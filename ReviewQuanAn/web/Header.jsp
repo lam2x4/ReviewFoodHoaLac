@@ -36,8 +36,7 @@
                 padding-left:10%;
             }
             .col{
-                border-style: hidden;
-                background-color: lavender;
+                border-style: hidden;             
                 margin-top:5%;
                 margin-right: 5%
             }
@@ -92,11 +91,11 @@
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng nhập   <i class="fa-solid fa-right-to-bracket"></i> </a>
+                            <a class="nav-link login-register-justified " href="LoginPage.jsp" > Đăng nhập   <i class="fa-solid fa-right-to-bracket"></i> </a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#">Đăng ký   <i class="fa-solid fa-feather"></i></a>
+                            <a class="nav-link login-register-justified " href="RegisterPage.jsp">Đăng ký   <i class="fa-solid fa-feather"></i></a>
                         </li>
 
                     </ul>

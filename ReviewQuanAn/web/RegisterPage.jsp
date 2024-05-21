@@ -46,7 +46,7 @@
             <div class="col-md-8 col-lg-6">
                 <div class="form-container">
                     <h2 class="text-center mb-4">Register</h2>
-                    <form action="../UserController" method="post">
+                    <form action="UserController" method="post">
                         <div class="form-group">
                             <p>Register As</p>
                             <select name="role" class="form-control" required>

@@ -37,7 +37,6 @@
             }
             .col{
                 border-style: hidden;
-                background-color: lavender;
                 margin-top:5%;
                 margin-right: 5%
             }
@@ -48,123 +47,37 @@
             header{
                 margin-bottom: 10px;
             }
+            .card{
+                width:350px;
+            }
         </style>
 
     </head>
 
     <body>
         <!-- Header begin -->
-        <header >
-            <!-- Navigation bar -->
-            <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
-                <!-- Brand -->
-                <a class="navbar-brand" href="#"> 
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPrBt0UbsRdMwTbJ0L4X4QIrbzl6hKLBUlPhQfk0GiGw&s" class="rounded-circle" width="100px"></a>
-
-                <!-- Toggler/collapsibe Button -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Navbar links -->
-
-                <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item nav-justified">
-                            <a class="nav-link " href="#">Trang chủ</a>
-                        </li>
-
-                        <li class="nav-item nav-justified">
-                            <a class="nav-link " href="#">Quán ăn</a>
-                        </li>
-                        <li class="nav-item nav-justified ">
-                            <a class="nav-link" href="#">Liên hệ</a>
-                        </li>
-
-
-                    </ul>
-                    <form class="form-inline search-justified" action="#">
-                        <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                        <button class="btn btn-success" type="submit">Tìm kiếm</button>
-                    </form>
-                </div>
-
-                <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng quán ăn    <i class="fa-solid fa-pen"></i> </a>
-
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng nhập   <i class="fa-solid fa-right-to-bracket"></i> </a>
-
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#">Đăng ký   <i class="fa-solid fa-feather"></i></a>
-                        </li>
-
-                    </ul>
-                </div>
-            </nav>
-
-            <!--Body begin-->
-
-        </header>
+        <%@include file="./Header.jsp" %>
         <div class="container text-center"><h3>Các quán ăn </h3> </div>
 
-        <div class="container" >
+        <div class="container-fluid" >
             <div class="row">
-                <div class="col"> Mình sẽ post thông tin quán ở đây  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-            </div>
-            <div class="row">
-                <div class="col"> Mình sẽ post thông tin quán ở đây  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-            </div>
-            <div class="row">
-                <div class="col"> Mình sẽ post thông tin quán ở đây  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-            </div>
-            <div class="row">
-                <div class="col"> Mình sẽ post thông tin quán ở đây  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
-                <div class="col"> gege  </div>
+                <c:forEach begin="0" end="${list.size()-1}" var="i">   
+                    <div class ="col"> 
+                        <div class="card" >
+                            <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTskvGE9g2h_ZgPGtkx6I9ziNRsEF9YG0LXJd35ZV-O0Q&s" alt="Card image" style="width:100%">
+                            <div class="card-body">
+                                <h4 class="card-title">${list.get(i).store_name}</h4>
+                                <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+                                <a href="#" class="btn btn-primary stretched-link">See Store</a>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>             
             </div>
         </div>
 
-        <footer>
-            <div class="container-fluid" style="margin-top:5%" >
+        <%@include file="./Footer.jsp" %>
 
-                <div class="row text-center " >
-                    <div class="col-md-4"><h3> Thành viên </h3></div> 
-                    <div class="col-md-4"><h3> Giới thiệu</h3></div>   
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Trịnh Hoàng Việt <p></div>    
-                    <div class="col-md-6"> <p>Địa chỉ: Hòa Lạc , Thạch Thất , Hà Nội. Số điện thoại hỗ trợ:  03234123423 - Email:haha@gmail.com</p></div>
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Triệu Bảo Lâm<p></div> 
-                    <div class="col-md-7"> <p>Đây là website review quán ăn hàng đầu Hòa Lạc . Với mong ước giúp các bạn tìm được những quán ăn chất lượng</p></div>
 
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Tuấn Anh <p></div>              
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Hoàng Anh <p></div>              
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Vũ Trung Kiên <p></div>              
-                </div>
-            </div>
-        </footer>
     </body>
 </html>

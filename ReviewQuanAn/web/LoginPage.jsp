@@ -50,7 +50,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="form-container">
                     <h2 class="text-center mb-4">Login</h2>
-                    <form action="../UserController" method="post">
+                    <form action="UserController" method="post">
                         <div class="form-group">
                             <input type="text" name="account" class="form-control" placeholder="Email or Username" required>
                         </div>
