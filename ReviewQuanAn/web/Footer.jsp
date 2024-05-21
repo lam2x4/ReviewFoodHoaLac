@@ -36,8 +36,7 @@
                 padding-left:10%;
             }
             .col{
-                border-style: hidden;
-                background-color: lavender;
+                border-style: hidden;           
                 margin-top:5%;
                 margin-right: 5%
             }

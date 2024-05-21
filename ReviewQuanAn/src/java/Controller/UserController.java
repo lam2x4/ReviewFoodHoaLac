@@ -38,13 +38,13 @@ public class UserController extends HttpServlet {
                     response.sendRedirect("HomePage.jsp");
                     break;
                 case "customer":
-                    response.sendRedirect("StorePage.jsp");
+                    response.sendRedirect("home");
                     break;
                 case "storeManager":
-                    response.sendRedirect("TA_JSP/StoreManagerPage.jsp");
+                    response.sendRedirect("StoreManagerPage.jsp");
                     break;
                 default:
-                    response.sendRedirect("TA_JSP/LoginPage.jsp");
+                    response.sendRedirect("LoginPage.jsp");
                     break;
             }
         }
@@ -60,7 +60,7 @@ public class UserController extends HttpServlet {
             int role = Integer.parseInt(request.getParameter("role"));
             User user = new User(username, password, email, phone, avatar, gender, description, role);
             dao.addUser(user);
-            response.sendRedirect("TA_JSP/LoginPage.jsp");
+            response.sendRedirect("LoginPage.jsp");
         }
 
     }
