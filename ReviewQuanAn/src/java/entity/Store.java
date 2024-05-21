@@ -1,56 +1,56 @@
 package entity;
 
 public class Store {
-    private int id;
-    private String name;
-    private boolean is_banned;
-    private float average_rating;
+    private int store_id;
+    private String store_name;
+    private int manager_id;
+    private float avg_rating;
 
     public Store() {
     }
 
-    public Store(int id, String name, float average_rating) {
-        this.id = id;
-        this.name = name;
-        is_banned = false;
-        this.average_rating = average_rating;
+    public Store(int store_id, String store_name, int manager_id, float avg_rating) {
+        this.store_id = store_id;
+        this.store_name = store_name;
+        this.manager_id = manager_id;
+        this.avg_rating = avg_rating;
     }
 
-    public int getId() {
-        return id;
+    public int getStore_id() {
+        return store_id;
     }
 
-    public String getName() {
-        return name;
+    public String getStore_name() {
+        return store_name;
     }
 
-    public boolean isIs_banned() {
-        return is_banned;
+    public int getManager_id() {
+        return manager_id;
     }
 
-    public float getAverage_rating() {
-        return average_rating;
+    public float getAvg_rating() {
+        return avg_rating;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStore_id(int store_id) {
+        this.store_id = store_id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStore_name(String store_name) {
+        this.store_name = store_name;
     }
 
-    public void setIs_banned(boolean is_banned) {
-        this.is_banned = is_banned;
+    public void setManager_id(int manager_id) {
+        this.manager_id = manager_id;
     }
 
-    public void setAverage_rating(float average_rating) {
-        this.average_rating = average_rating;
+    public void setAvg_rating(float avg_rating) {
+        this.avg_rating = avg_rating;
     }
 
     @Override
     public String toString() {
-        return "Store{" + "id=" + id + ", name=" + name + ", is_banned=" + is_banned + ", average_rating=" + average_rating + '}';
+        return "Store{" + "store_id=" + store_id + ", store_name=" + store_name + ", manager_id=" + manager_id + ", avg_rating=" + avg_rating + '}';
     }
     
     
