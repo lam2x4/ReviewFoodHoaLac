@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import model.DAOUser;
+import dao.DAOUser;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;

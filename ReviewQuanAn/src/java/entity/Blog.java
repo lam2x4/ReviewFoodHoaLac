@@ -1,18 +1,18 @@
 package entity;
 
-public class Comment {
+public class Blog {
     private int id;
     private int user_id;
-    private int blog_id;
+    private String title;
     private String content;
     private int likes;
 
-    public Comment() {
+    public Blog() {
     }
 
-    public Comment(int user_id, int blog_id, String content, int likes) {
+    public Blog(int user_id, String title, String content, int likes) {
         this.user_id = user_id;
-        this.blog_id = blog_id;
+        this.title = title;
         this.content = content;
         this.likes = likes;
     }
@@ -25,8 +25,8 @@ public class Comment {
         return user_id;
     }
 
-    public int getBlog_id() {
-        return blog_id;
+    public String getTitle() {
+        return title;
     }
 
     public String getContent() {
@@ -45,8 +45,8 @@ public class Comment {
         this.user_id = user_id;
     }
 
-    public void setBlog_id(int blog_id) {
-        this.blog_id = blog_id;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setContent(String content) {
@@ -59,7 +59,7 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" + "id=" + id + ", user_id=" + user_id + ", blog_id=" + blog_id + ", content=" + content + ", likes=" + likes + '}';
+        return "Blog{" + "id=" + id + ", user_id=" + user_id + ", title=" + title + ", content=" + content + ", likes=" + likes + '}';
     }
 
     

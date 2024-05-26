@@ -1,4 +1,4 @@
-package model;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +20,7 @@ public class DBConnect {
     }
     
     public DBConnect(){
-        this("jdbc:sqlserver://localhost:1433;databaseName=SE1825_SWP391_G2_DB2", "sa", "123456");
+        this("jdbc:sqlserver://localhost:1433;databaseName=SE1825_SWP391_G2_DB3", "sa", "123456");
     }
     
     public static void main(String[] args){
