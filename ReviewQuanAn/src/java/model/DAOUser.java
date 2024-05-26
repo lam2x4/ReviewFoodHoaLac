@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -22,21 +23,9 @@ public class DAOUser extends DBContext {
 
     public Vector<User> getAll(String sql) {
         Vector<User> vector = new Vector<>();
-        try {
-            Statement state = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = state.executeQuery(sql);
+        try (Statement state = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs = state.executeQuery(sql)) {
             while (rs.next()) {
-                int user_id = rs.getInt(1);
-                String user_name = rs.getString(2);
-                String password = rs.getString(3);
-                String email = rs.getString(4);
-                String phone = rs.getString(5);
-                String avatar = rs.getString(6);
-                int gender = rs.getByte(7);
-                String description = rs.getString(8);
-                int role_id = rs.getInt(9);
-
-                User user = new User(user_id, user_name, password, email, phone, avatar, gender, description, role_id);
+                User user = Mapper.mapRow(rs);
                 vector.add(user);
             }
         } catch (SQLException ex) {
@@ -44,35 +33,51 @@ public class DAOUser extends DBContext {
         }
         return vector;
     }
-    
-    public int addUser(User user){
-        int n = 0;
-        String sql = "INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], role_id)\n" +
-"VALUES('" + user.getUse_rname()+"','" + 
-                user.getPassword()+ "','" + user.getEmail()+ "','" + 
-                user.getPhone()+ "','" + user.getAvatar()+ "','" +
-                user.getGender()+ "','" + user.getDescription()+ "','" +
-                user.getRole_id()+"')";
-        
-        System.out.println(sql);
-        try {
-            Statement state = connection.createStatement();
-            n = state.executeUpdate(sql);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+    public int addUser(User user) {
+        String sql = 
+        "INSERT INTO [User] (username,[password],email,phone,avatar,gender,[description],verify_status,role_id)VALUES(?,?,?,?,?,?,?,?,?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Mapper.setRowAdd(user, pstmt);
+            pstmt.executeUpdate();
+            return 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return n;
-
+        return 0;
     }
-    
 
-//    public static void main(String[] args) {
-//        DAOUser dao = new DAOUser();
-//        User user = new User("a", "a", "a", "1", "", 0, "", 3);
+    public int updateUser(User user) {
+        String sql = "UPDATE [dbo].[User] SET [username] = ?, [password] = ?, [email] = ?, [phone] = ?, [avatar] = ?, [gender] = ?, "
+                + "[description] = ?, [verify_status] = ?, [role_id] = ? WHERE [id] = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Mapper.setRowUpdate(user, pstmt);
+            pstmt.executeUpdate();
+            return 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception appropriately
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        DAOUser dao = new DAOUser();
+//        User user = new User("a", "a", "a", "1", "", 3, "", 0, 1);
 //        int n = dao.addUser(user);
-//        Vector vector = dao.getAll("Select * from [user]");
+        Vector vector = dao.getAll("Select * from [user]");
+        for (int i = 0; i < vector.size(); i++) {
+            System.out.println(vector.get(i).toString());
+        }
+//        System.out.println("==============================================");
+//        User user1 = (User)vector.get(vector.size()-1);
+//        user1.setVerify_status(0);
+//        dao.updateUser(user1);
+//        
+//        vector = dao.getAll("Select * from [user]");
 //        for (int i = 0; i < vector.size(); i++) {
 //            System.out.println(vector.get(i).toString());
 //        }
-//    }
+    }
 }

@@ -14,6 +14,7 @@ public class User {
     private String avatar;
     private int gender;
     private String description;
+    private int verify_status;
     private int role_id;
 
     public User(int user_id, String user_name, String password, String email, String phone, String avatar, int gender, String description, int role_id) {
@@ -27,6 +28,31 @@ public class User {
         this.description = description;
         this.role_id = role_id;
     }
+
+    public User(int user_id, String user_name, String password, String email, String phone, String avatar, int gender, String description, int verify_status, int role_id) {
+        this.user_id = user_id;
+        this.user_name = user_name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.description = description;
+        this.verify_status = verify_status;
+        this.role_id = role_id;
+    }
+    public User(String user_name, String password, String email, String phone, String avatar, int gender, String description, int verify_status, int role_id) {
+        this.user_name = user_name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.description = description;
+        this.verify_status = verify_status;
+        this.role_id = role_id;
+    }
+    
     public User(String user_name, String password, String email, String phone, String avatar, int gender, String description, int role_id) {
         this.user_name = user_name;
         this.password = password;
@@ -38,6 +64,25 @@ public class User {
         this.role_id = role_id;
     }
 
+    public User() {
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public int getVerify_status() {
+        return verify_status;
+    }
+
+    public void setVerify_status(int verify_status) {
+        this.verify_status = verify_status;
+    }
+
 
     public int getUser_id() {
         return user_id;
@@ -45,10 +90,6 @@ public class User {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
-    }
-
-    public String getUse_rname() {
-        return user_name;
     }
 
     public void setAccount(String user_name) {
@@ -115,7 +156,7 @@ public class User {
     public String toString() {
         return "User{" + "user_id: " + user_id + ", user_name: " + user_name + ", password: " + password + ", email: " + email + 
                 ", phone: " + phone + ", avatar: " + avatar + ", gender: " + gender + ", description: " + description + 
-                ", role_id: " + role_id + '}';
+                ", verify_status: " + verify_status +", role_id: " + role_id + '}';
     }
 }
 
