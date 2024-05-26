@@ -4,6 +4,7 @@ package dal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 
 public class DBContext {
@@ -20,6 +21,9 @@ public class DBContext {
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex);
         }
+    }
+    public static void main(String[] args) {
+        new DBContext();
     }
     
 }
