@@ -16,17 +16,19 @@ import java.util.Vector;
  * @author Admin
  */
 public class DAOStore extends DBContext {
-    
-     public Vector<Store> getAllStore() {
+
+    public Vector<Store> getAllStore() {
         Vector<Store> storelist = new Vector();
         String sql = "select * from Store where 1=1";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                Store store = new Store(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getFloat(4));
+                Store store = new Store(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getFloat(4));
                 storelist.add(store);
+
             }
+            connection.close();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -36,8 +38,9 @@ public class DAOStore extends DBContext {
             return storelist;
         }
     }
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         DAOStore dao = new DAOStore();
-         System.out.println(dao.getAllStore().get(2).getStore_name());
+        System.out.println(dao.getAllStore().get(2).getStore_name());
     }
 }

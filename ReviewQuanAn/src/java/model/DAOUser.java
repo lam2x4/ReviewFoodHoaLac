@@ -39,6 +39,7 @@ public class DAOUser extends DBContext {
                 User user = new User(user_id, user_name, password, email, phone, avatar, gender, description, role_id);
                 vector.add(user);
             }
+            connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,6 +59,7 @@ public class DAOUser extends DBContext {
         try {
             Statement state = connection.createStatement();
             n = state.executeUpdate(sql);
+            connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
