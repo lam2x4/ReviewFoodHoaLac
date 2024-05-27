@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import entity.Store;
+import entity.Blog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Vector;
 
-import model.DAOStore;
+import dao.DAOBlog;
 
 /**
  *
@@ -63,8 +63,8 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        DAOStore dao = new DAOStore();
-        Vector<Store> list = dao.getAllStore();
+        DAOBlog dao = new DAOBlog();
+        Vector<Blog> list = dao.getAllStore();
         request.setAttribute("list", list);
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);
     }

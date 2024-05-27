@@ -1,7 +1,7 @@
 <%-- 
     Document   : LoginPage
     Created on : May 15, 2024, 5:52:48 PM
-    Author     : ACER
+    Author     : Tuan Anh
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
