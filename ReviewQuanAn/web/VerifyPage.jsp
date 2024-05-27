@@ -85,7 +85,7 @@
         <%
             User user = (User)session.getAttribute("userToVerify");
             if(user == null){
-                response.sendRedirect("RegisterPage.jsp?status=failure2");
+                response.sendRedirect("RegisterPage.jsp?status=4");
             }
             else if(user.getEmail() == null){
                 response.sendRedirect("AfterLogin.jsp");
@@ -96,6 +96,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <h2 class="text-center mb-4">We have sent an email to <%=(String)user.getEmail()%></h2>
+                    <div id="message" class="alert" style="display: none;"></div>
                     <form id="verificationForm" action="UserController?service=verify" method="post">
                         <div class="form-row justify-content-center">
                             <input name="Vcode" type="text" maxlength="6" required>
@@ -111,6 +112,24 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            window.onload = function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const status = urlParams.get('status');
+                const messageDiv = document.getElementById('message');
+
+                if (status === '1') {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = 'Verify code is incorrect!';
+                    messageDiv.style.display = 'block';
+                }
+                else if (status === '4') {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = 'Something went wrong. Try again';
+                    messageDiv.style.display = 'block';
+                }
+            };
+        </script>
 
     </body>
 </html>

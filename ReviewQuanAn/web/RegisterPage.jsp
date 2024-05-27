@@ -97,19 +97,19 @@
                 const status = urlParams.get('status');
                 const messageDiv = document.getElementById('message');
 
-                if (status === 'failure2') {
+                if (status === '1') {
                     messageDiv.className = 'alert alert-success';
                     messageDiv.innerHTML = 'Email or Phone number already been registered!';
                     messageDiv.style.display = 'block';
-                } else if (status === 'failure') {
+                } else if (status === '2') {
                     messageDiv.className = 'alert alert-danger';
                     messageDiv.innerHTML = 'Account creation failed. Email or phone number might already been taken.';
                     messageDiv.style.display = 'block';
-                } else if (status === 'error') {
+                } else if (status === '3') {
                     messageDiv.className = 'alert alert-danger';
                     messageDiv.innerHTML = 'Something went wrong!';
                     messageDiv.style.display = 'block';
-                } else if (status === 'failure1') {
+                } else if (status === '4') {
                     messageDiv.className = 'alert alert-danger';
                     messageDiv.innerHTML = 'Register new account or back to login if you registered but have not verified!';
                     messageDiv.style.display = 'block';

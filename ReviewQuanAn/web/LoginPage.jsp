@@ -50,6 +50,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="form-container">
                     <h2 class="text-center mb-4">Login</h2>
+                    <div id="message" class="alert" style="display: none;"></div>
                     <form action="UserController" method="post">
                         <div class="form-group">
                             <input type="text" name="account" class="form-control" placeholder="Email or Username" required>
@@ -76,5 +77,18 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+            window.onload = function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const status = urlParams.get('status');
+                const messageDiv = document.getElementById('message');
+
+                if (status === '1') {
+                    messageDiv.className = 'alert alert-success';
+                    messageDiv.innerHTML = 'Account or Password is incorrect!';
+                    messageDiv.style.display = 'block';
+                }
+            };
+        </script>
 </body>
 </html>
