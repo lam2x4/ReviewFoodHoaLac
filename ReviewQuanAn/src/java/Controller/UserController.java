@@ -57,7 +57,7 @@ public class UserController extends HttpServlet {
                     }
                 }
             } else {
-                response.sendRedirect("LoginPage.jsp");
+                response.sendRedirect("LoginPage.jsp?status=1");
             }
 
         }
@@ -76,22 +76,22 @@ public class UserController extends HttpServlet {
                 if (checkRegister(user)) {
                     int n = dao.addUser(user);
                     if (n > 0) {
-                        Vector vector = dao.getAll("select * from [user]");
+                        Vector vector = dao.getAll();
                         user = (User) vector.get(vector.size()-1);
                         session.setAttribute("userToVerify", user);
                         response.sendRedirect("UserController?service=verify");
                         return;
                     } else {
-                        // Handle case where user addition fails
-                        response.sendRedirect("RegisterPage.jsp?status=error");
+                        // Can't add user
+                        response.sendRedirect("RegisterPage.jsp?status=2");
                     }
                 } else {
                     // Handle case where registration check fails
-                    response.sendRedirect("RegisterPage.jsp?status=failure1");
+                    response.sendRedirect("RegisterPage.jsp?status=1");
                 }
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception
-                response.sendRedirect("RegisterPage.jsp?status=error");
+                response.sendRedirect("RegisterPage.jsp?status=3");
             }
         }
         if (service.equals("verify")) {
@@ -99,7 +99,7 @@ public class UserController extends HttpServlet {
             String submit = request.getParameter("submit");
 
             if (user == null) {
-                response.sendRedirect("RegisterPage.jsp?status=failure");
+                response.sendRedirect("RegisterPage.jsp?status=4");
                 return;
             } else {
                 if (submit == null) {
@@ -121,13 +121,13 @@ public class UserController extends HttpServlet {
                             response.sendRedirect("LoginPage.jsp");
                             return;
                         } else {
-                            response.sendRedirect("RegisterPage.jsp?status=error");
+                            response.sendRedirect("VerifyPage.jsp?status=4");
                         }
                     } else {
-                        response.sendRedirect("RegisterPage.jsp?status=error1");
+                        response.sendRedirect("VerifyPage.jsp?status=1");
                     }
                 } else {
-                    response.sendRedirect("RegisterPage.jsp?status=error2");
+                    response.sendRedirect("VerifyPage.jsp?status=4");
                 }
             }
         }
@@ -135,9 +135,9 @@ public class UserController extends HttpServlet {
 
     public User login(String account, String password) {
         DAOUser dao = new DAOUser();
-        Vector<User> vector = dao.getAll("select * from [user]");
+        Vector<User> vector = dao.getAll();
         for (User user : vector) {
-            if (user.getUser_name().equals(account) && user.getPassword().equals(password)) {
+            if (user.getUsername().equals(account) && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -146,7 +146,7 @@ public class UserController extends HttpServlet {
 
     public boolean checkRegister(User inputUser) {
         DAOUser dao = new DAOUser();
-        Vector<User> vector = dao.getAll("select * from [user]");
+        Vector<User> vector = dao.getAll();
         for (User user : vector) {
             if (inputUser.getEmail().equals(user.getEmail()) || inputUser.getPhone().equals(user.getPhone())) {
                 return false;
