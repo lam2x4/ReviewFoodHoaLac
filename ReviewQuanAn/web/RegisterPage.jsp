@@ -41,6 +41,7 @@
                 border-radius: 20px;
             }
         </style>
+
     </head>
     <body>
         <div class="container">
@@ -52,22 +53,21 @@
                         <div class="text-center mb-3">
                             <a href="LoginPage.jsp" class="text-decoration-none">Already have an account? Login here</a>
                         </div>
-                        <form action="UserController" method="post">
+                        <form id="register-form" action="UserController" method="post">
                             <div class="form-group">
                                 <input type="text" name="username" class="form-control" placeholder="Username" required>
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                <input id="password" type="password" name="password" class="form-control" placeholder="Password" oninput="EncryptPassword()" required>
                             </div>
                             <div class="form-group">
                                 <input type="email" name="email" class="form-control" placeholder="Email" required>
                             </div>
                             <div class="form-group">
-                                <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+                                <input type="text" name="phone" class="form-control" placeholder="Phone Number" pattern="^[0][0-9]{8,9}$" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group">Select Gender
                                 <select name="gender" class="form-control" required>
-                                    <option value="" disabled selected>Select Gender</option>
                                     <option value="0">Male</option>
                                     <option value="1">Female</option>
                                     <option value="3">Other</option>
@@ -91,6 +91,9 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jsencrypt"></script>
+        <script src="https://cdn.rawgit.com/travist/jsencrypt/master/bin/jsencrypt.min.js"></script>
+
         <script>
             window.onload = function () {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -113,8 +116,16 @@
                     messageDiv.className = 'alert alert-danger';
                     messageDiv.innerHTML = 'Register new account or back to login if you registered but have not verified!';
                     messageDiv.style.display = 'block';
+                } else if (status === '5') {
+                    messageDiv.className = 'alert alert-danger';
+                    messageDiv.innerHTML = 'Catch in user controller';
+                    messageDiv.style.display = 'block';
                 }
             };
+            function validatePassword(password) {
+                const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                return pattern.test(password);
+            }
         </script>
     </body>
 </html>

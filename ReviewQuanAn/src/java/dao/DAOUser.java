@@ -1,5 +1,6 @@
 package dao;
 
+import Utility.Mapper;
 import dal.DBContext;
 import entity.User;
 import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Mapper;
+import Utility.Mapper;
 
 public class DAOUser extends DBContext {
 
@@ -92,6 +93,10 @@ public class DAOUser extends DBContext {
 //    }
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
-        System.out.println(dao.getUser(4).toString());
+        Vector<User> vector = dao.getAll();
+        for(User user: vector){
+            System.out.println(user.toString());
+        }
+        
     }
 }

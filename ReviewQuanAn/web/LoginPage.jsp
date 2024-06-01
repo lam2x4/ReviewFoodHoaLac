@@ -13,36 +13,7 @@
     <title>Login Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('https://res.cloudinary.com/hksqkdlah/image/upload/ar_1:1,c_fill,dpr_2.0,f_auto,fl_lossy.progressive.strip_profile,g_faces:auto,q_auto:low,w_344/v1/MEDITERRANEAN%20SEO%20TEST/MediterraneanPyramid_header-03'); /* Replace with your image URL */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-        .form-container {
-            background: rgba(255, 255, 255, 1);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-container .form-group input {
-            border-radius: 20px;
-        }
-        .form-container .btn {
-            border-radius: 20px;
-        }
-        .form-container .forgot-password {
-            display: block;
-            margin-top: 10px;
-            text-align: right;
-        }
-    </style>
+    <link href="Css/Login_Page_Css.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -57,7 +28,7 @@
                         </div>
                         <div class="form-group">
                             <input type="password" name="password" class="form-control" placeholder="Password" required>
-                            <a href="#" class="forgot-password">Forgot Password?</a>
+                            <a href="ChangePasswordPage.jsp" class="forgot-password">Forgot Password?</a>
                         </div>
                         <div class="form-group d-flex justify-content-between">
                             <input type="submit" name="Login" value="Login" class="btn btn-primary"></input>
@@ -77,18 +48,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const status = urlParams.get('status');
-                const messageDiv = document.getElementById('message');
-
-                if (status === '1') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Account or Password is incorrect!';
-                    messageDiv.style.display = 'block';
-                }
-            };
-        </script>
+    <script src="Script/Login_Page_Script.js"></script>
 </body>
 </html>
