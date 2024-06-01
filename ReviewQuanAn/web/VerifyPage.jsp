@@ -14,72 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Verification Code Input</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <style>
-            body {
-                background-color: #f8f9fa; /* Soft background color */
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Soft and rounded font */
-            }
-
-            .container {
-                margin-top: 50px;
-            }
-
-            h2 {
-                color: #007bff; /* Blue heading */
-                font-weight: bold;
-            }
-
-            .form-control {
-                text-align: center;
-                max-width: 50px;
-                height: 50px;
-                font-size: 24px;
-                border-radius: 20px; /* Rounder corners */
-                border: 2px solid #007bff; /* Blue border */
-                margin: 0 5px;
-            }
-
-            .form-control:focus {
-                outline: none;
-                border-color: #0056b3; /* Darker blue on focus */
-            }
-
-            .btn-resend {
-                background-color: #ffc107; /* Yellow button */
-                color: #212529;
-                border: none;
-                border-radius: 20px; /* Rounder corners */
-                padding: 10px 20px;
-                font-size: 16px;
-                margin-top: 20px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-resend:hover {
-                background-color: #ffca28; /* Lighter yellow on hover */
-            }
-
-            .btn-submit {
-                background-color: #007bff; /* Blue submit button */
-                color: #fff;
-                border: none;
-                border-radius: 20px; /* Rounder corners */
-                padding: 10px 20px;
-                font-size: 16px;
-                margin-top: 20px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-submit:hover {
-                background-color: #0056b3; /* Darker blue on hover */
-            }
-
-            .error-message {
-                color: #dc3545; /* Red color for error message */
-                font-size: 14px;
-                margin-top: 10px;
-            }
-        </style>
+        <link rel="stylesheet" href="Css/Verify_Page_Css.css">
     </head>
     <body>
         <%
@@ -112,24 +47,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const status = urlParams.get('status');
-                const messageDiv = document.getElementById('message');
-
-                if (status === '1') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Verify code is incorrect!';
-                    messageDiv.style.display = 'block';
-                }
-                else if (status === '4') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Something went wrong. Try again';
-                    messageDiv.style.display = 'block';
-                }
-            };
-        </script>
+        <script src="Script/Verify_Page_Script.js"></script>
 
     </body>
 </html>
