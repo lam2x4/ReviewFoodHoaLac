@@ -61,7 +61,7 @@
 
         <div class="container-fluid" >
             <div class="row">
-                <c:forEach begin="0" end="${list.size()-1}" var="i">   
+                <c:forEach begin="0" end="${list.size()}" var="i">   
                     <div class ="col"> 
                         <div class="card" >
                             <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTskvGE9g2h_ZgPGtkx6I9ziNRsEF9YG0LXJd35ZV-O0Q&s" alt="Card image" style="width:100%">
