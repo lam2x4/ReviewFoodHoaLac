@@ -52,6 +52,10 @@ public class UserController extends HttpServlet {
                 disp.forward(request, response);
             }
         }
+        if(service.equals("resendVerifyCode")){
+            RequestDispatcher disp = request.getRequestDispatcher("ResendCode");
+            disp.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

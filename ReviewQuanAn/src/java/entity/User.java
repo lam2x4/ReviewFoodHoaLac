@@ -1,4 +1,3 @@
-
 package entity;
 
 /**
@@ -6,6 +5,7 @@ package entity;
  * @author AnhTT
  */
 public class User {
+
     private int id;
     private String username;
     private String password;
@@ -32,7 +32,21 @@ public class User {
         this.verify_status = verify_status;
         this.role_id = role_id;
     }
-    
+
+    public User(String email, String phone) {
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public User(int id, String username, String password, String email, String phone, int verify_status, int role_id) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.verify_status = verify_status;
+        this.role_id = role_id;
+    }
 
     public User(String username, String password, String email, String phone, String avatar, int gender, String description, int verify_status, int role_id) {
         this.username = username;
@@ -131,6 +145,4 @@ public class User {
         return "User{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phone=" + phone + ", avatar=" + avatar + ", gender=" + gender + ", description=" + description + ", verify_status=" + verify_status + ", role_id=" + role_id + '}';
     }
 
-    
 }
-

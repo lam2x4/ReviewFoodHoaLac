@@ -19,6 +19,7 @@ import java.util.Vector;
 /**
  *
  * @author ACER
+ * Commented: TRUE
  */
 public class SendVerifyCode extends HttpServlet {
 
@@ -30,27 +31,44 @@ public class SendVerifyCode extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         String service = request.getParameter("service");
+        //SEND VERIFICATION CODE
         if ("sendVerificationCode".equals(service)) {
+            
+            //GET EMAIL OF CURRENT ACCOUNT ON THE SESSION
             String email = request.getParameter("email");
+            
+            //CHECK USER IN DATABASE
             User user = checkUserExist(email);
+            
+            //COULD NOT FIND USER IN THE DATABASE
             if (user == null) {
                 response.setStatus(1);
                 return;
             }
+            
+            //SEND EMAIL
             boolean success = sendVerificationCode(email);
-
+            
+            //EMAIL SENT
             if (success) {
+                
+                //SETUP VERIFY CODE AND USER FOR LATER COMPAREMENT 
                 session.setAttribute("verifyCode", vCode);
                 session.setAttribute("user", user);
+                
+                //RETURN STATUS OF RESPONSE ==> MESSAGE OUTPUT AT SCREEN
                 response.setStatus(HttpServletResponse.SC_OK);
+                
+            //EMAIL COULD NOT SEND    
             } else {
+                
+                //RETURN STATUS OF RESPONSE ==> MESSAGE OUTPUT AT SCREEN
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        } else if ("changePassword".equals(service)) {
-
         }
     }
-
+    
+    //SEND MAIL FUNCTION TRUE IF SENT, FALSE IF NOT SENT
     private boolean sendVerificationCode(String email) {
         MailSender mailSender = new MailSender();
         String code = mailSender.getVifificationCode();
@@ -63,7 +81,8 @@ public class SendVerifyCode extends HttpServlet {
             return false;
         }
     }
-
+    
+    //RETRIVE USERS IN DATABASE, RETURN USER WITH EMAIL = INPUTTED EMAIL
     public User checkUserExist(String email) {
         DAOUser dao = new DAOUser();
         Vector<User> vector = dao.getAll();

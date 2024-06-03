@@ -15,6 +15,8 @@
         <title>Verification Code Input</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="Css/Verify_Page_Css.css">
+        <style>
+        </style>
     </head>
     <body>
         <%
@@ -27,18 +29,39 @@
             }
             else{
         %>
-        <div class="container">
+        <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <h2 class="text-center mb-4">We have sent an email to <%=(String)user.getEmail()%></h2>
-                    <div id="message" class="alert" style="display: none;"></div>
-                    <form id="verificationForm" action="UserController?service=verify" method="post">
-                        <div class="form-row justify-content-center">
-                            <input name="Vcode" type="text" maxlength="6" required>
+                    <div class="card shadow-md">
+
+                        <div class="popup">
+                            <span class="icon">!</span>
+                            <span class="popuptext" id="popupMessage">
+                                The system have saved your account information.
+                                If you could not complete verification in this session, you can continue the next time you login.
+                            </span>
                         </div>
-                        <input type="submit" name="submit" value="submit" class="btn btn-submit btn-block">
-                    </form>
-                    <button class="btn btn-resend btn-block">Resend Verification Code</button>
+                        <div class="card-header text-center">
+                            <h2 class="text-center mb-4">We have sent an email to <%=user.getEmail()%> </h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="message" class="alert" style="display: none;"></div>
+                            <form id="verificationForm" action="UserController?service=verify" method="post">
+                                <div class="form-row justify-content-center">
+                                    <input name="Vcode" type="text" maxlength="6" placeholder="Enter Verification Code" required>
+                                </div>
+                                <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block mt-3">
+                            </form>
+                            <form action="UserController" method="post" class="mt-2">
+                                <input class="btn btn-secondary btn-block" type="submit" value="Resend Verify Code">
+                                <input type="hidden" name="service" value="resendVerifyCode">
+                            </form>
+                            <!-- Back to Login Page Link -->
+                            <div class="text-center mt-3">
+                                <a href="LoginPage.jsp" class="btn btn-link">Back to login page</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

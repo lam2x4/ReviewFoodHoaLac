@@ -29,4 +29,12 @@ window.onload = function () {
         messageDiv.style.display = 'block';
     }
 };
+document.querySelector('.icon').addEventListener('click', function () {
+      const popup = document.getElementById('passwordPopup');
+      if (popup.style.display === 'none' || popup.style.display === '') {
+        popup.style.display = 'block';
+      } else {
+        popup.style.display = 'none';
+      }
+    });
 
