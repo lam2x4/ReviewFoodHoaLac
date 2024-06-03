@@ -89,7 +89,8 @@
         </style>
     </head>
     <body>
-        <%
+        <%@ include file="./Header.jsp" %>
+        <%--
             User user = (User)session.getAttribute("userToVerify");
             if(user == null){
                 response.sendRedirect("LoginPage.jsp");
@@ -98,7 +99,7 @@
                 response.sendRedirect("AfterLogin.jsp");
             }
             else{
-        %>
+        --%>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
@@ -123,13 +124,14 @@
                                 <input type="submit" name="Apply" value="Apply" class="btn btn-primary">
                                 <input type="reset" name="Clear" value="Clear" class="btn btn-secondary">
                             </div>
-                            <input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">
+                            <%--<input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">--%>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <%}%>
+        <%--}--%>
+        <%@ include file="./Footer.jsp" %>
 
         <!-- Bootstrap JS and dependencies -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

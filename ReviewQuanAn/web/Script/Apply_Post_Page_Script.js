@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => {
                     if (response.ok) {
                         showMessage("Your post application has been submitted successfully!", "alert-success");
-                        form.submit();
                     } else {
                         showMessage("There was an error submitting your application. Please try again.", "alert-danger");
                     }

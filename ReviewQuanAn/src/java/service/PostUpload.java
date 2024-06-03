@@ -21,14 +21,11 @@ import entity.Images;
 import dao.DAOBlog;
 import entity.Blog;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "UploadServlet", urlPatterns = {"/upload"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
@@ -56,8 +53,9 @@ public class PostUpload extends HttpServlet {
         DAOBlog daoBlog = new DAOBlog();
 
         try {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
+//            int userId = Integer.parseInt(request.getParameter("userId"));
+//            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
+            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
 
             for (Part part : request.getParts()) {
@@ -66,12 +64,13 @@ public class PostUpload extends HttpServlet {
                 if (contentType != null && contentType.startsWith("image")) {
                     String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
-                    daoImg.addImages(new Images(blogTemp.getId(), uploadPath + fileName));
+                    daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
                     //response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
-            response.sendRedirect("HomePage.jsp");
+            e.printStackTrace();
+            //response.sendRedirect("HomePage.jsp");
         }
     }
 
@@ -86,10 +85,8 @@ public class PostUpload extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.sendRedirect("HomePage.jsp");
     }
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * Handles the HTTP <code>POST</code> method.
