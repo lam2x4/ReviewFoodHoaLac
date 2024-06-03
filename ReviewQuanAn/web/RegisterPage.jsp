@@ -14,34 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Register Account</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background-image: url('https://marketplace.canva.com/EAFA7Zl1wfs/1/0/1600w/canva-pastel-red-green-illustrative-element-centric-video-background-Rs7EVOqIM2c.jpg'); /* Replace with your image URL */
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-            }
-            .form-container {
-                background: rgba(255, 255, 255, 1);
-                padding: 30px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-            .form-container .form-group input,
-            .form-container .form-group select,
-            .form-container .form-group textarea {
-                border-radius: 20px;
-            }
-            .form-container .btn {
-                border-radius: 20px;
-            }
-        </style>
-
+        <link href="Css/Register_Page_Css.css" rel="stylesheet">
     </head>
     <body>
         <div class="container">
@@ -58,7 +31,11 @@
                                 <input type="text" name="username" class="form-control" placeholder="Username" required>
                             </div>
                             <div class="form-group">
-                                <input id="password" type="password" name="password" class="form-control" placeholder="Password" oninput="EncryptPassword()" required>
+                                <input id="password" type="password" name="password" class="form-control" 
+                                       placeholder="Password" required
+                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+                                       title="Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter,
+                                one digit, and one special character.">
                             </div>
                             <div class="form-group">
                                 <input type="email" name="email" class="form-control" placeholder="Email" required>
@@ -93,40 +70,9 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jsencrypt"></script>
         <script src="https://cdn.rawgit.com/travist/jsencrypt/master/bin/jsencrypt.min.js"></script>
-
-        <script>
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const status = urlParams.get('status');
-                const messageDiv = document.getElementById('message');
-
-                if (status === '1') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Email or Phone number already been registered!';
-                    messageDiv.style.display = 'block';
-                } else if (status === '2') {
-                    messageDiv.className = 'alert alert-danger';
-                    messageDiv.innerHTML = 'Account creation failed. Email or phone number might already been taken.';
-                    messageDiv.style.display = 'block';
-                } else if (status === '3') {
-                    messageDiv.className = 'alert alert-danger';
-                    messageDiv.innerHTML = 'Something went wrong!';
-                    messageDiv.style.display = 'block';
-                } else if (status === '4') {
-                    messageDiv.className = 'alert alert-danger';
-                    messageDiv.innerHTML = 'Register new account or back to login if you registered but have not verified!';
-                    messageDiv.style.display = 'block';
-                } else if (status === '5') {
-                    messageDiv.className = 'alert alert-danger';
-                    messageDiv.innerHTML = 'Catch in user controller';
-                    messageDiv.style.display = 'block';
-                }
-            };
-            function validatePassword(password) {
-                const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                return pattern.test(password);
-            }
-        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+        <script src="Script/Password_Encryption.js"></script>
+        <script src="Script/Register_Page_Script.js"></script>
     </body>
 </html>
 

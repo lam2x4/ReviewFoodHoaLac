@@ -4,73 +4,41 @@
  */
 package service;
 
-import Utility.MailSender;
-import dao.DAOUser;
-import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author ACER
- * Commented: TRUE
  */
-public class ResendCode extends HttpServlet {
+public class EncryptPassword extends HttpServlet {
 
-    private String vCode;
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
-        DAOUser dao = new DAOUser();
+        String password = request.getParameter("password");
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        try {
-            //GET USER IN SESSION
-            User user = (User) session.getAttribute("userToVerify");
-            
-            //SUCCESS
-            if (user != null) {
-                String email = user.getEmail();
-                
-                //SEND EMAIL
-                boolean success = sendVerificationCode(email);
-                
-                //SUCCESS
-                if (success == true) {
-                    session.setAttribute("verifyCode", vCode);
-                    response.sendRedirect("VerifyPage.jsp?status=2");
-                } 
-                //FAILED
-                else {
-                    response.sendRedirect("VerifyPage.jsp?status=3");
-                }
-            } 
-            //FAILED
-            else {
-                response.sendRedirect("VerifyPage.jsp?status=5");
-            }
-        } catch (Exception e) {
-            //USER NULL
-            response.sendRedirect("VerifyPage.jsp?status=5");
-        }
-    }
+        // Store hashedPassword in the database
+        System.out.println("Hashed Password: " + hashedPassword);
 
-    private boolean sendVerificationCode(String email) {
-        MailSender mailSender = new MailSender();
-        try {
-            String code = mailSender.getVifificationCode();
-            mailSender.sentEmail(email, code);
-            vCode = code;
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        // Verify password
+        boolean matches = BCrypt.checkpw(password, hashedPassword);
+        System.out.println("Password Matches: " + matches);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
