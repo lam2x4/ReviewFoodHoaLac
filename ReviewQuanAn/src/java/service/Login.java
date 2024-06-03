@@ -14,42 +14,45 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Vector;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author ACER
+ * Commented  : TRUE
  */
 public class Login extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
         
-        //BEGIN
+        //GET USER INPUT
         String account = request.getParameter("account");
         String password = request.getParameter("password");
+        
+        //CHECK IF ACCOUNT/PASSWORD ARE CORRECT
         User user = login(account, password);
         
+        //SUCCESS
         if (user != null) {
+            
+            //USER HAS NOT VERIFIED ACCOUNT
             if (user.getVerify_status() == 0) {
+                
                 session.setAttribute("userToVerify", user);
                 response.sendRedirect("UserController?service=verify");
-            } else {
-                java.util.Enumeration em = session.getAttributeNames();
-                while (em.hasMoreElements()) {
-                    String key = em.nextElement().toString();
-                    session.removeAttribute(key);
-                }
+                
+            } 
+            //USER HAS VERIFIED ACCOUNT
+            else {
+                //REMOVE SESSION'S INFORMATION THAT MIGHT NOT BE SAFE
+                session.removeAttribute("userToVerify");
+                session.removeAttribute("verifyCode");
+                session.removeAttribute("user");
+                
+                //LOGIN WITH ROLES
                 String[] roles = {"empty", "admin", "customer"};
                 String role = roles[user.getRole_id()];
                 switch (role) {
@@ -64,12 +67,15 @@ public class Login extends HttpServlet {
                     case "empty":
                         response.sendRedirect("LoginPage.jsp?status=1");
                         break;
+                    //EXCEPTION (UNKNOWN)
                     default:
                         response.sendRedirect("LoginPage.jsp?status=2");
                         break;
                 }
             }
-        } else {
+        } 
+        //COULD NOT FIND USER IN DATABASE
+        else {
             response.sendRedirect("LoginPage.jsp?status=1");
         }
     }
@@ -78,8 +84,10 @@ public class Login extends HttpServlet {
         DAOUser dao = new DAOUser();
         Vector<User> vector = dao.getAll();
         for (User user : vector) {
-            if ((user.getUsername().equals(account) || user.getEmail().equals(account)) && user.getPassword().equals(password)) {
-                return user;
+            if ((user.getUsername().equals(account) || user.getEmail().equals(account))) {
+                if(BCrypt.checkpw(password, user.getPassword())){
+                    return user;
+                }
             }
         }
         return null;

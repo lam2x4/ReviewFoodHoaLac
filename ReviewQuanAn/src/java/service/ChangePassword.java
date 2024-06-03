@@ -16,10 +16,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Vector;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author ACER
+ * Commented: TRUE
  */
 public class ChangePassword extends HttpServlet {
 
@@ -38,38 +40,61 @@ public class ChangePassword extends HttpServlet {
         HttpSession session = request.getSession(true);
 
         String service = request.getParameter("service");
+        
+        //COMPARE VERIFY CODE SENT AND USER INPUT
         if ("checkCode".equals(service)) {
+            
+            //USER INPUT
             String verifyCode = request.getParameter("code");
+            //VERIFY CODE SENT
             String vCode = (String) session.getAttribute("verifyCode");
+            
+            //MATCHED
             if (vCode.equals(verifyCode)) {
 
                 response.setStatus(HttpServletResponse.SC_OK);
 
-            } else if (!vCode.equals(verifyCode)) {
+            } 
+            //NOT MATCHED
+            else if (!vCode.equals(verifyCode)) {
 
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-            } else {
+            } 
+            //EXCEPTION (NET WORK FAILURE)
+            else {
 
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
+        
+        //CHANGE PASSWORD
         if (service.equals("changePassword")) {
             try {
+                
                 User user = (User) session.getAttribute("user");
-                System.out.println("User: " + user.toString());
-                user.setPassword(request.getParameter("newPassword"));
-                System.out.println("User: " + user.toString());
+                
+                String password = request.getParameter("newPassword");
+                
+                //ENCRYPT PASSWORD
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                
+                //UPDATE TO DATABASE
+                user.setPassword(hashedPassword);
                 DAOUser dao = new DAOUser();
                 int n = dao.updateUser(user);
+                
+                //SUCCESS
                 if (n == 1) {
                     response.sendRedirect("ChangePasswordPage.jsp?status=7");
-                } else {
-                    System.out.println("1");
+                } 
+                //FAILED
+                else {
                     response.sendRedirect("ChangePasswordPage.jsp?status=8");
                 }
             } catch (Exception e) {
-                System.out.println("2");
+                
+                //NULL USER
                 response.sendRedirect("ChangePasswordPage.jsp?status=9");
             }
         }
