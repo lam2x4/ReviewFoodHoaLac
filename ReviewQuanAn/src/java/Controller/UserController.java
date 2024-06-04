@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import dao.DAOUser;
+import model.DAOUser;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -137,7 +137,7 @@ public class UserController extends HttpServlet {
         DAOUser dao = new DAOUser();
         Vector<User> vector = dao.getAll("select * from [user]");
         for (User user : vector) {
-            if (user.getUser_name().equals(account) && user.getPassword().equals(password)) {
+            if (user.getUsername().equals(account) && user.getPassword().equals(password)) {
                 return user;
             }
         }

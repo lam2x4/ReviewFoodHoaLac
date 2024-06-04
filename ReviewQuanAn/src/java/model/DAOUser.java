@@ -38,7 +38,7 @@ public class DAOUser extends DBContext {
     public int addUser(User user){
         int n = 0;
         String sql = "INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], role_id)\n" +
-"VALUES('" + user.getUse_rname()+"','" + 
+"VALUES('" + user.getUsername()+"','" + 
                 user.getPassword()+ "','" + user.getEmail()+ "','" + 
                 user.getPhone()+ "','" + user.getAvatar()+ "','" +
                 user.getGender()+ "','" + user.getDescription()+ "','" +

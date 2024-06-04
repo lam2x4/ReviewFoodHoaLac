@@ -30,7 +30,7 @@ public class Mapper {
         return new User(user_id, user_name, password, email, phone, avatar, gender, description, verify_status, role_id);
     }
     public static void setRowUpdate(User user, PreparedStatement pstmt) throws SQLException {
-        pstmt.setString(1, user.getUser_name());
+        pstmt.setString(1, user.getUsername());
         pstmt.setString(2, user.getPassword());
         pstmt.setString(3, user.getEmail());
         pstmt.setString(4, user.getPhone());
@@ -39,10 +39,10 @@ public class Mapper {
         pstmt.setString(7, user.getDescription());
         pstmt.setInt(8, user.getVerify_status());
         pstmt.setInt(9, user.getRole_id());
-        pstmt.setInt(10, user.getUser_id());
+        pstmt.setInt(10, user.getId());
     }
     public static void setRowAdd(User user, PreparedStatement pstmt) throws SQLException {
-        pstmt.setString(1, user.getUser_name());
+        pstmt.setString(1, user.getUsername());
         pstmt.setString(2, user.getPassword());
         pstmt.setString(3, user.getEmail());
         pstmt.setString(4, user.getPhone());
