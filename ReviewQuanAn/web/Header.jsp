@@ -87,7 +87,7 @@
                 <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng quán ăn    <i class="fa-solid fa-pen"></i> </a>
+                            <a class="nav-link login-register-justified " href="BlogPostApplication.jsp" > Đăng blog    <i class="fa-solid fa-pen"></i> </a>
 
                         </li>
                         <li class="nav-item">
