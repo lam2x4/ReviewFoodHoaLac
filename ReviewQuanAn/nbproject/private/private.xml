@@ -3,25 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/META-INF/context.xml</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/dao/DAOImages.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/VerifyPage.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/LoginPage.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Admin.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/Login.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/Register.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/nbproject/build-impl.xml</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Script/Apply_Post_Page_Script.js</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/PostUpload.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/RegisterPage.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/dao/DAOBlog.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/StorePage.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/BlogPostApplication.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/entity/Blog.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/HomePage.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/nbproject/build-impl.xml~</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/EncryptPassword.java</file>
+            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/dal/DBContext.java</file>
         </group>
     </open-files>
 </project-private>
