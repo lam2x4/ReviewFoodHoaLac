@@ -24,13 +24,13 @@ CREATE TABLE [Role](
 CREATE TABLE [User](
 	id int IDENTITY(1,1) primary key,
 	username nvarchar(50) Unique,
-	[password] nvarchar(50) not null,
+	[password] nvarchar(255) not null,
 	email nvarchar(50) Unique,
 	phone nvarchar(10) Unique,
 	avatar nvarchar(255),
 	gender int,
 	[description] nvarchar(750),
-	verify_status int,
+	verify_status int not null,
 	role_id int foreign key references [role](role_id),
 )
 

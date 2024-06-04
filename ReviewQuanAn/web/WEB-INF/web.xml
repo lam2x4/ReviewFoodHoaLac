@@ -7,8 +7,64 @@
         <servlet-name>UserController</servlet-name>
         <servlet-class>Controller.UserController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangePassword</servlet-name>
+        <servlet-class>service.ChangePassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VerifyAccount</servlet-name>
+        <servlet-class>service.VerifyAccount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>service.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>service.Register</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendVerifyCode</servlet-name>
+        <servlet-class>service.SendVerifyCode</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResendCode</servlet-name>
+        <servlet-class>service.ResendCode</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EncryptPassword</servlet-name>
+        <servlet-class>service.EncryptPassword</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassword</servlet-name>
+        <url-pattern>/ChangePassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VerifyAccount</servlet-name>
+        <url-pattern>/VerifyAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/Register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendVerifyCode</servlet-name>
+        <url-pattern>/SendVerifyCode</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResendCode</servlet-name>
+        <url-pattern>/ResendCode</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EncryptPassword</servlet-name>
+        <url-pattern>/EncryptPassword</url-pattern>
     </servlet-mapping>
 </web-app>
