@@ -7,7 +7,6 @@ package service;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,9 +52,9 @@ public class PostUpload extends HttpServlet {
         DAOBlog daoBlog = new DAOBlog();
 
         try {
-//            int userId = Integer.parseInt(request.getParameter("userId"));
-//            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
-            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
+//            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
 
             for (Part part : request.getParts()) {
@@ -65,7 +64,7 @@ public class PostUpload extends HttpServlet {
                     String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
-                    //response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
+                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
