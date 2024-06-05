@@ -108,15 +108,15 @@ public class DAOUser extends DBContext {
 //            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-    public static void main(String[] args) {
-        DAOUser dao = new DAOUser();
+//    public static void main(String[] args) {
+//        DAOUser dao = new DAOUser();
 //        Vector<User> vector = dao.getAll();
 //        for(User user: vector){
 //            System.out.println(user.toString());
 //        }
 //        System.out.println(dao.getUser("llstylish0810@gmail.com").toString());
-        System.out.println(checkPassword("De0aib3t@@"));
-    }
+//        System.out.println(checkPassword("De0aib3t@@"));
+//    }
 
     public static boolean checkPassword(String password) {
         if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {

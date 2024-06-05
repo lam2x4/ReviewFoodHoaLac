@@ -86,12 +86,34 @@
             .text-center a:hover {
                 text-decoration: underline;
             }
+
+            #imagePreview {
+                display: flex;
+                flex-wrap: wrap;
+                overflow-y: auto;
+                height: 200px;
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
+
+            .spaced-buttons{
+                padding-left: 10px;
+                padding-right: 10px;
+                display: flex;
+                justify-content: space-between;
+            }
         </style>
+
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="Script/Apply_Post_Page_Script.js"></script>
     </head>
     <body>
         <%@ include file="./Header.jsp" %>
-        <%--
-            User user = (User)session.getAttribute("userToVerify");
+        <%
+            User user = (User)session.getAttribute("User");
             if(user == null){
                 response.sendRedirect("LoginPage.jsp");
             }
@@ -99,7 +121,7 @@
                 response.sendRedirect("AfterLogin.jsp");
             }
             else{
-        --%>
+        %>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
@@ -111,32 +133,27 @@
                         </div>
                         <form id="apply-post-form" action="upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <input type="text" name="postTitle" class="form-control" placeholder="Post Title" required>
+                                <textarea id="postTitle" name="postTitle" class="form-control" placeholder="Post Title" required></textarea>
                             </div>
                             <div class="form-group">
-                                <textarea name="postDescription" class="form-control" rows="4" placeholder="Post Description" required></textarea>
+                                <textarea id="postDescription" name="postDescription" class="form-control" rows="4" placeholder="Post Description" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="postImages">Upload Images</label>
-                                <input type="file" name="postImages" class="form-control-file" id="postImages" accept="image/*" multiple>
+                                <label for="imageUpload">Upload Images</label>
+                                <input type="file" id="imageUpload" name="imageUpload" class="form-control-file" accept="image/*" multiple>
+                                <div id="imagePreview"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group, spaced-buttons">
                                 <input type="submit" name="Apply" value="Apply" class="btn btn-primary">
                                 <input type="reset" name="Clear" value="Clear" class="btn btn-secondary">
                             </div>
-                            <%--<input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">--%>
+                            <input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        <%--}--%>
+        <%}%>
         <%@ include file="./Footer.jsp" %>
-
-        <!-- Bootstrap JS and dependencies -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="Script/Apply_Post_Page_Script.js"></script>
     </body>
 </html>
