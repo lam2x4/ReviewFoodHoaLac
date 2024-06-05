@@ -65,6 +65,7 @@ public class PostUpload extends HttpServlet {
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
                     response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
+                    System.out.println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {

@@ -115,18 +115,18 @@ public class DAOBlog extends DBConnect {
         }
     }
 
-//     public static void main(String[] args) {
-//        DAOBlog dao = new DAOBlog();
-//        
-//        Blog b = new Blog(1, "New Title", "New Content", 0);
-//        try {
-//            dao.addBlog(b);
-//            Blog newB = dao.getBlog(6);
-//            newB.setTitle("New Edited Title");
-//            dao.editBlog(newB);
-//            dao.deleteBlog(6);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+     public static void main(String[] args) {
+        DAOBlog dao = new DAOBlog();
+        
+        Blog b = new Blog(1, "New Title", "New Content", 0);
+        try {
+            dao.addBlog(b);
+            Blog newB = dao.getBlog(6);
+            newB.setTitle("New Edited Title");
+            dao.editBlog(newB);
+            dao.deleteBlog(6);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
