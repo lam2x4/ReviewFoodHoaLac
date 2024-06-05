@@ -1,0 +1,126 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 1, 2024, 12:10:08 PM
+    Author     : ACER
+*/
+
+body {
+    background-image: url('https://static.vecteezy.com/system/resources/previews/008/877/711/original/food-icons-colored-food-background-doodle-illustration-with-food-icon-free-vector.jpg');
+    background-size: auto;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Soft and rounded font */
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h2 {
+    color: #007bff; /* Blue heading */
+    font-weight: bold;
+}
+
+.form-control {
+    text-align: center;
+    max-width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 20px; /* Rounder corners */
+    border: 2px solid #007bff; /* Blue border */
+    margin: 0 5px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0056b3; /* Darker blue on focus */
+}
+
+.btn-resend {
+    background-color: #ffc107; /* Yellow button */
+    color: #212529;
+    border: none;
+    border-radius: 20px; /* Rounder corners */
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-resend:hover {
+    background-color: #ffca28; /* Lighter yellow on hover */
+}
+
+.btn-submit {
+    background-color: #007bff; /* Blue submit button */
+    color: #fff;
+    border: none;
+    border-radius: 20px; /* Rounder corners */
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.error-message {
+    color: #dc3545; /* Red color for error message */
+    font-size: 14px;
+    margin-top: 10px;
+}
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popup .popuptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    top: 125%; /* Position the popup below the icon */
+    left: 50%;
+    margin-left: -110px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%; /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+.popup:hover .popuptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.icon {
+    display: flex;
+    float: left;
+    font-size: 2rem;
+    height: auto;
+    width: 50px;
+    color: #f00;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+    border: 3px solid red;
+}

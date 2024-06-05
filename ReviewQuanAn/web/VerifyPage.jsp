@@ -14,71 +14,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Verification Code Input</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="Css/Verify_Page_Css.css">
         <style>
-            body {
-                background-color: #f8f9fa; /* Soft background color */
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Soft and rounded font */
-            }
-
-            .container {
-                margin-top: 50px;
-            }
-
-            h2 {
-                color: #007bff; /* Blue heading */
-                font-weight: bold;
-            }
-
-            .form-control {
-                text-align: center;
-                max-width: 50px;
-                height: 50px;
-                font-size: 24px;
-                border-radius: 20px; /* Rounder corners */
-                border: 2px solid #007bff; /* Blue border */
-                margin: 0 5px;
-            }
-
-            .form-control:focus {
-                outline: none;
-                border-color: #0056b3; /* Darker blue on focus */
-            }
-
-            .btn-resend {
-                background-color: #ffc107; /* Yellow button */
-                color: #212529;
-                border: none;
-                border-radius: 20px; /* Rounder corners */
-                padding: 10px 20px;
-                font-size: 16px;
-                margin-top: 20px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-resend:hover {
-                background-color: #ffca28; /* Lighter yellow on hover */
-            }
-
-            .btn-submit {
-                background-color: #007bff; /* Blue submit button */
-                color: #fff;
-                border: none;
-                border-radius: 20px; /* Rounder corners */
-                padding: 10px 20px;
-                font-size: 16px;
-                margin-top: 20px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-submit:hover {
-                background-color: #0056b3; /* Darker blue on hover */
-            }
-
-            .error-message {
-                color: #dc3545; /* Red color for error message */
-                font-size: 14px;
-                margin-top: 10px;
-            }
         </style>
     </head>
     <body>
@@ -92,18 +29,39 @@
             }
             else{
         %>
-        <div class="container">
+        <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <h2 class="text-center mb-4">We have sent an email to <%=(String)user.getEmail()%></h2>
-                    <div id="message" class="alert" style="display: none;"></div>
-                    <form id="verificationForm" action="UserController?service=verify" method="post">
-                        <div class="form-row justify-content-center">
-                            <input name="Vcode" type="text" maxlength="6" required>
+                    <div class="card shadow-md">
+
+                        <div class="popup">
+                            <span class="icon">!</span>
+                            <span class="popuptext" id="popupMessage">
+                                The system have saved your account information.
+                                If you could not complete verification in this session, you can continue the next time you login.
+                            </span>
                         </div>
-                        <input type="submit" name="submit" value="submit" class="btn btn-submit btn-block">
-                    </form>
-                    <button class="btn btn-resend btn-block">Resend Verification Code</button>
+                        <div class="card-header text-center">
+                            <h2 class="text-center mb-4">We have sent an email to <%=user.getEmail()%> </h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="message" class="alert" style="display: none;"></div>
+                            <form id="verificationForm" action="UserController?service=verify" method="post">
+                                <div class="form-row justify-content-center">
+                                    <input name="Vcode" type="text" maxlength="6" placeholder="Enter Verification Code" required>
+                                </div>
+                                <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-block mt-3">
+                            </form>
+                            <form action="UserController" method="post" class="mt-2">
+                                <input class="btn btn-secondary btn-block" type="submit" value="Resend Verify Code">
+                                <input type="hidden" name="service" value="resendVerifyCode">
+                            </form>
+                            <!-- Back to Login Page Link -->
+                            <div class="text-center mt-3">
+                                <a href="LoginPage.jsp" class="btn btn-link">Back to login page</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,24 +70,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                const status = urlParams.get('status');
-                const messageDiv = document.getElementById('message');
-
-                if (status === '1') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Verify code is incorrect!';
-                    messageDiv.style.display = 'block';
-                }
-                else if (status === '4') {
-                    messageDiv.className = 'alert alert-success';
-                    messageDiv.innerHTML = 'Something went wrong. Try again';
-                    messageDiv.style.display = 'block';
-                }
-            };
-        </script>
+        <script src="Script/Verify_Page_Script.js"></script>
 
     </body>
 </html>

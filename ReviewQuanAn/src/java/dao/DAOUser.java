@@ -1,5 +1,6 @@
 package dao;
 
+import Utility.Mapper;
 import dal.DBContext;
 import entity.User;
 import java.sql.PreparedStatement;
@@ -9,7 +10,7 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Mapper;
+import Utility.Mapper;
 
 public class DAOUser extends DBContext {
 
@@ -57,6 +58,23 @@ public class DAOUser extends DBContext {
         return 0;
     }
 
+    public User getUser(String email) {
+        String sql = "SELECT * FROM [user] WHERE email = ?";
+        User user = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = Mapper.mapRow(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, "Error fetching user by email: " + email, ex);
+            // Consider throwing a custom exception here or handle the error appropriately
+        }
+        return user;
+    }
+
     public User getUser(int id) {
         String sql = "SELECT * FROM [User] WHERE id = ?";
 
@@ -92,6 +110,19 @@ public class DAOUser extends DBContext {
 //    }
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
-        System.out.println(dao.getUser(4).toString());
+//        Vector<User> vector = dao.getAll();
+//        for(User user: vector){
+//            System.out.println(user.toString());
+//        }
+//        System.out.println(dao.getUser("llstylish0810@gmail.com").toString());
+        System.out.println(checkPassword("De0aib3t@@"));
     }
+
+    public static boolean checkPassword(String password) {
+        if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -2,59 +2,74 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package service;
 
+import Utility.MailSender;
+import dao.DAOUser;
+import entity.User;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author AnhTT
+ * @author ACER
+ * Commented: TRUE
  */
-public class UserController extends HttpServlet {
+public class ResendCode extends HttpServlet {
+
+    private String vCode;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String service = request.getParameter("service");
+        HttpSession session = request.getSession(true);
+        DAOUser dao = new DAOUser();
 
-        //Login handler------------------------------------------------------
-        if (service.equals("login")) {
-            RequestDispatcher disp = request.getRequestDispatcher("Login");
-            disp.forward(request, response);
-        }
-        //DONE!---------------------------------------------------------------
-
-        //Register handler----------------------------------------------------
-        if (service.equals("register")) {
-            RequestDispatcher disp = request.getRequestDispatcher("Register");
-            disp.forward(request, response);
-        }
-        //DONE!---------------------------------------------------------------
-
-        //Verify handler------------------------------------------------------
-        if (service.equals("verify")) {
-            RequestDispatcher disp = request.getRequestDispatcher("VerifyAccount");
-            disp.forward(request, response);
-        }
-        //DONE!---------------------------------------------------------------
-
-        if (service.equals("changePassword")) {
-            try{
-                RequestDispatcher disp = request.getRequestDispatcher("ChangePassword");
-                disp.forward(request, response);
-            }catch(Exception e){
-                RequestDispatcher disp = request.getRequestDispatcher("ChangePasswordPage.jsp?status=5");
-                disp.forward(request, response);
+        try {
+            //GET USER IN SESSION
+            User user = (User) session.getAttribute("userToVerify");
+            
+            //SUCCESS
+            if (user != null) {
+                String email = user.getEmail();
+                
+                //SEND EMAIL
+                boolean success = sendVerificationCode(email);
+                
+                //SUCCESS
+                if (success == true) {
+                    session.setAttribute("verifyCode", vCode);
+                    response.sendRedirect("VerifyPage.jsp?status=2");
+                } 
+                //FAILED
+                else {
+                    response.sendRedirect("VerifyPage.jsp?status=3");
+                }
+            } 
+            //FAILED
+            else {
+                response.sendRedirect("VerifyPage.jsp?status=5");
             }
+        } catch (Exception e) {
+            //USER NULL
+            response.sendRedirect("VerifyPage.jsp?status=5");
         }
-        if(service.equals("resendVerifyCode")){
-            RequestDispatcher disp = request.getRequestDispatcher("ResendCode");
-            disp.forward(request, response);
+    }
+
+    private boolean sendVerificationCode(String email) {
+        MailSender mailSender = new MailSender();
+        try {
+            String code = mailSender.getVifificationCode();
+            mailSender.sentEmail(email, code);
+            vCode = code;
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
