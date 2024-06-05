@@ -15,21 +15,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <%
-            if((Vector<User>) session.getAttribute("data") != null){
-                Vector<User> vector = (Vector<User>) session.getAttribute("data");
-                for(User user: vector){
-        %>
-                <p><%=user.toString()%></p>
-        <%
-                }
-            }
-            if((User)session.getAttribute("userToVerify") != null){
-        %>
-                <p><%=((User)session.getAttribute("userToVerify")).toString()%></p>
-        <%
-            }
-        %>
+        <%String src= "img/3ad12229-4213-4e93-a060-d0aab4b85102_Megumin.jpg";%>
+        <h1><%=src%></h1>
+        <img src="<%=src%>" alt="alt"/>
     </body>
 </html>

@@ -19,6 +19,8 @@ import dao.DAOImages;
 import entity.Images;
 import dao.DAOBlog;
 import entity.Blog;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 
 /**
@@ -45,7 +47,7 @@ public class PostUpload extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String postTitle = request.getParameter("postTitle");
         String postDescription = request.getParameter("postDescription");
-
+        HttpSession session = request.getSession(true);
         // Uploaded to: ReviewQuanAn\build\web\img\
         String uploadPath = getServletContext().getRealPath("/img") + File.separator;
         DAOImages daoImg = new DAOImages();
@@ -65,7 +67,6 @@ public class PostUpload extends HttpServlet {
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
                     response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
-                    System.out.println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
