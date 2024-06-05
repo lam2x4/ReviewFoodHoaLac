@@ -73,6 +73,22 @@ VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', 10),
        (1, 'Review of Cafeteria 2', 'The food is 7/10', 15),
        (2, 'Review of Cafeteria 1', 'The food is 10/10', 20),
        (2, 'Review of Cafeteria 2', 'The food is 9/10', 8);
+-- Insert example data into the Blog table
+INSERT INTO Blog ([user_id], title, content, likes) VALUES 
+(1, 'First Blog Post', 'This is the content of the first blog post.', 10),
+(2, 'Second Blog Post', 'This is the content of the second blog post.', 5),
+(1, 'Another Blog Post', 'Content for another blog post by the same user.', 8),
+(3, 'Tech Trends 2024', 'An in-depth look at upcoming tech trends in 2024.', 15),
+(2, 'Travel Diaries', 'Experiences from my recent trip around the world.', 20);
+
+-- Insert another set of example data
+INSERT INTO Blog ([user_id], title, content, likes) VALUES 
+(4, 'Healthy Living', 'Tips and tricks for maintaining a healthy lifestyle.', 25),
+(3, 'JavaScript Tips', 'Useful tips and tricks for JavaScript developers.', 30),
+(5, 'Gardening 101', 'A beginner’s guide to starting your own garden.', 12),
+(4, 'Fitness Journey', 'My personal journey towards achieving fitness goals.', 18),
+(1, 'Cooking Recipes', 'Delicious and easy-to-make recipes for home cooking.', 22);
+INSERT INTO Blog(
 
 -- Insert data into the Images table
 INSERT INTO Images (blog_id, link)
