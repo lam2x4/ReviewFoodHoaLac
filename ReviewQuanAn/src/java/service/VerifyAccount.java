@@ -64,7 +64,7 @@ public class VerifyAccount extends HttpServlet {
                 {
                     user.setVerify_status(1);
                     int n = dao.updateUser(user);
-                    if (n == 1) response.sendRedirect("LoginPage.jsp");
+                    if (n == 1) response.sendRedirect("VerifyPage.jsp?status=6");
                     //Unknown Error 
                     else response.sendRedirect("VerifyPage.jsp?status=4");
                     

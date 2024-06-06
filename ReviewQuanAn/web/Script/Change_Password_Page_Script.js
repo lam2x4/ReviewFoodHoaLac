@@ -30,11 +30,11 @@ window.onload = function () {
     const messageDiv = document.getElementById('message');
 
     if (status === '1') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Could not find your email in our database!';
         messageDiv.style.display = 'block';
     } else if (status === '2') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Could not send verify code to your email!';
         messageDiv.style.display = 'block';
     } else if (status === '3') {
@@ -42,11 +42,11 @@ window.onload = function () {
         messageDiv.innerHTML = 'Password changed!';
         messageDiv.style.display = 'block';
     } else if (status === '4') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Something went wrong when changing your password!';
         messageDiv.style.display = 'block';
     } else if (status === '5') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Incorect Verify Code!';
         messageDiv.style.display = 'block';
     } else if (status === '7') {
@@ -54,11 +54,11 @@ window.onload = function () {
         messageDiv.innerHTML = 'Password changed!';
         messageDiv.style.display = 'block';
     } else if (status === '8') {
-        messageDiv.className = 'alert alert-success';
-        messageDiv.innerHTML = 'Could not change pasword (update step)!';
+        messageDiv.className = 'alert alert-danger';
+        messageDiv.innerHTML = 'Could not change pasword (maybe database error)';
         messageDiv.style.display = 'block';
     } else if (status === '9') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'User null or password null!';
         messageDiv.style.display = 'block';
     }
