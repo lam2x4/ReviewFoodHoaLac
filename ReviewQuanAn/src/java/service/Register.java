@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -29,6 +31,7 @@ public class Register extends HttpServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
+        
         User user = new User(email, phone);
         //CHECK IF EMAIL OR PHONE ALREADY EXISTED IN DATABASE
         if (!checkRegister(user)) {
@@ -39,11 +42,16 @@ public class Register extends HttpServlet {
         String avatar = "";
         int gender = Integer.parseInt(request.getParameter("gender"));
         String description = request.getParameter("description");
-
+        
+        //GET CURRENT DATE
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String create_date = date.format(dateFormat);
+        
         //HASH PASSWORD AND ADD TO DATABASE
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         //VERIFY STATUS = 0 MEANS HAVE NOT VERIFY ----- ROLE = 2 MEANS CUSTOMER
-        user = new User(username, hashedPassword, email, phone, avatar, gender, description, 0, 2);
+        user = new User(username, hashedPassword, email, phone, avatar, gender, description, create_date, 0, 2);
 
         try {
             //ADD USER TO DATABASE 
