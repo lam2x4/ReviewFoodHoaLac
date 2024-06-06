@@ -82,11 +82,17 @@ public class Login extends HttpServlet {
 
     public User login(String account, String password) {
         DAOUser dao = new DAOUser();
+        account = account.toLowerCase();
         Vector<User> vector = dao.getAll();
         for (User user : vector) {
             if ((user.getUsername().equals(account) || user.getEmail().equals(account))) {
-                if(BCrypt.checkpw(password, user.getPassword())){
-                    return user;
+                try{
+                    boolean checkPassword = BCrypt.checkpw(password, user.getPassword());
+                    if(checkPassword){
+                        return user;
+                    }
+                }catch(Exception e){
+                    return null;
                 }
             }
         }
