@@ -15,8 +15,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%String src= "img/3ad12229-4213-4e93-a060-d0aab4b85102_Megumin.jpg";%>
-        <h1><%=src%></h1>
+        <%Vector<String> vector = (Vector<String>) session.getAttribute("srcs");
+        for(String src: vector){
+        %>
         <img src="<%=src%>" alt="alt"/>
+        <%
+            }
+        %>
+        
     </body>
 </html>

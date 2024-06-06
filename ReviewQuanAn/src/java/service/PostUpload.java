@@ -22,6 +22,7 @@ import entity.Blog;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  *
@@ -58,7 +59,7 @@ public class PostUpload extends HttpServlet {
             Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
 //            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
-
+            Vector<String> vector = new Vector();
             for (Part part : request.getParts()) {
                 String contentType = part.getContentType();
 
@@ -67,8 +68,11 @@ public class PostUpload extends HttpServlet {
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
                     response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
+
+                    vector.add("img/"+fileName);
                 }
             }
+            session.setAttribute("srcs", vector);
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
             e.printStackTrace();
             //response.sendRedirect("HomePage.jsp");
