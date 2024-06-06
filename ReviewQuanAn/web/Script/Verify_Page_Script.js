@@ -8,7 +8,7 @@ window.onload = function () {
     const messageDiv = document.getElementById('message');
 
     if (status === '1') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Verify code is incorrect!';
         messageDiv.style.display = 'block';
     } else if (status === '2') {
@@ -20,12 +20,16 @@ window.onload = function () {
         messageDiv.innerHTML = 'Could not resend email!';
         messageDiv.style.display = 'block';
     } else if (status === '4') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'Something went wrong. Try again';
         messageDiv.style.display = 'block';
     } else if (status === '5') {
-        messageDiv.className = 'alert alert-success';
+        messageDiv.className = 'alert alert-danger';
         messageDiv.innerHTML = 'User is null!';
+        messageDiv.style.display = 'block';
+    } else if (status === '6') {
+        messageDiv.className = 'alert alert-success';
+        messageDiv.innerHTML = 'Account verified successfully!';
         messageDiv.style.display = 'block';
     }
 };

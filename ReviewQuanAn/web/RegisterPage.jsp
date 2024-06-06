@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <input id="password" type="password" name="password" class="form-control" 
                                        placeholder="Password" required
-                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                                        title="Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter,
                                 one digit, and one special character.">
                             </div>
@@ -71,7 +71,6 @@
         <script src="https://cdn.jsdelivr.net/npm/jsencrypt"></script>
         <script src="https://cdn.rawgit.com/travist/jsencrypt/master/bin/jsencrypt.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
-        <script src="Script/Password_Encryption.js"></script>
         <script src="Script/Register_Page_Script.js"></script>
     </body>
 </html>
