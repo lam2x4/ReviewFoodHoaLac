@@ -110,10 +110,10 @@ public class DAOUser extends DBContext {
 //    }
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
-//        Vector<User> vector = dao.getAll();
-//        for(User user: vector){
-//            System.out.println(user.toString());
-//        }
+        Vector<User> vector = dao.getAll();
+        for(User user: vector){
+            System.out.println(user.toString());
+        }
 //        System.out.println(dao.getUser("llstylish0810@gmail.com").toString());
         System.out.println(checkPassword("De0aib3t@@"));
     }
