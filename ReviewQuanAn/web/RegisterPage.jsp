@@ -71,7 +71,6 @@
         <script src="https://cdn.jsdelivr.net/npm/jsencrypt"></script>
         <script src="https://cdn.rawgit.com/travist/jsencrypt/master/bin/jsencrypt.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
-        <script src="Script/Password_Encryption.js"></script>
         <script src="Script/Register_Page_Script.js"></script>
     </body>
 </html>
