@@ -24,10 +24,11 @@ public class Mapper {
         String avatar = rs.getString(6);
         int gender = rs.getByte(7);
         String description = rs.getString(8);
-        int verify_status = rs.getInt(9);
-        int role_id = rs.getInt(10);
+        String create_date = rs.getString(9);
+        int verify_status = rs.getInt(10);
+        int role_id = rs.getInt(11);
 
-        return new User(user_id, user_name, password, email, phone, avatar, gender, description, verify_status, role_id);
+        return new User(user_id, user_name, password, email, phone, avatar, gender, description, create_date, verify_status, role_id);
     }
     public static void setRowUpdate(User user, PreparedStatement pstmt) throws SQLException {
         pstmt.setString(1, user.getUsername());
@@ -38,8 +39,9 @@ public class Mapper {
         pstmt.setInt(6, user.getGender());
         pstmt.setString(7, user.getDescription());
         pstmt.setInt(8, user.getVerify_status());
-        pstmt.setInt(9, user.getRole_id());
-        pstmt.setInt(10, user.getId());
+        pstmt.setString(9, user.getCreate_date());
+        pstmt.setInt(10, user.getRole_id());
+        pstmt.setInt(11, user.getId());
     }
     public static void setRowAdd(User user, PreparedStatement pstmt) throws SQLException {
         pstmt.setString(1, user.getUsername());
@@ -49,7 +51,8 @@ public class Mapper {
         pstmt.setString(5, user.getAvatar());
         pstmt.setInt(6, user.getGender());
         pstmt.setString(7, user.getDescription());
-        pstmt.setInt(8, user.getVerify_status());
-        pstmt.setInt(9, user.getRole_id());
+        pstmt.setString(8, user.getCreate_date());
+        pstmt.setInt(9, user.getVerify_status());
+        pstmt.setInt(10, user.getRole_id());
     }
 }

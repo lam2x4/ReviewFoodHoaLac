@@ -66,36 +66,36 @@
                 <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item nav-justified">
-                            <a class="nav-link " href="#">Trang chủ</a>
+                            <a class="nav-link " href="#">Home</a>
                         </li>
 
                         <li class="nav-item nav-justified">
-                            <a class="nav-link " href="#">Quán ăn</a>
+                            <a class="nav-link " href="#">Blogs</a>
                         </li>
                         <li class="nav-item nav-justified ">
-                            <a class="nav-link" href="#">Liên hệ</a>
+                            <a class="nav-link" href="#">Contacts</a>
                         </li>
 
 
                     </ul>
                     <form class="form-inline search-justified" action="#">
                         <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                        <button class="btn btn-success" type="submit">Tìm kiếm</button>
+                        <button class="btn btn-success" type="submit">Search</button>
                     </form>
                 </div>
 
                 <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng quán ăn    <i class="fa-solid fa-pen"></i> </a>
+                            <a class="nav-link login-register-justified " href="#" >Post Blog  <i class="fa-solid fa-pen"></i> </a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="LoginPage.jsp" > Đăng nhập   <i class="fa-solid fa-right-to-bracket"></i> </a>
+                            <a class="nav-link login-register-justified " href="LoginPage.jsp" >Login  <i class="fa-solid fa-right-to-bracket"></i> </a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="RegisterPage.jsp">Đăng ký   <i class="fa-solid fa-feather"></i></a>
+                            <a class="nav-link login-register-justified " href="RegisterPage.jsp">Register  <i class="fa-solid fa-feather"></i></a>
                         </li>
 
                     </ul>
