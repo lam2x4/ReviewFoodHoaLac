@@ -38,8 +38,8 @@ public class Mapper {
         pstmt.setString(5, user.getAvatar());
         pstmt.setInt(6, user.getGender());
         pstmt.setString(7, user.getDescription());
-        pstmt.setInt(8, user.getVerify_status());
-        pstmt.setString(9, user.getCreate_date());
+                pstmt.setString(8, user.getCreate_date());
+        pstmt.setInt(9, user.getVerify_status());
         pstmt.setInt(10, user.getRole_id());
         pstmt.setInt(11, user.getId());
     }

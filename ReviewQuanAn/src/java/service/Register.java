@@ -56,13 +56,13 @@ public class Register extends HttpServlet {
         try {
             //ADD USER TO DATABASE 
             int n = dao.addUser(user);
-            
+            System.out.println(n);
             //SUCCESS
             if (n > 0) {
                 
                 //UPDATE CURRENT USER WITH DATABASE (CURRENT USER DOES NOT HAVE ID)
                 user = dao.getUser(email);
-                
+                System.out.println(user.toString());
                 //EXCEPTION
                 if (user == null) {
                     response.sendRedirect("RegisterPage.jsp?status=6");

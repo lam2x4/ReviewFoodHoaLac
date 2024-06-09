@@ -121,7 +121,7 @@ public class DAOBlog extends DBConnect {
      public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
         
-        Blog b = new Blog(1, "New Title", "New Content", 0);
+        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
         try {
             dao.addBlog(b);
             Blog newB = dao.getBlog(6);

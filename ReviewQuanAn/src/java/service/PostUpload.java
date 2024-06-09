@@ -22,6 +22,8 @@ import entity.Blog;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 /**
@@ -49,16 +51,18 @@ public class PostUpload extends HttpServlet {
         String postTitle = request.getParameter("postTitle");
         String postDescription = request.getParameter("postDescription");
         HttpSession session = request.getSession(true);
-        
-        
+
         // Uploaded to: ReviewQuanAn\build\web\img\
         String uploadPath = getServletContext().getRealPath("/img") + File.separator;
         DAOImages daoImg = new DAOImages();
         DAOBlog daoBlog = new DAOBlog();
 
         try {
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String create_date = date.format(dateFormat);
             int userId = Integer.parseInt(request.getParameter("userId"));
-            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
+            Blog blogTemp = new Blog(userId, postTitle, postDescription,create_date, 0,0,0);
 //            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
             for (Part part : request.getParts()) {
