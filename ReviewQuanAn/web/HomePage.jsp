@@ -61,14 +61,14 @@
 
         <div class="container-fluid" >
             <div class="row">
-                <c:forEach begin="0" end="${list.size()}" var="i">   
-                    <div class ="col"> 
+                <c:forEach items="${requestScope.list}" var="i">   
+                    <div class ="col-4"> 
                         <div class="card" >
                             <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTskvGE9g2h_ZgPGtkx6I9ziNRsEF9YG0LXJd35ZV-O0Q&s" alt="Card image" style="width:100%">
                             <div class="card-body">
-                                <h4 class="card-title">${list.get(i).store_name}</h4>
-                                <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
-                                <a href="#" class="btn btn-primary stretched-link">See Store</a>
+                                <h4 class="card-title">${i.title}</h4>
+                                <p class="card-text">${i.content}</p>
+                                <a href="#" class="btn btn-primary stretched-link">See Blog</a>
                             </div>
                         </div>
                     </div>

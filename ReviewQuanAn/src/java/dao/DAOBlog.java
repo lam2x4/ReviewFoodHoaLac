@@ -69,7 +69,7 @@ public class DAOBlog extends DBConnect {
                 b.setUser_id(rs.getInt(2));
                 b.setTitle(rs.getString(3));
                 b.setContent(rs.getString(4));
-                b.setLikes(rs.getInt(5));
+                b.setLikes(rs.getInt(6));
 
                 vector.add(b);
             }
@@ -118,18 +118,14 @@ public class DAOBlog extends DBConnect {
         }
     }
 
-//     public static void main(String[] args) {
-//        DAOBlog dao = new DAOBlog();
-//        
-//        Blog b = new Blog(1, "New Title", "New Content", 0);
-//        try {
-//            dao.addBlog(b);
-//            Blog newB = dao.getBlog(6);
-//            newB.setTitle("New Edited Title");
-//            dao.editBlog(newB);
-//            dao.deleteBlog(6);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+     public static void main(String[] args) {
+        DAOBlog dao = new DAOBlog();
+        
+       
+        try {
+            System.out.println(dao.getAll());
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
