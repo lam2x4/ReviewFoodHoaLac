@@ -17,18 +17,10 @@ import jakarta.servlet.http.HttpSession;
 /**
  *
  * @author ACER
+ * Commented: TRUE
  */
 public class VerifyAccount extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -53,7 +45,7 @@ public class VerifyAccount extends HttpServlet {
                 try {
                     
                     mailSender.sentEmail(user.getEmail(), code);
-                    session.setAttribute("verificationCode", code);
+                    session.setAttribute("verifyCode", code);
                     response.sendRedirect("VerifyPage.jsp");
                     
                 } catch (Exception e) {
@@ -66,14 +58,14 @@ public class VerifyAccount extends HttpServlet {
             else if (submit != null) 
             {
                 String code = request.getParameter("Vcode");
-                String sessionCode = (String) session.getAttribute("verificationCode");
+                String sessionCode = (String) session.getAttribute("verifyCode");
 
                 if (code.equals(sessionCode)) 
                 {
                     user.setVerify_status(1);
                     int n = dao.updateUser(user);
-                    if (n == 1) response.sendRedirect("LoginPage.jsp");
-                    //Unknown Error (Exception handler)
+                    if (n == 1) response.sendRedirect("VerifyPage.jsp?status=6");
+                    //Unknown Error 
                     else response.sendRedirect("VerifyPage.jsp?status=4");
                     
                 } 
@@ -83,7 +75,7 @@ public class VerifyAccount extends HttpServlet {
                     response.sendRedirect("VerifyPage.jsp?status=1");
                 }
             } 
-            //Unknown Error (Exception handler)
+            //Unknown Error
             else 
             {
                 response.sendRedirect("VerifyPage.jsp?status=4");

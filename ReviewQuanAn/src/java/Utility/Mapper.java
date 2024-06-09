@@ -22,7 +22,7 @@ public class Mapper {
         String email = rs.getString(4);
         String phone = rs.getString(5);
         String avatar = rs.getString(6);
-        int gender = rs.getByte(7);
+        int gender = rs.getInt(7);
         String description = rs.getString(8);
         String create_date = rs.getString(9);
         int verify_status = rs.getInt(10);

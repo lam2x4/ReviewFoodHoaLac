@@ -18,34 +18,53 @@ import jakarta.servlet.http.HttpSession;
 /**
  *
  * @author ACER
+ * Commented: TRUE
  */
 public class ResendCode extends HttpServlet {
+
     private String vCode;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
         DAOUser dao = new DAOUser();
-        User user = (User) session.getAttribute("userToVerify");
-        if(user != null){
-            String email = user.getEmail();
-            boolean success = sendVerificationCode(email);
-            if(success == true){
-                response.sendRedirect("VerifyPage.jsp?status=2");
+
+        try {
+            //GET USER IN SESSION
+            User user = (User) session.getAttribute("userToVerify");
+            
+            //SUCCESS
+            if (user != null) {
+                String email = user.getEmail();
+                
+                //SEND EMAIL
+                boolean success = sendVerificationCode(email);
+                
+                //SUCCESS
+                if (success == true) {
+                    session.setAttribute("verifyCode", vCode);
+                    response.sendRedirect("VerifyPage.jsp?status=2");
+                } 
+                //FAILED
+                else {
+                    response.sendRedirect("VerifyPage.jsp?status=3");
+                }
+            } 
+            //FAILED
+            else {
+                response.sendRedirect("VerifyPage.jsp?status=5");
             }
-            else{
-                response.sendRedirect("VerifyPage.jsp?status=3");
-            }
-        }
-        else{
+        } catch (Exception e) {
+            //USER NULL
             response.sendRedirect("VerifyPage.jsp?status=5");
         }
     }
+
     private boolean sendVerificationCode(String email) {
         MailSender mailSender = new MailSender();
-        String code = mailSender.getVifificationCode();
         try {
-
+            String code = mailSender.getVifificationCode();
             mailSender.sentEmail(email, code);
             vCode = code;
             return true;

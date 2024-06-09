@@ -11,6 +11,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utility.Mapper;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class DAOUser extends DBContext {
 
@@ -32,7 +35,8 @@ public class DAOUser extends DBContext {
 
     public int addUser(User user) {
         String sql
-                = "INSERT INTO [User] (username,[password],email,phone,avatar,gender,[description],verify_status,role_id)VALUES(?,?,?,?,?,?,?,?,?)";
+                = "INSERT INTO [User] "
+                + "(username,[password],email,phone,avatar,gender,[description],create_date,verify_status,role_id)VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             Mapper.setRowAdd(user, pstmt);
@@ -46,7 +50,7 @@ public class DAOUser extends DBContext {
 
     public int updateUser(User user) {
         String sql = "UPDATE [dbo].[User] SET [username] = ?, [password] = ?, [email] = ?, [phone] = ?, [avatar] = ?, [gender] = ?, "
-                + "[description] = ?, [verify_status] = ?, [role_id] = ? WHERE [id] = ?";
+                + "[description] = ?, [create_date] = ?, [verify_status] = ?, [role_id] = ? WHERE [id] = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             Mapper.setRowUpdate(user, pstmt);
             pstmt.executeUpdate();
@@ -56,6 +60,23 @@ public class DAOUser extends DBContext {
             // Handle the exception appropriately
         }
         return 0;
+    }
+
+    public User getUser(String email) {
+        String sql = "SELECT * FROM [user] WHERE email = ?";
+        User user = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = Mapper.mapRow(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, "Error fetching user by email: " + email, ex);
+            // Consider throwing a custom exception here or handle the error appropriately
+        }
+        return user;
     }
 
     public User getUser(int id) {
@@ -93,27 +114,44 @@ public class DAOUser extends DBContext {
         return -1;
     }
 
-//    public static void main(String[] args) {
-//        DAOUser dao = new DAOUser();
-//        User u = new User("New Username", "New Password", "New Email", "New Phone", "New Avatar", 1, "New Description", 1, 1);
-//        try {
-//            User newU = dao.getUser(5);
-//            newU.setUsername("New Edited Username");
-//            dao.updateUser(newU);
-//            dao.addUser(u);
-//            dao.deleteUser(5);
-//            Vector<User> vector = dao.getAll();
-//            for(User _u : vector) System.out.println(_u);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    public int deleteUser(int user_id) {
+        String sql = """
+                 DELETE FROM [User]
+                 WHERE id = ?
+                 AND id NOT IN (SELECT [user_id] FROM Blog)
+                 AND id NOT IN (SELECT [user_id] FROM Images)
+                 AND id NOT IN (SELECT [user_id] FROM Comment)
+                 AND id NOT IN (SELECT [user_id] FROM Draft);""";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            int rowsAffected = pre.executeUpdate();
+            return rowsAffected; // return the number of rows affected
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
         Vector<User> vector = dao.getAll();
-        for(User user: vector){
+        for (User user : vector) {
             System.out.println(user.toString());
         }
-        
+        /*
+        LocalDate create_date = LocalDate.now();
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String date = create_date.format(dateFormat);
+        System.out.println(date);*/
+
     }
+
+    public static boolean checkPassword(String password) {
+        if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            return true;
+        }
+        return false;
+    }
+
 }
