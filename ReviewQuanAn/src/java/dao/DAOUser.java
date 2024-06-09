@@ -96,6 +96,23 @@ public class DAOUser extends DBContext {
         }
         return null;
     }
+    
+    public int getUser_id(String username){
+         String sql = "SELECT id FROM [User] WHERE username = ?";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, username);
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
 
     public int deleteUser(int user_id) {
         String sql = """

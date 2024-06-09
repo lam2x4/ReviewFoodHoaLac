@@ -10,13 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DAOBlog extends DBConnect {
-
-    public int addBlog(Blog b) throws SQLException {
-        String sql = "INSERT INTO [dbo].[Blog] "
-                + "([user_id], [title], [content], [likes]) "
-                + "VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+    
+    public int addBlog(Blog b) throws SQLException{
+        String sql = "INSERT INTO [dbo].[Blog] " +
+                    "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned]) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        try(PreparedStatement pre = conn.prepareStatement(sql)){
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
@@ -91,8 +91,11 @@ public class DAOBlog extends DBConnect {
                     b.setUser_id(rs.getInt(2));
                     b.setTitle(rs.getString(3));
                     b.setContent(rs.getString(4));
-                    b.setLikes(rs.getInt(5));
-
+                    b.setCreate_date(rs.getString(5));
+                    b.setLikes(rs.getInt(6));
+                    b.setIs_approved(rs.getInt(7));
+                    b.setIs_banned(rs.getInt(8));
+                    
                     return b;
                 } else {
                     throw new SQLException("No blog found with ID: " + id);

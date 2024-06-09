@@ -90,6 +90,27 @@ public class DAOImages extends DBConnect{
         }
     }
     
+    public Vector<Images> findImagesByBlog_id(int blog_id) throws SQLException{
+        Vector<Images> vector = new Vector<>();
+        String sql = "SELECT * FROM Images WHERE blog_id = ?";
+        
+        try(PreparedStatement pre = conn.prepareStatement(sql)){
+            pre.setInt(1, blog_id);
+            ResultSet rs = pre.executeQuery();
+            
+            while(rs.next()){
+                Images img = new Images();
+                
+                img.setId(rs.getInt(1));
+                img.setBlog_id(rs.getInt(2));
+                img.setLink(rs.getString(3));
+
+                vector.add(img);
+            }
+        }
+        return vector;
+    }
+    
 //    public static void main(String[] args) {
 //        DAOImages dao = new DAOImages();
 //        Images img = new Images(1, "New Link");
