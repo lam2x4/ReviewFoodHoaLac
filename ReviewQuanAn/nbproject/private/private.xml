@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/entity/User.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/service/VerifyAccount.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/dao/DBConnect.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/Utility/Mapper.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/service/Register.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/web/Script/Register_Page_Script.js</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/dao/DAOUser.java</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/web/Script/Verify_Page_Script.js</file>
-            <file>file:/C:/SWP391/Temp2/ReviewQuanAn/src/java/dal/DBContext.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

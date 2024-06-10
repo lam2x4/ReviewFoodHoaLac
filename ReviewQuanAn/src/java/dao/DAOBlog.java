@@ -72,7 +72,7 @@ public class DAOBlog extends DBConnect {
                 b.setUser_id(rs.getInt(2));
                 b.setTitle(rs.getString(3));
                 b.setContent(rs.getString(4));
-                b.setLikes(rs.getInt(5));
+                b.setLikes(rs.getInt(6));
 
                 vector.add(b);
             }
