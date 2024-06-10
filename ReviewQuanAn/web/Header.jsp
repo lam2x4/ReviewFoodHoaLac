@@ -133,7 +133,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                            <a class="nav-link" href="home"><i class="fas fa-home"></i> Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="upload"><i class="fas fa-blog"></i> Add Blog</a>

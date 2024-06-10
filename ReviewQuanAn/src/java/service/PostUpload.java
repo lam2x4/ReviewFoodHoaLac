@@ -62,7 +62,7 @@ public class PostUpload extends HttpServlet {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String create_date = date.format(dateFormat);
             int userId = Integer.parseInt(request.getParameter("userId"));
-            Blog blogTemp = new Blog(userId, postTitle, postDescription,create_date, 0,0,0);
+            Blog blogTemp = new Blog(userId, postTitle, postDescription, create_date, 0, 0, 0);
 //            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
             for (Part part : request.getParts()) {
@@ -72,13 +72,14 @@ public class PostUpload extends HttpServlet {
                     String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
-                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
+                    //response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
             e.printStackTrace();
             //response.sendRedirect("HomePage.jsp");
         }
+        response.sendRedirect("ApplyPostPage.jsp");
     }
 
     /**
