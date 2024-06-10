@@ -48,32 +48,6 @@ public class User {
     public User() {
     }
 
-    public User(int id, String username, String password, String email, String phone, String avatar, int gender, String description, String create_date, int verify_status, int role_id) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.avatar = avatar;
-        this.gender = gender;
-        this.description = description;
-        this.create_date = create_date;
-        this.verify_status = verify_status;
-        this.role_id = role_id;
-    }
-
-    public User(String username, String password, String email, String phone, String avatar, int gender, String description, String create_date, int verify_status, int role_id) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.avatar = avatar;
-        this.gender = gender;
-        this.description = description;
-        this.create_date = create_date;
-        this.verify_status = verify_status;
-        this.role_id = role_id;
-    }
 
     public String getCreate_date() {
         return create_date;
@@ -115,10 +89,6 @@ public class User {
         return description;
     }
 
-    public String getCreate_date() {
-        return create_date;
-    }
-
     public int getVerify_status() {
         return verify_status;
     }
@@ -157,10 +127,6 @@ public class User {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setCreate_date(String create_date) {
-        this.create_date = create_date;
     }
 
     public void setVerify_status(int verify_status) {
