@@ -3,13 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 
+
 window.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('apply-post-form');
+
     const postTitle = document.getElementById('postTitle');
     const postDescription = document.getElementById('postDescription');
-    const imagePreview = document.getElementById('imagePreview');
-    const clearButton = form.querySelector('input[type="reset"]');
+
+    const billUpload = document.getElementById('billUpload');
+    const billPreview = document.getElementById('billPreview');
+
     const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+
+    const clearButton = form.querySelector('input[type="reset"]');
 
     function showMessage(message, alertClass) {
         const messageDiv = document.getElementById("message");
@@ -40,24 +47,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (clearButton) {
         clearButton.addEventListener('click', () => {
-            showMessage(null);
-
-            // Clear session storage for form data
-            sessionStorage.removeItem('formData');
-
-            // Clear image previews
-            imagePreview.innerHTML = '';
+            clear(true);
         });
     }
+    function clear(clearAlert) {
+        if (clearAlert) {
+           showMessage(null);
+        }
 
-    if (imageUpload) {
-        imageUpload.addEventListener('change', () => {
-            // Clear existing previews
-            imagePreview.innerHTML = '';
+        // Clear session storage for form data
+        sessionStorage.removeItem('formData');
+        form.reset();
+        
+        // Clear previews
+        imagePreview.innerHTML = '';
+        billPreview.innerHTML = '';
+    }
 
-            // Loop through each selected file
-            for (let i = 0; i < imageUpload.files.length; i++) {
-                const file = imageUpload.files[i];
+    function handleFilePreview(fileInput, previewContainer) {
+        previewContainer.innerHTML = ''; // Clear existing previews
+
+        const files = fileInput.files;
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
@@ -65,13 +78,26 @@ window.addEventListener('DOMContentLoaded', () => {
                         img.src = e.target.result;
                         img.style.maxWidth = '200px'; // Limit the width to avoid stretching
                         img.style.margin = '5px'; // Add margin around each image
-                        imagePreview.appendChild(img);
+                        previewContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);
                 }
             }
-            // Display image preview container
-            imagePreview.style.display = 'flex';
+        }
+        previewContainer.style.display = 'flex'; // Display the preview container
+    }
+
+    if (billUpload) {
+        billUpload.addEventListener('change', () => {
+            handleFilePreview(billUpload, billPreview);
+        });
+    } else {
+        console.error("Element with ID 'billUpload' not found.");
+    }
+
+    if (imageUpload) {
+        imageUpload.addEventListener('change', () => {
+            handleFilePreview(imageUpload, imagePreview);
         });
     } else {
         console.error("Element with ID 'imageUpload' not found.");
@@ -104,6 +130,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 .then(response => {
                     if (response.ok) {
                         showMessage("Your post application has been submitted successfully!", "alert-success");
+                        clear(false);
                     } else {
                         showMessage("There was an error submitting your application. Please try again.", "alert-danger");
                     }
@@ -112,6 +139,5 @@ window.addEventListener('DOMContentLoaded', () => {
 //                    showMessage("An error occurred. Please try again later.", "alert-danger");
 //                })
                 ;
-
     });
 });

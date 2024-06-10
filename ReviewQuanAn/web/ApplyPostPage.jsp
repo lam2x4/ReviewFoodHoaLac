@@ -87,7 +87,7 @@
                 text-decoration: underline;
             }
 
-            #imagePreview {
+            .preview {
                 display: flex;
                 flex-wrap: wrap;
                 overflow-y: auto;
@@ -127,10 +127,9 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="form-container">
                         <h2 class="text-center mb-4">Apply for Post</h2>
-                        <div id="message" class="alert" style="display: none;"></div>
-                        <div class="text-center mb-3">
+                        <%--<div class="text-center mb-3">
                             <a href="ViewPosts.jsp" class="text-decoration-none">View available posts</a>
-                        </div>
+                        </div>--%>
                         <form id="apply-post-form" action="upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <textarea id="postTitle" name="postTitle" class="form-control" placeholder="Post Title" required></textarea>
@@ -139,14 +138,21 @@
                                 <textarea id="postDescription" name="postDescription" class="form-control" rows="4" placeholder="Post Description" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="imageUpload">Upload Images</label>
-                                <input type="file" id="imageUpload" name="imageUpload" class="form-control-file" accept="image/*" multiple>
-                                <div id="imagePreview"></div>
+                                <label for="billUpload">Upload Bill</label>
+                                <input type="file" id="billUpload" name="billUpload" class="form-control-file" accept="image/*" required>
+                                <div class ="preview" id="billPreview"></div>
                             </div>
+                            <div class="form-group">
+                                <label for="imageUpload">Upload Content Images</label>
+                                <input type="file" id="imageUpload" name="imageUpload" class="form-control-file" accept="image/*" multiple>
+                                <div class ="preview" id="imagePreview"></div>
+                            </div>
+                            <div id="message" class="alert" style="display: none;"></div>
                             <div class="form-group, spaced-buttons">
                                 <input type="submit" name="Apply" value="Apply" class="btn btn-primary">
                                 <input type="reset" name="Clear" value="Clear" class="btn btn-secondary">
                             </div>
+                            
                             <input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">
                         </form>
                     </div>
