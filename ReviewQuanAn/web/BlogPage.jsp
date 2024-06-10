@@ -85,7 +85,7 @@
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="" class="profile-link"><%=comm.getUsername()%></a></p>
+                            <p><a href="" class="profile-link"><%=comm.getUsername()%></a> <%=comm.getCreate_date()%></p>
                             <p><%=comm.getContent()%></p>
                             <div class="comment-actions">
                                 <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
