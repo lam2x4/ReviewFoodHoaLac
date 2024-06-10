@@ -136,7 +136,7 @@ public class DAOUser extends DBContext {
 
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
-        Vector<Blog> vector = dao.search1("Cafeteria 1");
+        Vector<Blog> vector = dao.search1("anhtthe182190");
         for (Blog user1 : vector) {
             System.out.println(user1.toString());
         }

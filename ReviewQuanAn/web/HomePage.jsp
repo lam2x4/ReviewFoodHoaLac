@@ -93,7 +93,7 @@
                     <c:forEach items="${requestScope.list}" var="i">
                         <div class="col-md-4">
                             <div class="card mb-4">
-                                <img class="card-img-top" src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDEzNjJ8MHwxfGFsbHwyfHx8fHx8fHwxNjIwODkwNTI5&ixlib=rb-1.2.1&q=80&w=400" alt="Card image">
+                                <img class="card-img-top" src="img/"+${i.} alt="Card image">
                                 <div class="card-body">
                                     <h4 class="card-title">${i.title}</h4>
                                     <p class="card-text">${i.content}</p>
