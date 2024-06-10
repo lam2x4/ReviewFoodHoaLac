@@ -39,6 +39,38 @@
         <servlet-name>PostUpload</servlet-name>
         <servlet-class>service.PostUpload</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Admin</servlet-name>
+        <servlet-class>Controller.Admin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminBanBlog</servlet-name>
+        <servlet-class>Controller.AdminBanBlog</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminBlogManagement</servlet-name>
+        <servlet-class>Controller.AdminBlogManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminDeleteBlog</servlet-name>
+        <servlet-class>Controller.AdminDeleteBlog</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminDeleteUser</servlet-name>
+        <servlet-class>Controller.AdminDeleteUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminUserManagement</servlet-name>
+        <servlet-class>Controller.AdminUserManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminWaitingBlog</servlet-name>
+        <servlet-class>Controller.AdminWaitingBlog</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileAdmin</servlet-name>
+        <servlet-class>Controller.ProfileAdmin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -74,5 +106,37 @@
     <servlet-mapping>
         <servlet-name>PostUpload</servlet-name>
         <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Admin</servlet-name>
+        <url-pattern>/Admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminBanBlog</servlet-name>
+        <url-pattern>/AdminBanBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminBlogManagement</servlet-name>
+        <url-pattern>/AdminBlogManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminDeleteBlog</servlet-name>
+        <url-pattern>/AdminDeleteBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminDeleteUser</servlet-name>
+        <url-pattern>/AdminDeleteUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminUserManagement</servlet-name>
+        <url-pattern>/AdminUserManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminWaitingBlog</servlet-name>
+        <url-pattern>/AdminWaitingBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileAdmin</servlet-name>
+        <url-pattern>/ProfileAdmin</url-pattern>
     </servlet-mapping>
 </web-app>
