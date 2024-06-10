@@ -96,9 +96,9 @@ public class DAOUser extends DBContext {
         }
         return null;
     }
-    
-    public int getUser_id(String username){
-         String sql = "SELECT id FROM [User] WHERE username = ?";
+
+    public int getUser_id(String username) {
+        String sql = "SELECT id FROM [User] WHERE username = ?";
 
         try (PreparedStatement pre = connection.prepareStatement(sql)) {
             pre.setString(1, username);
@@ -135,16 +135,18 @@ public class DAOUser extends DBContext {
 
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
-        Vector<User> vector = dao.getAll();
-        for (User user : vector) {
-            System.out.println(user.toString());
-        }
-        /*
+
+        
         LocalDate create_date = LocalDate.now();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = create_date.format(dateFormat);
-        System.out.println(date);*/
-
+        
+        User user = new User("Tuan Anh", "$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO", "abcd@gmail.com", "0", "", 1, "", date, 0, 1);
+        dao.updateUser(user);
+        Vector<User> vector = dao.getAll();
+        for (User user1 : vector) {
+            System.out.println(user1.toString());
+        }
     }
 
     public static boolean checkPassword(String password) {

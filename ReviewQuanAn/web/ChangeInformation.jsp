@@ -5,6 +5,7 @@
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="entity.User"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +23,17 @@
     </head>
     <body>
         <%@include file="Header.jsp" %>
-        <c:set var="user" value="${sessionScope.user}"/>
+                <%
+            User user = (User)session.getAttribute("User");
+            if(user == null){
+                response.sendRedirect("LoginPage.jsp");
+            }
+            else if(user.getEmail() == null){
+                response.sendRedirect("AfterLogin.jsp");
+            }
+            else{
+        %>
+       <c:set var="user" value="${sessionScope.user}"/> 
         <div class="container mt-5 mb-5">
             <h1 style="margin-bottom: 40px">Update Profile</h1>
             <form action="change-information" method="post">
@@ -43,10 +54,6 @@
                         <input type="text" class="form-control" id="fullname" name="fullname" value="${user.fullname}">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="inputPassword4" style="font-weight: bold">Password</label>
-                        <input type="text" class="form-control" id="inputPassword4" placeholder="Password" value="${user.password}" name="password">
-                    </div>
-                    <div class="form-group col-md-4">
                         <label for="phone" style="font-weight: bold">Phone</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}">
                     </div>
@@ -65,6 +72,7 @@
                 <button type="submit" class="btn btn-primary updateBtn">Save</button>
             </form>
         </div>
+                            <%}%>
         <%@include file="Footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>

@@ -48,6 +48,11 @@ public class User {
     public User() {
     }
 
+    public User(String email, String phone) {
+        this.email = email;
+        this.phone = phone;
+    }
+
 
     public String getCreate_date() {
         return create_date;
@@ -89,6 +94,7 @@ public class User {
         return description;
     }
 
+
     public int getVerify_status() {
         return verify_status;
     }
@@ -128,6 +134,7 @@ public class User {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     public void setVerify_status(int verify_status) {
         this.verify_status = verify_status;

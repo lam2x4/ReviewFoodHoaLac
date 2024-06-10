@@ -24,6 +24,7 @@ public class UserController extends HttpServlet {
 
         //Login handler------------------------------------------------------
         if (service.equals("login")) {
+            
             RequestDispatcher disp = request.getRequestDispatcher("Login");
             disp.forward(request, response);
         }

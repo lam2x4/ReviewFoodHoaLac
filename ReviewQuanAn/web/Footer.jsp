@@ -21,7 +21,7 @@
 
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>       
-        <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <title>Home Page </title>
         <style>
             .nav-justified {
@@ -48,31 +48,23 @@
     </head>
 
     <body>
-        <footer>
-            <div class="container-fluid" style="margin-top:5%" >
-
-                <div class="row text-center " >
-                    <div class="col-md-4"><h3> Thành viên </h3></div> 
-                    <div class="col-md-4"><h3> Giới thiệu</h3></div>   
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Trịnh Hoàng Việt <p></div>    
-                    <div class="col-md-6"> <p>Địa chỉ: Hòa Lạc , Thạch Thất , Hà Nội. Số điện thoại hỗ trợ:  03234123423 - Email:haha@gmail.com</p></div>
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Triệu Bảo Lâm<p></div> 
-                    <div class="col-md-7"> <p>Đây là website review quán ăn hàng đầu Hòa Lạc . Với mong ước giúp các bạn tìm được những quán ăn chất lượng</p></div>
-
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Tuấn Anh <p></div>              
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Hoàng Anh <p></div>              
-                </div>
-                <div class="row text-center " >
-                    <div class="col-md-4"><p> Vũ Trung Kiên <p></div>              
-                </div>
+        <footer class="bg-dark text-white py-4">
+            <div class="container text-center">
+                <p>&copy; 2024 Blog Review AZ. All rights reserved.</p>
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
             </div>
         </footer>
     </body>

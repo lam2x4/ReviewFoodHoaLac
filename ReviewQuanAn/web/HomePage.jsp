@@ -57,27 +57,72 @@
     <body>
         <!-- Header begin -->
         <%@include file="./Header.jsp" %>
-        <div class="container text-center"><h3>Các quán ăn </h3> </div>
+    <body>
 
-        <div class="container-fluid" >
-            <div class="row">
-                <c:forEach begin="0" end="${list.size()}" var="i">   
-                    <div class ="col"> 
-                        <div class="card" >
-                            <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTskvGE9g2h_ZgPGtkx6I9ziNRsEF9YG0LXJd35ZV-O0Q&s" alt="Card image" style="width:100%">
-                            <div class="card-body">
-                                <h4 class="card-title">${list.get(i).store_name}</h4>
-                                <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
-                                <a href="#" class="btn btn-primary stretched-link">See Store</a>
-                            </div>
-                        </div>
-                    </div>
-                </c:forEach>             
+
+        <!-- Hero Section -->
+        <div class="hero text-white text-center py-5">
+            <div class="container">
+                <h1 class="display-3">Welcome to Review Food Store in Hoa Lac</h1>
+                <p class="lead">Your source for the latest reviews and blog posts</p>
+                <a href="#" class="btn btn-primary btn-lg">Learn More</a>
             </div>
         </div>
 
-        <%@include file="./Footer.jsp" %>
+        <!-- Latest Articles Section -->
+        <section class="latest-articles py-5">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Search for articles...">
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <select class="form-control w-50 d-inline">
+                            <option value="">Filter by category</option>
+                            <option value="food">Food</option>
+                            <option value="travel">Travel</option>
+                            <option value="lifestyle">Lifestyle</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <c:forEach items="${requestScope.list}" var="i">
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <img class="card-img-top" src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDEzNjJ8MHwxfGFsbHwyfHx8fHx8fHwxNjIwODkwNTI5&ixlib=rb-1.2.1&q=80&w=400" alt="Card image">
+                                <div class="card-body">
+                                    <h4 class="card-title">${i.title}</h4>
+                                    <p class="card-text">${i.content}</p>
+                                    <a href="#" class="btn btn-primary">See Profile</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </c:forEach>
+
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
 
 
+        <!-- Bootstrap and FontAwesome scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
+
+    <%@include file="./Footer.jsp" %>
+
+
+</body>
 </html>

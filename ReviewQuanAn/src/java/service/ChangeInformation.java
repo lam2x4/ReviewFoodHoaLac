@@ -91,7 +91,7 @@ public class ChangeInformation extends HttpServlet {
             image = u.getAvatar();
         }
         DAOUser dao = new DAOUser();
-        User user = new User(u.getId(), username, password, email, phone, image, u.getGender(), phone, u.getVerify_status(), u.getRole_id());
+        User user = new User(u.getId(), username, password, email, phone, image, u.getGender(), u.getDescription(),u.getCreate_date(), u.getVerify_status(), u.getRole_id());
         dao.updateUser(user);
         session.removeAttribute("user");
         session.setAttribute("user",user);
