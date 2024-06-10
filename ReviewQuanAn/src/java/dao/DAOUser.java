@@ -141,8 +141,6 @@ public class DAOUser extends DBContext {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = create_date.format(dateFormat);
         
-        User user = new User("Tuan Anh", "$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO", "abcd@gmail.com", "0", "", 1, "", date, 0, 1);
-        dao.updateUser(user);
         Vector<User> vector = dao.getAll();
         for (User user1 : vector) {
             System.out.println(user1.toString());
