@@ -78,9 +78,9 @@ VALUES (1, 'admin'),
 -- Insert data into the User table
 INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], create_date, verify_status, role_id)
 VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', NULL, 1, 'Tuan Anh', '15/6/2024', 1, 1),
-       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', NULL, 1, 'Hoang Anh','15/6/2024', 1, 2),
-       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', NULL, 1, 'Kien', '15/6/2024', 1, 2),
-	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', NULL, 1, 'Viet', '15/6/2024', 1, 2),
+       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', NULL, 1, 'Hoang Anh','15/6/2024', 1, 1),
+       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', NULL, 1, 'Kien', '15/6/2024', 1, 1),
+	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', NULL, 1, 'Viet', '15/6/2024', 1, 1),
        ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', NULL, 1, 'Lam', '15/6/2024', 1, 2);
 
 -- Insert data into the Blog table

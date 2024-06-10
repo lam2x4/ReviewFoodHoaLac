@@ -19,7 +19,12 @@ import dao.DAOImages;
 import entity.Images;
 import dao.DAOBlog;
 import entity.Blog;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Vector;
 
 /**
  *
@@ -45,6 +50,7 @@ public class PostUpload extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String postTitle = request.getParameter("postTitle");
         String postDescription = request.getParameter("postDescription");
+        HttpSession session = request.getSession(true);
 
         // Uploaded to: ReviewQuanAn\build\web\img\
         String uploadPath = getServletContext().getRealPath("/img") + File.separator;
@@ -52,11 +58,13 @@ public class PostUpload extends HttpServlet {
         DAOBlog daoBlog = new DAOBlog();
 
         try {
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String create_date = date.format(dateFormat);
             int userId = Integer.parseInt(request.getParameter("userId"));
-            Blog blogTemp = new Blog(userId, postTitle, postDescription, 0);
+            Blog blogTemp = new Blog(userId, postTitle, postDescription,create_date, 0,0,0);
 //            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
-
             for (Part part : request.getParts()) {
                 String contentType = part.getContentType();
 
@@ -84,7 +92,7 @@ public class PostUpload extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("HomePage.jsp");
+        response.sendRedirect("ApplyPostPage.jsp");
     }
 
     /**
