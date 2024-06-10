@@ -67,6 +67,10 @@
         <servlet-name>AdminWaitingBlog</servlet-name>
         <servlet-class>Controller.AdminWaitingBlog</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProfileAdmin</servlet-name>
+        <servlet-class>Controller.ProfileAdmin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -130,5 +134,9 @@
     <servlet-mapping>
         <servlet-name>AdminWaitingBlog</servlet-name>
         <url-pattern>/AdminWaitingBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileAdmin</servlet-name>
+        <url-pattern>/ProfileAdmin</url-pattern>
     </servlet-mapping>
 </web-app>

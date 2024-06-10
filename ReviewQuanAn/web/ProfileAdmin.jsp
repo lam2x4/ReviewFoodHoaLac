@@ -125,7 +125,7 @@
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
-
+            <c:set value="${sessionScope.Admin}" var="i"></c:set>
                 <div class="container-fluid mt-4">
                     <h1 class="mb-4">Profile</h1>
                     <div class="row">
@@ -159,10 +159,10 @@
                             <div class="card mb-4 shadow-sm">
                                 <div class="card-header"><i class="fas fa-info-circle"></i> Current Profile</div>
                                 <div class="card-body">
-                                    <p><strong>Username:</strong> JohnDoe</p>
-                                    <p><strong>Email:</strong> johndoe@example.com</p>
-                                    <p><strong>Member since:</strong> January 1, 2020</p>
-                                    <p><strong>Last login:</strong> May 18, 2024</p>
+                                    <p><strong>Username:</strong> ${i.username}</p>
+                                    <p><strong>Email:</strong> ${i.email}</p>
+                                    <p><strong>Phone:</strong> ${i.phone}</p>
+                                    <p><strong>Member since:</strong> ${i.create_date}</p>
                                 </div>
                             </div>
                         </div>
