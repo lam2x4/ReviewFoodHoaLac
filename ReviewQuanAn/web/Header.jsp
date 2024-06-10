@@ -136,7 +136,7 @@
                             <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-blog"></i> Add Blog</a>
+                            <a class="nav-link" href="upload"><i class="fas fa-blog"></i> Add Blog</a>
                         </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">

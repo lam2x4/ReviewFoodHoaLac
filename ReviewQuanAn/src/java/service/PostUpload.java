@@ -92,7 +92,7 @@ public class PostUpload extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("HomePage.jsp");
+        response.sendRedirect("ApplyPostPage.jsp");
     }
 
     /**
