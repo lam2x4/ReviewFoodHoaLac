@@ -36,7 +36,7 @@
                 padding-left:10%;
             }
             .col{
-                border-style: hidden;             
+                border-style: hidden;
                 margin-top:5%;
                 margin-right: 5%
             }
@@ -53,7 +53,7 @@
             <!-- Navigation bar -->
             <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
                 <!-- Brand -->
-                <a class="navbar-brand" href="#"> 
+                 <a class="navbar-brand" href="#"> 
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPrBt0UbsRdMwTbJ0L4X4QIrbzl6hKLBUlPhQfk0GiGw&s" class="rounded-circle" width="100px"></a>
 
                 <!-- Toggler/collapsibe Button -->
@@ -87,7 +87,7 @@
                 <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link login-register-justified " href="#" > Đăng quán ăn    <i class="fa-solid fa-pen"></i> </a>
+                            <a class="nav-link login-register-justified " href="ApplyPostPage.jsp" > Đăng blog    <i class="fa-solid fa-pen"></i> </a>
 
                         </li>
                         <li class="nav-item">

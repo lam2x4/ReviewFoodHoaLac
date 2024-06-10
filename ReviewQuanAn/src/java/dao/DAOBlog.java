@@ -10,29 +10,29 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DAOBlog extends DBConnect {
-    
-    public int addBlog(Blog b) throws SQLException{
-        String sql = "INSERT INTO [dbo].[Blog] " +
-                    "([user_id], [title], [content], [likes]) " +
-                    "VALUES (?, ?, ?, ?)";
-        
-        try(PreparedStatement pre = conn.prepareStatement(sql)){
+
+    public int addBlog(Blog b) throws SQLException {
+        String sql = "INSERT INTO [dbo].[Blog] "
+                + "([user_id], [title], [content], [likes]) "
+                + "VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
             pre.setInt(4, b.getLikes());
-        
+
             return pre.executeUpdate();
         }
     }
-    
-    public int editBlog(Blog b) throws SQLException{
-        String sql = "UPDATE [dbo].[Blog] " +
-                    "SET [title] = ?, " +
-                    "[content] = ? " +
-                    "WHERE id = ?";
-        
-        try(PreparedStatement pre = conn.prepareStatement(sql)){
+
+    public int editBlog(Blog b) throws SQLException {
+        String sql = "UPDATE [dbo].[Blog] "
+                + "SET [title] = ?, "
+                + "[content] = ? "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setString(1, b.getTitle());
             pre.setString(2, b.getContent());
             pre.setInt(3, b.getId());
@@ -40,13 +40,13 @@ public class DAOBlog extends DBConnect {
             return pre.executeUpdate();
         }
     }
-    
-    public int deleteBlog(int id) throws SQLException{
-        String sql = "DELETE FROM Blog WHERE id = ? " +
-                    "AND id NOT IN (SELECT blog_id FROM Comment WHERE blog_id = ?) " +
-                    "AND id NOT IN (SELECT blog_id FROM Images WHERE blog_id = ?)";
-        
-        try(PreparedStatement pre = conn.prepareStatement(sql)){
+
+    public int deleteBlog(int id) throws SQLException {
+        String sql = "DELETE FROM Blog WHERE id = ? "
+                + "AND id NOT IN (SELECT blog_id FROM Comment WHERE blog_id = ?) "
+                + "AND id NOT IN (SELECT blog_id FROM Images WHERE blog_id = ?)";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
             pre.setInt(2, id);
             pre.setInt(3, id);
@@ -54,17 +54,17 @@ public class DAOBlog extends DBConnect {
             return pre.executeUpdate();
         }
     }
-    
-     public Vector<Blog> getAll() throws SQLException {
+
+    public Vector<Blog> getAll() throws SQLException {
         Vector<Blog> vector = new Vector<>();
         String sql = "SELECT * FROM Blog";
-        
-        try(PreparedStatement pre = conn.prepareStatement(sql)){
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
-        
-            while(rs.next()){
+
+            while (rs.next()) {
                 Blog b = new Blog();
-                
+
                 b.setId(rs.getInt(1));
                 b.setUser_id(rs.getInt(2));
                 b.setTitle(rs.getString(3));
@@ -76,32 +76,45 @@ public class DAOBlog extends DBConnect {
         }
         return vector;
     }
-     
-     public Blog getBlog(int id) throws SQLException{
-         String sql = "SELECT * FROM Blog WHERE id = ?";
-         
-         try(PreparedStatement pre = conn.prepareStatement(sql)){
-             pre.setInt(1,id);
-             
-             try(ResultSet rs = pre.executeQuery()){
-                 if(rs.next()){
+
+    public Blog getBlog(int id) throws SQLException {
+        String sql = "SELECT * FROM Blog WHERE id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, id);
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
                     Blog b = new Blog();
-                    
+
                     b.setId(rs.getInt(1));
                     b.setUser_id(rs.getInt(2));
                     b.setTitle(rs.getString(3));
                     b.setContent(rs.getString(4));
                     b.setLikes(rs.getInt(5));
-                    
+
                     return b;
-                 }
-                 else{
-                     throw new SQLException("No blog found with ID: " + id);
-                 }
-             }
-         }
-     }
-     
+                } else {
+                    throw new SQLException("No blog found with ID: " + id);
+                }
+            }
+        }
+    }
+
+    public int getLastInsertedBlog() throws SQLException {
+        String sql = "SELECT MAX(ID) AS LastInsertedBlogID FROM Blog";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("LastInsertedBlogID");
+                } else {
+                    throw new SQLException("Failed to retrieve last inserted blog ID");
+                }
+            }
+        }
+    }
+
 //     public static void main(String[] args) {
 //        DAOBlog dao = new DAOBlog();
 //        

@@ -38,7 +38,7 @@
                                     <label for="newPassword">New Password:</label>
                                     <input type="password" id="newPassword" name="newPassword" 
                                            class="form-control" placeholder="Enter new password" required
-                                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+                                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                                            title="Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter,
                                 one digit, and one special character.">
                                 </div>

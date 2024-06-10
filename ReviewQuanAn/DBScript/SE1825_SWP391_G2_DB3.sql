@@ -30,6 +30,7 @@ CREATE TABLE [User](
 	avatar nvarchar(255),
 	gender int,
 	[description] nvarchar(750),
+	create_date nvarchar(20) not null,
 	verify_status int not null,
 	role_id int foreign key references [role](role_id),
 )
@@ -39,7 +40,10 @@ CREATE TABLE Blog(
 	[user_id] int foreign key references [user](id),
 	title nvarchar(50) not null,
 	content nvarchar(750) not null,
+	create_date nvarchar(20) not null,
 	likes int,
+	is_approved int not null,
+	is_banned int not null
 )
 
 CREATE TABLE Images(
@@ -53,7 +57,17 @@ CREATE TABLE Comment(
 	[user_id] int foreign key references [User](id),
 	blog_id int foreign key references Blog(id),
 	content nvarchar(750),
+	create_date nvarchar(20),
 	likes int,
+	is_banned int not null
+)
+
+CREATE TABLE Draft(
+	id int Identity(1,1) primary key,
+	[user_id] int foreign key references [user](id),
+	title nvarchar(50) not null,
+	content nvarchar(750) not null,
+	create_date nvarchar(20) not null,
 )
 
 -- Insert data into the Role table
@@ -62,33 +76,20 @@ VALUES (1, 'admin'),
        (2, 'user');
 
 -- Insert data into the User table
-INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], verify_status, role_id)
-VALUES ('anhtthe182190', '123', 'anhtthe182190@fpt.edu.vn', '0344191620', NULL, 1, 'Yessir', 1, 1),
-       ('yuuhi', '123', 'user1@example.com', '0987654321', NULL, 1, 'Description for user1', 1, 2),
-       ('marine', '123', 'user2@example.com', '9876543210', NULL, 0, 'Description for user2', 1, 2);
+INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], create_date, verify_status, role_id)
+VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', NULL, 1, 'Tuan Anh', '15/6/2024', 1, 1),
+       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', NULL, 1, 'Hoang Anh','15/6/2024', 1, 2),
+       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', NULL, 1, 'Kien', '15/6/2024', 1, 2),
+	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', NULL, 1, 'Viet', '15/6/2024', 1, 2),
+       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', NULL, 1, 'Lam', '15/6/2024', 1, 2);
 
 -- Insert data into the Blog table
-INSERT INTO Blog ([user_id], title, content, likes)
-VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', 10),
-       (1, 'Review of Cafeteria 2', 'The food is 7/10', 15),
-       (2, 'Review of Cafeteria 1', 'The food is 10/10', 20),
-       (2, 'Review of Cafeteria 2', 'The food is 9/10', 8);
--- Insert example data into the Blog table
-INSERT INTO Blog ([user_id], title, content, likes) VALUES 
-(1, 'First Blog Post', 'This is the content of the first blog post.', 10),
-(2, 'Second Blog Post', 'This is the content of the second blog post.', 5),
-(1, 'Another Blog Post', 'Content for another blog post by the same user.', 8),
-(3, 'Tech Trends 2024', 'An in-depth look at upcoming tech trends in 2024.', 15),
-(2, 'Travel Diaries', 'Experiences from my recent trip around the world.', 20);
-
--- Insert another set of example data
-INSERT INTO Blog ([user_id], title, content, likes) VALUES 
-(4, 'Healthy Living', 'Tips and tricks for maintaining a healthy lifestyle.', 25),
-(3, 'JavaScript Tips', 'Useful tips and tricks for JavaScript developers.', 30),
-(5, 'Gardening 101', 'A beginner’s guide to starting your own garden.', 12),
-(4, 'Fitness Journey', 'My personal journey towards achieving fitness goals.', 18),
-(1, 'Cooking Recipes', 'Delicious and easy-to-make recipes for home cooking.', 22);
-INSERT INTO Blog(
+INSERT INTO Blog ([user_id], title, content, create_date, likes, is_approved, is_banned)
+VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', '15/06/2024', 10, 0, 0),
+       (2, 'Review of Cafeteria 2', 'The food is 7/10', '15/06/2024', 15, 0, 0),
+       (3, 'Review of Cafeteria 1', 'The food is 10/10', '15/06/2024', 20, 0, 0),
+       (4, 'Review of Cafeteria 2', 'The food is 9/10', '15/06/2024', 8, 0, 0),
+	   (5, 'Review of Cafeteria 3', 'The food is 11/10', '15/06/2024', 8, 0, 0);
 
 -- Insert data into the Images table
 INSERT INTO Images (blog_id, link)
@@ -99,11 +100,16 @@ VALUES (1, 'https://tiki.vn/blog/wp-content/uploads/2023/07/thumb-12-768x433.jpg
        (2, 'https://d2w1ef2ao9g8r9.cloudfront.net/images/products/print-receipt-loyalty-sign-up.png');
 
 -- Insert data into the Comment table
-INSERT INTO Comment ([user_id], blog_id, content, likes)
-VALUES (1, 1, 'First comment on the first blog post.', 5),
-       (1, 1, 'Second comment on the first blog post.', 3),
-       (1, 2, 'First comment on the second blog post.', 7),
-       (1, 2, 'First comment on the third blog post.', 12),
-       (2, 1, 'Second comment on the third blog post.', 6),
-       (2, 2, 'First comment on the fourth blog post.', 4),
-       (2, 2, 'Second comment on the fourth blog post.', 9);
+INSERT INTO Comment ([user_id], blog_id, content, create_date, likes, is_banned)
+VALUES (1, 1, 'Tuan Anh comment', '15/06/2024', 5, 0),
+       (2, 2, 'Hoang Anh comment', '15/06/2024', 3, 0),
+       (3, 3, 'Kien comment', '15/06/2024', 7, 0),
+       (4, 4, 'Viet comment', '15/06/2024', 12, 0),
+       (5, 5, 'Lam comment', '15/06/2024', 6, 0);
+
+INSERT INTO Draft ([user_id], title, content, create_date)
+VALUES (1, 'Tuan Anh Draft', 'Tuan Anh Sample content for the draft.', '15/06/2024'),
+		(2, 'Hoang Anh Draft', 'Hoang Anh Sample content for the draft.', '15/06/2024'),
+		(3, 'Kien Draft', 'Kien Sample content for the draft.', '15/06/2024'),
+		(4, 'Viet Draft', 'Viet Sample content for the draft.', '15/06/2024'),
+		(5, 'Lam Draft', 'Lam Sample content for the draft.', '15/06/2024');

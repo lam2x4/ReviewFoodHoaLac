@@ -35,6 +35,10 @@
         <servlet-name>EncryptPassword</servlet-name>
         <servlet-class>service.EncryptPassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PostUpload</servlet-name>
+        <servlet-class>service.PostUpload</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -66,5 +70,9 @@
     <servlet-mapping>
         <servlet-name>EncryptPassword</servlet-name>
         <url-pattern>/EncryptPassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PostUpload</servlet-name>
+        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
 </web-app>
