@@ -20,7 +20,10 @@ public class DAOBlog extends DBConnect {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
-            pre.setInt(4, b.getLikes());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getLikes());
+            pre.setInt(6, b.getIs_approved());
+            pre.setInt(7, b.getIs_banned());
 
             return pre.executeUpdate();
         }
@@ -69,7 +72,7 @@ public class DAOBlog extends DBConnect {
                 b.setUser_id(rs.getInt(2));
                 b.setTitle(rs.getString(3));
                 b.setContent(rs.getString(4));
-                b.setLikes(rs.getInt(5));
+                b.setLikes(rs.getInt(6));
 
                 vector.add(b);
             }
@@ -118,18 +121,18 @@ public class DAOBlog extends DBConnect {
         }
     }
 
-//     public static void main(String[] args) {
-//        DAOBlog dao = new DAOBlog();
-//        
-//        Blog b = new Blog(1, "New Title", "New Content", 0);
-//        try {
-//            dao.addBlog(b);
-//            Blog newB = dao.getBlog(6);
-//            newB.setTitle("New Edited Title");
-//            dao.editBlog(newB);
-//            dao.deleteBlog(6);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+     public static void main(String[] args) {
+        DAOBlog dao = new DAOBlog();
+        
+        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
+        try {
+            dao.addBlog(b);
+            Blog newB = dao.getBlog(6);
+            newB.setTitle("New Edited Title");
+            dao.editBlog(newB);
+            dao.deleteBlog(6);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

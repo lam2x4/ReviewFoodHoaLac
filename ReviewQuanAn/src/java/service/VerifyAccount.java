@@ -63,10 +63,11 @@ public class VerifyAccount extends HttpServlet {
                 if (code.equals(sessionCode)) 
                 {
                     user.setVerify_status(1);
+                    System.out.println(user.toString());
                     int n = dao.updateUser(user);
                     if (n == 1) response.sendRedirect("VerifyPage.jsp?status=6");
                     //Unknown Error 
-                    else response.sendRedirect("VerifyPage.jsp?status=4");
+                    else {response.sendRedirect("VerifyPage.jsp?status=4");}
                     
                 } 
                 //Incorrect verify code
