@@ -20,7 +20,10 @@ public class DAOBlog extends DBConnect {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
-            pre.setInt(4, b.getLikes());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getLikes());
+            pre.setInt(6, b.getIs_approved());
+            pre.setInt(7, b.getIs_banned());
 
             return pre.executeUpdate();
         }
