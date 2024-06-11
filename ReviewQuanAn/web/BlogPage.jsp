@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="entity.*, java.util.Vector"%>
+<%@page import="entity.*, dao.DAOComment, java.util.Vector"%>
 
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -71,11 +71,13 @@
             <div class="comment-section">
                 <div class="comment-box" id="comment-box">
                     <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic">
-                    <input type="text" id="comment-input" class="glowing-input" placeholder="Add a comment...">
+                    <form action="BlogPageController" method="post">
+                    <input type="text" name="comment" id="comment-input" class="glowing-input" placeholder="Add a comment...">
                     <div class="buttons">
                         <button class="button" id="cancel-button">Cancel</button>
-                        <button class="button" id="add-comment-button" onclick="updateCommentCount();postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Add Comment</button>
+                        <button class="button" name="submit" id="add-comment-button" onclick="updateCommentCount();postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Add Comment</button>
                     </div>
+                    </form>
                 </div>
                 <div class="comment-list" id="comment-list">
                     <%for(int i = 0; i < comments.size() && i < avatars.size(); i++){%>
@@ -89,8 +91,8 @@
                             <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
                             <p><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
-                                <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
-                                <%=comments.get(i).getLikes()%> likes   
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"><i class="fa-regular fa-thumbs-up"></i></button>   
+                                <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes   </span>
                                 <button class="reply-button" onclick="showReplyInput(this, '<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Reply</button>
                                 <div class="replies" id="replies"></div>
                             </div>
@@ -103,7 +105,7 @@
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-            updateCommentCount();
+                                    updateCommentCount();
         </script>
     </body>
 </html>

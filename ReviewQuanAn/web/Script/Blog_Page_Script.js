@@ -11,12 +11,12 @@ document.getElementById('cancel-button').addEventListener('click', function () {
 function postComment(username, profPic) {
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
-    
+
     const date = new Date();
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    
+
     let currentDate = `${day}/${month}/${year}`;
 
     if (commentValue) {
@@ -171,20 +171,36 @@ function updateCommentCount() {
 }
 
 function toggleLike() {
-  let likeBtn = document.getElementById("like-button");
-  let likeCount = document.getElementById("likeCount");
-  
-  let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+    let likeBtn = document.getElementById("like-button");
+    let likeCount = document.getElementById("likeCount");
 
-  const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
-  likeBtn.setAttribute('aria-pressed', !isPressed);
-  
-  isPressed ? bloglikes-- : bloglikes++;
-  likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+    let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+
+    const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
+    likeBtn.setAttribute('aria-pressed', !isPressed);
+
+    isPressed ? bloglikes-- : bloglikes++;
+    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
 }
 
-function toggleCommentLike(){
-    
+function toggleCommentLike(commentId) {
+    let likeBtn = document.getElementById(`like-button-${commentId}`);
+    let likeCount = document.getElementById(`likeCommentCount-${commentId}`);
+
+    let likes = parseInt(likeCount.innerText.split(' ')[0]);
+
+    const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
+    likeBtn.setAttribute('aria-pressed', !isPressed);
+
+    if (isPressed) {
+        likes--;
+        likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i>`;
+    } else {
+        likes++;
+        likeBtn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
+    }
+
+    likeCount.innerText = `${likes} likes`;
 }
 
 //Light box

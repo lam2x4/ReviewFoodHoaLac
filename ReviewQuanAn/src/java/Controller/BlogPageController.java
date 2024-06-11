@@ -15,6 +15,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
+
 @WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
 
@@ -23,6 +26,11 @@ public class BlogPageController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
         
+        /**/
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");  
+    Date date = new Date();  
+    request.setAttribute("curDate", formatter.format(date));
+        //
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
         DAOComment daoComment = new DAOComment();
@@ -51,6 +59,11 @@ public class BlogPageController extends HttpServlet {
         
         request.setAttribute("commentProfPic", "img/" + curUser.getAvatar());
         request.setAttribute("commentUsername", curUser.getUsername());
+        
+        if(request.getParameter("submit") != null){
+            System.out.println("No comment: " + request.getParameter("comment"));
+            //daoComment.addComment(new Comment(4, u.getUsername(), 1, request.getParameter("comment"), formatter.format(date), 0, 0));
+        }
         
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
         dispth.forward(request, response);

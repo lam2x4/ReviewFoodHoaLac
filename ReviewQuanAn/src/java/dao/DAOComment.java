@@ -14,14 +14,16 @@ public class DAOComment extends DBConnect {
     
     public int addComment(Comment comm) throws SQLException {
         String sql = "INSERT INTO [dbo].[Comment] "
-                + "([user_id], [blog_id], [content], [likes]) "
-                + "VALUES (?,?,?,?)";
+                + "([user_id], [blog_id], [content], [create_date], [likes], [is_banned]) "
+                + "VALUES (?,?,?,?,?,?)";
         
         try(PreparedStatement pre = conn.prepareStatement(sql)){
             pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
             pre.setString(3, comm.getContent());
-            pre.setInt(4, comm.getLikes());
+            pre.setString(4, comm.getCreate_date());
+            pre.setInt(5, comm.getLikes());
+            pre.setInt(6, comm.getIs_banned());
             
             return pre.executeUpdate();
         }
