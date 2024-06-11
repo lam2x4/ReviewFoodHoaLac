@@ -48,7 +48,7 @@
                 margin-bottom: 10px;
             }
             .card{
-               
+
                 width:350px;
             }
         </style>
@@ -96,11 +96,18 @@
                             <div class="card mb-4">
                                 <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 <div class="card-body">
-                                    
+
                                     <h4 class="card-title" >${i.title}</h4>
                                     <p class="card-text" >${i.content}</p>
-                                   
-                                    <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
+
+                                    <c:choose>
+                                        <c:when test="${i.id != null}">
+                                            <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="BlogPageController" class="btn btn-primary">See Detail</a>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +116,7 @@
 
                 </div>
                 <!-- Pagination -->
-                
+
             </div>
         </section>
 
@@ -121,7 +128,7 @@
     </body>
 
     <%@include file="./Footer.jsp" %>
-    
+
 
 </body>
 

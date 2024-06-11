@@ -152,7 +152,7 @@
                                 <input type="submit" name="Apply" value="Apply" class="btn btn-primary">
                                 <input type="reset" name="Clear" value="Clear" class="btn btn-secondary">
                             </div>
-                            
+
                             <input type="hidden" id="userId" name="userId" value="<%= user.getId() %>">
                         </form>
                     </div>
