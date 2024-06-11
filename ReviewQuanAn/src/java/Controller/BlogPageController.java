@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import entity.*;
 import dao.*;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -20,7 +21,8 @@ public class BlogPageController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        int blogId = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession(true);
+        
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
         DAOComment daoComment = new DAOComment();
@@ -29,25 +31,26 @@ public class BlogPageController extends HttpServlet {
         Blog b = daoBlog.getBlog(blogId);
         User u = daoUser.getUser(b.getUser_id());
         
-        String[] ppLinks = {"img/photo_1_2024-06-06_11-09-40.jpg", "img/photo_2_2024-06-06_11-09-40.jpg", "img/photo_3_2024-06-06_11-09-40.jpg"};
+        User curUser = (User)session.getAttribute("Admin");
         
-        Vector<Comment> comments = daoComment.findCommentsById(1);
+        Vector<Comment> comments = daoComment.findCommentsByBlog_id(1);
         Vector<Images> imgs = daoImages.findImagesByBlog_id(1);
-        imgs.add(new Images(1, "img/Nahida.jpg"));
-        imgs.add(new Images(1, "img/Nilou.jpg"));
-        imgs.add(new Images(1, "img/ShirokoTerror.jpg"));
+        Vector<String> avatars = new Vector<>();
+        for(Comment comm : comments) avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));
         
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
-        request.setAttribute("profPic", ppLinks[0]);
+        request.setAttribute("profPic", "img/" + u.getAvatar());
         
         request.setAttribute("blogTitle", b.getTitle());
         request.setAttribute("blogContent", b.getContent());
         request.setAttribute("blogLikes", b.getLikes());
         request.setAttribute("blogPictures", imgs);
         request.setAttribute("blogComments", comments);
+        request.setAttribute("commentAvatars", avatars);
         
-        request.setAttribute("commentProfPic", ppLinks[2]);
+        request.setAttribute("commentProfPic", "img/" + curUser.getAvatar());
+        request.setAttribute("commentUsername", curUser.getUsername());
         
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
         dispth.forward(request, response);
