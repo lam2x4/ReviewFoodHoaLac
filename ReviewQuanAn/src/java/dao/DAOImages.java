@@ -59,7 +59,7 @@ public class DAOImages extends DBConnect{
                 
                 img.setId(rs.getInt(1));
                 img.setBlog_id(rs.getInt(2));
-                img.setLink(rs.getString(3));
+                img.setLink("img/" + rs.getString(3));
 
                 vector.add(img);
             }
@@ -79,7 +79,7 @@ public class DAOImages extends DBConnect{
                     
                     img.setId(rs.getInt(1));
                     img.setBlog_id(rs.getInt(2));
-                    img.setLink(rs.getString(3));
+                    img.setLink("img/" + rs.getString(3));
                     
                     return img;
                 }
@@ -103,7 +103,7 @@ public class DAOImages extends DBConnect{
                 
                 img.setId(rs.getInt(1));
                 img.setBlog_id(rs.getInt(2));
-                img.setLink(rs.getString(3));
+                img.setLink("img/" + rs.getString(3));
 
                 vector.add(img);
             }

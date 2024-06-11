@@ -148,6 +148,30 @@
     }
 }
 
+.likeBtn[aria-pressed="true"]{
+  background-color: #27ae60;
+  color: #27ae60;
+  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+  transition: all .3s;
+}
+
+.likeBtn:hover[aria-pressed="true"] {
+  background-color: #1e8449;
+  color: #1e8449;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.likeBtn:active[aria-pressed="true"] {
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.likeBtn:hover[aria-pressed="true"] {
+  box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+}
+
 .profile-link{
     color: black;
     text-decoration: none;

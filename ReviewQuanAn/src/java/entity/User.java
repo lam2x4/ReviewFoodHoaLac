@@ -18,6 +18,33 @@ public class User {
     private int verify_status;
     private int role_id;
 
+    public User(int id, String username, String password, String email, String phone, String avatar, int gender, String description, String create_date, int verify_status, int role_id) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.description = description;
+        this.create_date = create_date;
+        this.verify_status = verify_status;
+        this.role_id = role_id;
+    }
+    
+    public User(String username, String password, String email, String phone, String avatar, int gender, String description, String create_date, int verify_status, int role_id) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.description = description;
+        this.create_date = create_date;
+        this.verify_status = verify_status;
+        this.role_id = role_id;
+    }
+
     public User() {
     }
 

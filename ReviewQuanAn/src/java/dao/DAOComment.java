@@ -20,7 +20,7 @@ public class DAOComment extends DBConnect {
                     "VALUES (?,?,?,?)";
         
         try(PreparedStatement pre = conn.prepareStatement(sql)){
-            pre.setInt(1, daoUser.getUser_id(comm.getUsername()));
+            pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
             pre.setString(3, comm.getContent());
             pre.setInt(4, comm.getLikes());
@@ -63,6 +63,7 @@ public class DAOComment extends DBConnect {
                 Comment comm = new Comment();
                 
                 comm.setId(rs.getInt(1));
+                comm.setUser_id(rs.getInt(2));
                 comm.setUsername(findUsername(rs.getInt(2)));
                 comm.setBlog_id(rs.getInt(3));
                 comm.setContent(rs.getString(4));
@@ -86,6 +87,7 @@ public class DAOComment extends DBConnect {
                 Comment comm = new Comment();
                 
                 comm.setId(rs.getInt(1));
+                comm.setUser_id(rs.getInt(2));
                 comm.setUsername(findUsername(rs.getInt(2)));
                 comm.setBlog_id(rs.getInt(3));
                 comm.setContent(rs.getString(4));
@@ -126,6 +128,23 @@ public class DAOComment extends DBConnect {
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString(1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public String findAvatarByUser_id(int user_id) throws SQLException{
+        String sql = "SELECT avatar FROM [User] WHERE id = (SELECT TOP 1 user_id FROM Comment WHERE user_id = ?)";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return "img/" + rs.getString(1);
                 }
             }
         } catch (SQLException ex) {
