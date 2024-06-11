@@ -60,7 +60,7 @@ public class AdminDeleteBlog extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         DAOBlog daoBlog = new DAOBlog();
         try {
-            daoBlog.deleteBlog(id);
+            daoBlog.deleteBlogIgnoreConstraint(id);
             request.getRequestDispatcher("AdminBlogManagement").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(AdminDeleteBlog.class.getName()).log(Level.SEVERE, null, ex);
