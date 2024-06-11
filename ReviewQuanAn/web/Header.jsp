@@ -139,7 +139,7 @@
                             <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> User Profile</a>
+                            <a class="nav-link" href="change-information"><i class="fas fa-book-open"></i> User Profile</a>
                         </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">

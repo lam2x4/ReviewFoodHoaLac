@@ -59,13 +59,14 @@ public class ChangeInformation extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if( user == null) {
-       
-           request.getRequestDispatcher("login").forward(request, response);
-        }
-        request.getRequestDispatcher("ChangeInformation.jsp").forward(request, response);
+//            HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("user");
+//        if( user == null) {
+//       
+//           request.getRequestDispatcher("login").forward(request, response);
+//        }
+        response.sendRedirect("ChangeInformation.jsp");
+        //request.getRequestDispatcher("ChangeInformation.jsp").forward(request, response);
     }
 
     /**
@@ -80,20 +81,20 @@ public class ChangeInformation extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("user");
+        User User = (User) session.getAttribute("User");
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
         String image = request.getParameter("image");
         if(image.equals("")) {
-            image = u.getAvatar();
+            image = User.getAvatar();
         }
         DAOUser dao = new DAOUser();
-        User user = new User(u.getId(), username, password, email, phone, image, u.getGender(), u.getDescription(),u.getCreate_date(), u.getVerify_status(), u.getRole_id());
+        User user = new User(User.getId(), username, password, email, phone, image, User.getGender(), User.getDescription(),User.getCreate_date(), User.getVerify_status(), User.getRole_id());
         dao.updateUser(user);
-        session.removeAttribute("user");
-        session.setAttribute("user",user);
+        //session.removeAttribute("User");
+        session.setAttribute("User",User);
         response.sendRedirect("home");
     }
 
