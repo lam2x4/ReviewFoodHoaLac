@@ -15,6 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Vector;
 
 import dao.DAOBlog;
+import dao.DAOImages;
+import entity.Images;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -64,12 +68,32 @@ public class Home extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         DAOBlog dao = new DAOBlog();
+        DAOImages daoImage = new DAOImages();
+        HashMap<Blog, ArrayList<Images>> Blog_Image = new HashMap<>();
+        ArrayList<Images> listFake;
         try {
-            Vector<Blog> list = dao.getAll();
+
+            Vector<Blog> list = dao.getAllApproved();
+            Vector<Images> imageList = daoImage.getAll();
+            for (Blog blog : list) {
+                
+                listFake = new ArrayList();
+                
+                for (Images images : imageList) {
+                    
+                    if (images.getBlog_id() == blog.getId()) {
+                        listFake.add(images);
+                    }
+                }
+                Blog_Image.put(blog, listFake); 
+               
+                
+            }
+            request.setAttribute("blog_image", Blog_Image);
             request.setAttribute("list", list);
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         } catch (Exception e) {
-             
+
         }
 
     }
@@ -93,7 +117,7 @@ public class Home extends HttpServlet {
             request.setAttribute("list", list);
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         } catch (Exception e) {
-             
+
         }
     }
 
