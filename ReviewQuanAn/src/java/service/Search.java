@@ -2,26 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package service;
 
+import dao.DAOBlog;
+import dao.DAOUser;
 import entity.Blog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Vector;
 
-import dao.DAOBlog;
-
 /**
  *
- * @author lam1
+ * @author ACER
  */
-@WebServlet(name = "Home", urlPatterns = {"/home"})
-public class Home extends HttpServlet {
+public class Search extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,18 +33,24 @@ public class Home extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Home</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Home at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String searchContent = request.getParameter("search");
+        DAOUser dao = new DAOUser();
+        
+        Vector<Blog> vector = dao.search1(searchContent);
+        
+        request.setAttribute("list", vector);
+        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+    }
+    
+    public String addString(Blog blog){
+        String output = "";
+        if(blog == null){
+            return null;
         }
+        else{
+            output = blog.getUsername() + blog.getTitle() + blog.getContent() + blog.getCreate_date();
+        }
+        return output;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,17 +65,7 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        DAOBlog dao = new DAOBlog();
-        try {
-            Vector<Blog> list = dao.getAll();
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-        } catch (Exception e) {
-             
-        }
-
+        processRequest(request, response);
     }
 
     /**
@@ -85,16 +79,7 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        DAOBlog dao = new DAOBlog();
-        try {
-            Vector<Blog> list = dao.getAll();
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-        } catch (Exception e) {
-             
-        }
+        processRequest(request, response);
     }
 
     /**

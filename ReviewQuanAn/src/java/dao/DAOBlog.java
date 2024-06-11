@@ -20,7 +20,7 @@ public class DAOBlog extends DBConnect {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
-            pre.setString(4, b.getCreate_date());
+            pre.setString(4,b.getCreate_date());
             pre.setInt(5, b.getLikes());
             pre.setInt(6, b.getIs_approved());
             pre.setInt(7, b.getIs_banned());
@@ -46,12 +46,19 @@ public class DAOBlog extends DBConnect {
         String sql = "UPDATE [dbo].[Blog] "
                 + "SET [title] = ?, "
                 + "[content] = ? "
+                + "[create_date] = ? "
+                + "[likes] = ? "
+                + "[is_approved] = ? "
+                + "[is_banned] = ? "
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setString(1, b.getTitle());
             pre.setString(2, b.getContent());
-            pre.setInt(3, b.getId());
+            pre.setString(3,b.getCreate_date());
+            pre.setInt(4, b.getLikes());
+            pre.setInt(5, b.getIs_approved());
+            pre.setInt(6, b.getIs_banned());
 
             return pre.executeUpdate();
         }

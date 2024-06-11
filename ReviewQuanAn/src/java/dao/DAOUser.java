@@ -11,6 +11,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utility.Mapper;
+import entity.Blog;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.mindrot.jbcrypt.BCrypt;
@@ -164,6 +165,58 @@ public class DAOUser extends DBContext {
             return true;
         }
         return false;
+    }
+    
+    public Vector<String> search(String search){
+        String sql = """
+                     select u.username, b.title, b.content, b.create_date from blog b left join [user] u on b.user_id = u.id
+                     """;
+        Vector<String> vector = new Vector<>();
+        try (Statement state
+                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                String searchContent = "";
+                searchContent += rs.getString(1);
+                searchContent += rs.getString(2);
+                searchContent += rs.getString(3);
+                searchContent += rs.getString(4);
+                vector.add(searchContent);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vector;
+    }
+    
+    public Vector<Blog> search1 (String search){
+        String sql = "select u.username, b.* from blog b left join [user] u on b.user_id = u.id";
+
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                String username = rs.getString(1);
+                int blog_id = rs.getInt(2);
+                int user_id = rs.getInt(3);
+                String title = rs.getString(4);
+                String content = rs.getString(5);
+                String create_date = rs.getString(6);
+                int likes = rs.getInt(7);
+                int is_approved = rs.getInt(8);
+                int is_banned = rs.getInt(9);
+                Blog blog = new Blog(username, blog_id, user_id, title, content, create_date, likes, is_approved, is_banned);
+                String a = username + title + content+ create_date;
+                if(a.contains(search)){
+                    vector.add(blog);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vector;
+            
     }
 
 }
