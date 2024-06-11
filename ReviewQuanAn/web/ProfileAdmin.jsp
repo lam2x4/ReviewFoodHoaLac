@@ -113,6 +113,10 @@
             .card img {
                 max-width: 100%;
                 border-radius: 10px;
+
+            }
+            .border-right{
+                height:742px;
             }
 
         </style>
@@ -120,37 +124,8 @@
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
-            <div class="bg-dark border-right" id="sidebar-wrapper">
-                <div class="sidebar-heading text-white"><i class="fas fa-tachometer-alt"></i> Admin Dashboard </div>
-                <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-home"></i> Home</a>
-                    <a href="profile.html" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-user"></i> Profile</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-users"></i> Users</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-file-alt"></i> Posts</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-comments"></i> Comments</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-flag"></i> Reports</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-cogs"></i> Settings</a>
-                </div>
-            </div>
-            <!-- /#sidebar-wrapper -->
-
-            <!-- Page Content -->
-            <div id="page-content-wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                    <button class="btn btn-primary" id="menu-toggle"><i class="fas fa-bars"></i></button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-
+            <%@include file="./AdminHeader.jsp" %>
+            <c:set value="${sessionScope.Admin}" var="i"></c:set>
                 <div class="container-fluid mt-4">
                     <h1 class="mb-4">Profile</h1>
                     <div class="row">
@@ -184,10 +159,10 @@
                             <div class="card mb-4 shadow-sm">
                                 <div class="card-header"><i class="fas fa-info-circle"></i> Current Profile</div>
                                 <div class="card-body">
-                                    <p><strong>Username:</strong> JohnDoe</p>
-                                    <p><strong>Email:</strong> johndoe@example.com</p>
-                                    <p><strong>Member since:</strong> January 1, 2020</p>
-                                    <p><strong>Last login:</strong> May 18, 2024</p>
+                                    <p><strong>Username:</strong> ${i.username}</p>
+                                    <p><strong>Email:</strong> ${i.email}</p>
+                                    <p><strong>Phone:</strong> ${i.phone}</p>
+                                    <p><strong>Member since:</strong> ${i.create_date}</p>
                                 </div>
                             </div>
                         </div>

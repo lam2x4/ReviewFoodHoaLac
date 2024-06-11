@@ -123,9 +123,9 @@
         <header>
             <!-- Navigation bar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="home">
                     <img src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.34264412.1716346800&semt=sph" style="width: 60px" alt="Logo">
-                    Blog Review AZ
+                    HoaLac3School
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -133,15 +133,15 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                            <a class="nav-link" href="home"><i class="fas fa-home"></i> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-blog"></i> Add Blog</a>
+                            <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
                         </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
-                                <a class="nav-link" href="#"><i class="fas fa-user-plus"></i> Profile</a>
-                                <a class="nav-link" href="#"><i class="fas fa-user-plus"></i> Logout</a>
+                                <a class="nav-link" href="#"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:when test="${sessionScope.Admin!=null}">
 
