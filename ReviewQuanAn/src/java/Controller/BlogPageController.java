@@ -48,7 +48,7 @@ public class BlogPageController extends HttpServlet {
 
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
-        request.setAttribute("profPic", u.getAvatar());
+        request.setAttribute("profPic", "img/" + u.getAvatar());
 
         request.setAttribute("blogTitle", b.getTitle());
         request.setAttribute("blogContent", b.getContent());
@@ -57,7 +57,7 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
 
-        request.setAttribute("commentProfPic",  curUser.getAvatar());
+        request.setAttribute("commentProfPic",  "img/" + curUser.getAvatar());
         request.setAttribute("commentUsername", curUser.getUsername());
 
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
