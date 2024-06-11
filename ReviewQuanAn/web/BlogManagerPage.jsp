@@ -14,7 +14,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
-        <title>Post Management</title>
+        <title>Blog Management</title>
         <style>
             body {
                 background-color: #f8f9fa;
@@ -131,7 +131,7 @@
 
 
             <div class="container-fluid mt-4">
-                <h1 class="mb-4">Post Management</h1>
+                <h1 class="mb-4">Blog Management</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
@@ -148,26 +148,32 @@
                         <tbody>
                             <c:forEach items="${requestScope.BlogList}" var="i" >
                                 <c:if test="${i.getIs_approved()!=0}" > 
-                                <tr>
-                                    <td>${i.id}</td>
-                                    <td>${i.title}</td>
-                                    <td>${requestScope.Blog_User.get(i.user_id)}</td>
-                                    <td>${i.content}</td>
-                                    <td>${i.create_date}</td>
-                                    <td id="status-${i.id}">${requestScope.blog_Approved.get(i.id)}</td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${requestScope.blog_Approved.get(i.id) == 'Approved'}">
-                                                <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-ban"></i> Reject</button>
-                                            </c:when>
-                                            <c:when test="${requestScope.blog_Approved.get(i.id) == 'Reject'}">
-                                                <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-check"></i> Approved</button>
-                                            </c:when>
-                                        </c:choose>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
-                                    </td>
+                                    <tr>
+                                        <td>   ${i.id} </td>
+                                        <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
+                                        <c:if test="${requestScope.Blog_User.get(i.user_id)==null}">
+                                            <td>Author is deleted</td>
+                                        </c:if>
 
-                                </tr>
+                                        <c:if test="${requestScope.Blog_User.get(i.user_id)!=null}">
+                                            <td>${requestScope.Blog_User.get(i.user_id)}</td>
+                                        </c:if>                                                                              
+                                        <td>${i.content}</td>
+                                        <td>${i.create_date}</td>
+                                        <td id="status-${i.id}">${requestScope.blog_Approved.get(i.id)}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Approved'}">
+                                                    <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-ban"></i> Reject</button>
+                                                </c:when>
+                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Reject'}">
+                                                    <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-check"></i> Approved</button>
+                                                </c:when>
+                                            </c:choose>
+                                            <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
+                                        </td>
+
+                                    </tr>
                                 </c:if> 
                             </c:forEach>
                             <!-- Add more post rows as needed -->
@@ -200,29 +206,32 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Delete User Modal -->
-        <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this user?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                    </div>
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this user?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <script>
+        function form(id){
+            window.location.href = 'haha.jsp';
+        }
         // Handle status button click
         $('.status-btn').click(function () {
             const id = $(this).data('id');
@@ -241,23 +250,23 @@
             // Redirect to haha servlet with post id
             window.location.href = `AdminBanBlog?id=` + id + "&status=" + status;
         });
-         $('.delete-btn').click(function () {             
-                const id = $(this).data('id');            
-                $('#confirmDeleteBtn').data('id', id);
-            });
+        $('.delete-btn').click(function () {
+            const id = $(this).data('id');
+            $('#confirmDeleteBtn').data('id', id);
+        });
 
-            // Handle delete confirmation
-            $('#confirmDeleteBtn').click(function () {              
-                const id = $(this).data('id');
-                // Perform the delete action (e.g., AJAX request or form submission)
-                
-                $('#deleteUserModal').modal('hide');
+        // Handle delete confirmation
+        $('#confirmDeleteBtn').click(function () {
+            const id = $(this).data('id');
+            // Perform the delete action (e.g., AJAX request or form submission)
 
-                // Redirect to homepage.jsp with email parameter after hiding the modal
-                $('#deleteUserModal').on('hidden.bs.modal', function () {
-                    window.location.href = 'AdminDeleteBlog?id='+id;
-                });
+            $('#deleteUserModal').modal('hide');
+
+            // Redirect to homepage.jsp with email parameter after hiding the modal
+            $('#deleteUserModal').on('hidden.bs.modal', function () {
+                window.location.href = 'AdminDeleteBlog?id=' + id;
             });
+        });
     </script>
 </body>
 </html>

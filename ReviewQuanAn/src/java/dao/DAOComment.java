@@ -13,13 +13,12 @@ import java.util.logging.Logger;
 public class DAOComment extends DBConnect {
     
     public int addComment(Comment comm) throws SQLException {
-        DAOUser daoUser = new DAOUser();
         String sql = "INSERT INTO [dbo].[Comment] "
                 + "([user_id], [blog_id], [content], [likes]) "
                 + "VALUES (?,?,?,?)";
         
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, daoUser.getUser_id(comm.getUsername()));
+        try(PreparedStatement pre = conn.prepareStatement(sql)){
+            pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
             pre.setString(3, comm.getContent());
             pre.setInt(4, comm.getLikes());
@@ -62,6 +61,7 @@ public class DAOComment extends DBConnect {
                 Comment comm = new Comment();
                 
                 comm.setId(rs.getInt(1));
+                comm.setUser_id(rs.getInt(2));
                 comm.setUsername(findUsername(rs.getInt(2)));
                 comm.setBlog_id(rs.getInt(3));
                 comm.setContent(rs.getString(4));
@@ -75,9 +75,9 @@ public class DAOComment extends DBConnect {
         return vector;
     }
     
-    public Vector<Comment> findCommentsById(int id) throws SQLException {
+    public Vector<Comment> findCommentsByBlog_id(int id) throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment WHERE id = ?";
+        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
@@ -87,6 +87,7 @@ public class DAOComment extends DBConnect {
                 Comment comm = new Comment();
                 
                 comm.setId(rs.getInt(1));
+                comm.setUser_id(rs.getInt(2));
                 comm.setUsername(findUsername(rs.getInt(2)));
                 comm.setBlog_id(rs.getInt(3));
                 comm.setContent(rs.getString(4));
@@ -134,15 +135,21 @@ public class DAOComment extends DBConnect {
         }
         return null;
     }
+    
+    public String findAvatarByUser_id(int user_id) throws SQLException{
+        String sql = "SELECT avatar FROM [User] WHERE id = (SELECT TOP 1 user_id FROM Comment WHERE user_id = ?)";
 
-    public static void main(String[] args) {
-        DAOComment dao = new DAOComment();
-        
-        
-        try {
-            System.out.println(dao.viewAll());
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return "img/" + rs.getString(1);
+                }
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(DAOComment.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 }

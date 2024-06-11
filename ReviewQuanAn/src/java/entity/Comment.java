@@ -3,6 +3,7 @@ package entity;
 public class Comment {
 
     private int id;
+    private int user_id;
     private String username;
     private int blog_id;
     private String content;
@@ -13,7 +14,8 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String username, int blog_id, String content, String create_date, int likes, int is_banned) {
+    public Comment(int user_id, String username, int blog_id, String content, String create_date, int likes, int is_banned) {
+        this.user_id = user_id;
         this.username = username;
         this.blog_id = blog_id;
         this.content = content;
@@ -24,6 +26,10 @@ public class Comment {
 
     public int getId() {
         return id;
+    }
+
+    public int getUser_id() {
+        return user_id;
     }
 
     public String getUsername() {
@@ -52,6 +58,10 @@ public class Comment {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public void setUsername(String username) {

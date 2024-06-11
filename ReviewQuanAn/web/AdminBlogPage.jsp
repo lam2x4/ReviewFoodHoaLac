@@ -21,7 +21,7 @@
     </head>
     <body>
         <!-- Navigation Bar -->
-        <%@ include file="./Header.jsp" %>
+        <%@ include file="./AdminHeader.jsp" %>
         <%Vector<Comment> comments = (Vector<Comment>)request.getAttribute("blogComments");
           Vector<Images> imgs = (Vector<Images>)request.getAttribute("blogPictures");
           Vector<String> avatars = (Vector<String>)request.getAttribute("commentAvatars");%>
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <%@ include file="./Footer.jsp" %>
+        
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
             updateCommentCount();

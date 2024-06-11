@@ -48,6 +48,7 @@
                 margin-bottom: 10px;
             }
             .card{
+               
                 width:350px;
             }
         </style>
@@ -74,7 +75,11 @@
             <div class="container">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Search for articles...">
+                        <form action="Search" method="post">
+                            <input name="search" type="text" class="form-control" placeholder="Search for articles...">
+                            <input type="submit" name="search" value="Search">
+                            <input type="hidden" name="submit" value="search">
+                        </form>
                     </div>
                     <div class="col-md-6 text-right">
                         <select class="form-control w-50 d-inline">
@@ -89,11 +94,13 @@
                     <c:forEach items="${requestScope.list}" var="i">
                         <div class="col-md-4">
                             <div class="card mb-4">
-                                <img class="card-img-top" src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDEzNjJ8MHwxfGFsbHwyfHx8fHx8fHwxNjIwODkwNTI5&ixlib=rb-1.2.1&q=80&w=400" alt="Card image">
+                                <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 <div class="card-body">
-                                    <h4 class="card-title">${i.title}</h4>
-                                    <p class="card-text">${i.content}</p>
-                                    <a href="#" class="btn btn-primary">See Profile</a>
+                                    
+                                    <h4 class="card-title" >${i.title}</h4>
+                                    <p class="card-text" >${i.content}</p>
+                                   
+                                    <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
                                 </div>
                             </div>
                         </div>
@@ -102,15 +109,7 @@
 
                 </div>
                 <!-- Pagination -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav>
+                
             </div>
         </section>
 
@@ -122,7 +121,8 @@
     </body>
 
     <%@include file="./Footer.jsp" %>
-
+    
 
 </body>
+
 </html>

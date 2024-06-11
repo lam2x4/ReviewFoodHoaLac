@@ -3,6 +3,12 @@
     <!--    <welcome-file-list>
         <welcome-file>StorePage.jsp</welcome-file>
     </welcome-file-list>-->
+    <web-app>
+        <session-config>
+            <session-timeout>60</session-timeout>
+            <!-- Session timeout in minutes -->
+        </session-config>
+    </web-app>
     <servlet>
         <servlet-name>UserController</servlet-name>
         <servlet-class>Controller.UserController</servlet-class>
@@ -70,6 +76,18 @@
     <servlet>
         <servlet-name>ProfileAdmin</servlet-name>
         <servlet-class>Controller.ProfileAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Search</servlet-name>
+        <servlet-class>service.Search</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>service.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminBlogPage</servlet-name>
+        <servlet-class>Controller.AdminBlogPage</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangeInformation</servlet-name>
@@ -142,6 +160,18 @@
     <servlet-mapping>
         <servlet-name>ProfileAdmin</servlet-name>
         <url-pattern>/ProfileAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/Search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminBlogPage</servlet-name>
+        <url-pattern>/AdminBlogPage</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangeInformation</servlet-name>

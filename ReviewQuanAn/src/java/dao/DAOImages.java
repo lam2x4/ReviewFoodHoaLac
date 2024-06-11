@@ -59,7 +59,7 @@ public class DAOImages extends DBConnect{
                 
                 img.setId(rs.getInt(1));
                 img.setBlog_id(rs.getInt(2));
-                img.setLink(rs.getString(3));
+                img.setLink("img/" + rs.getString(3));
 
                 vector.add(img);
             }
@@ -79,7 +79,7 @@ public class DAOImages extends DBConnect{
                     
                     img.setId(rs.getInt(1));
                     img.setBlog_id(rs.getInt(2));
-                    img.setLink(rs.getString(3));
+                    img.setLink("img/" + rs.getString(3));
                     
                     return img;
                 }
@@ -103,7 +103,7 @@ public class DAOImages extends DBConnect{
                 
                 img.setId(rs.getInt(1));
                 img.setBlog_id(rs.getInt(2));
-                img.setLink(rs.getString(3));
+                img.setLink("img/" + rs.getString(3));
 
                 vector.add(img);
             }
@@ -111,20 +111,15 @@ public class DAOImages extends DBConnect{
         return vector;
     }
     
-//    public static void main(String[] args) {
-//        DAOImages dao = new DAOImages();
-//        Images img = new Images(1, "New Link");
-//        
-//        try {
-//            dao.addImages(img);
-//            Images newImg = dao.getImages(6);
-//            newImg.setLink("New Edited Link");
-//            dao.updateImages(newImg);
-//            dao.removeImages(6);
-//            Vector<Images> vector = dao.getAll();
-//            for(Images i : vector) System.out.println(i);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOImages.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    public static void main(String[] args) {
+        DAOImages dao = new DAOImages();
+        Images img = new Images(1, "New Link");
+        
+        try {
+            
+            System.out.println(dao.getAll());
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOImages.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

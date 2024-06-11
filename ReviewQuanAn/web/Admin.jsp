@@ -186,7 +186,7 @@
                                     <c:if test="${i.getIs_approved()==0}" > 
                                         <tr>
                                             <td>${i.id}</td>
-                                            <td>${i.title}</td>
+                                            <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title} </td>
                                             <td>${requestScope.Blog_User.get(i.user_id)}</td>
                                             <td>${i.content}</td>
                                             <td>${i.create_date}</td>

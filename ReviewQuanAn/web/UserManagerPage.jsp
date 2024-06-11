@@ -137,13 +137,12 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>#</th>
-                                    <th>UserName</th>
-                                    <th>Password</th>
+                                    <th>UserName</th>                                   
                                     <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Avatar</th>
+                                    <th>Phone</th>                                   
                                     <th>Gender</th>
-                                    <th>Role</th>                                        
+                                    <th>Role</th> 
+                                    <th>Action</th> 
                                 </tr>
                             </thead>
 
@@ -153,17 +152,25 @@
                                     <tr>
                                         <td>${i.id}</td>                                       
                                         <td>${i.username}</td>
-                                        <td>${i.password}</td>
+                                        
                                         <td>${i.email}</td>
+                                        <td>${i.phone}</td>
                                         <c:if test="${i.gender==1}">
                                             <td>Male</td>
                                         </c:if>
                                         <c:if test="${i.gender==0}">
                                             <td>Female</td>
                                         </c:if>
-                                        <td>Active</td>
+                                            <c:if test="${i.role_id==1}">
+                                            <td>Admin</td>
+                                        </c:if>
+                                        <c:if test="${i.role_id==2}">
+                                            <td>User</td>
+                                        </c:if>
+                                                
+                                                
+                                            </td>
                                         <td>
-                                            <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editUserModal" data-id="${i.id}" data-username="${i.username}" data-email="${i.email}" data-role="Admin" data-status="Active"><i class="fas fa-edit"></i> Edit</button>
                                             <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-email="${i.email}" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
                                         </td>
                                     </tr>
@@ -178,64 +185,7 @@
         </div>
         <!-- /#wrapper -->
 
-        <!-- Edit User Modal -->
-        <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editUserForm" novalidate action="hehe.jsp">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" required>
-                                <div class="invalid-feedback">
-                                    Please enter a username.
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                                <div class="invalid-feedback">
-                                    Please enter a valid email address.
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <select class="form-control" id="role" required>
-                                    <option value="" disabled selected>Select role</option>
-                                    <option>Admin</option>
-                                    <option>User</option>
-                                    <option>Guest</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Please select a role.
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status" required>
-                                    <option value="" disabled selected>Select status</option>
-                                    <option>Active</option>
-                                    <option>Inactive</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                    Please select a status.
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" form="editUserForm">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
 
         <!-- Delete User Modal -->
         <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
@@ -314,7 +264,7 @@
 
                 // Redirect to homepage.jsp with email parameter after hiding the modal
                 $('#deleteUserModal').on('hidden.bs.modal', function () {
-                    window.location.href = 'homepage.jsp?email=' + encodeURIComponent(userEmail)+'&id='+encodeURIComponent(id);
+                    window.location.href = 'AdminDeleteUser?id=' + id;
                 });
             });
         </script>
