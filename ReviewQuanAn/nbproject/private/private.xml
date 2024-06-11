@@ -3,13 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/src/java/dao/DAOUser.java</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/web/BlogPage.jsp</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/web/ApplyPostPage.jsp</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/web/ChangeInformation.jsp</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/src/java/service/ChangeInformation.java</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/src/java/Controller/BlogPageController.java</file>
-            <file>file:/C:/Users/kyler/OneDrive/Desktop/ForkyThingy/Temp/ReviewQuanAn/web/ChangePasswordPage.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/ChangeInformation.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Controller/AdminBlogManagement.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/Login.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Controller/AdminDeleteBlog.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Header.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Utility/Mapper.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/ChangeInformation.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Controller/Admin.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/PostUpload.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/RegisterPage.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/dao/DBConnect.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/entity/Role.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/entity/User.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/AdminHeader.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/LoginPage.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Script/Change_Information_Script.js</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Controller/UserController.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/dao/DAOUser.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Script/Apply_Post_Page_Script.js</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/ApplyPostPage.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/Test.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/service/ResendCode.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/src/java/Controller/Home.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Uni/SWP391%20-%20AnhDT135/Project/ReviewQuanAn/web/HomePage.jsp</file>
         </group>
     </open-files>
 </project-private>
