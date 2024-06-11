@@ -91,7 +91,6 @@
                             <div class="comment-actions">
                                 <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                                 <%=comments.get(i).getLikes()%> likes   
-                                <button class="rating"><i class="fa-regular fa-thumbs-down"></i></button>
                                 <button class="reply-button" onclick="showReplyInput(this, '<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Reply</button>
                                 <div class="replies" id="replies"></div>
                             </div>

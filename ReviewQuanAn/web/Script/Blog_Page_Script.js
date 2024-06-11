@@ -11,6 +11,13 @@ document.getElementById('cancel-button').addEventListener('click', function () {
 function postComment(username, profPic) {
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
+    
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    
+    let currentDate = `${day}/${month}/${year}`;
 
     if (commentValue) {
         const newComment = document.createElement('div');
@@ -22,12 +29,11 @@ function postComment(username, profPic) {
                 </a>
             </div>
             <div class="comment-body">
-                <p><a href="" class="profile-link">${username}</a></p>
+                <p><a href="" class="profile-link">${username}</a> ${currentDate}</p>
                 <p>${commentValue}</p>
                 <div class="comment-actions">
                     <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                     0 likes   
-                    <button class="rating"><i class="fa-regular fa-thumbs-down"></i></button>
                     <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
                 </div>
                 <div class="replies"></div>
@@ -131,7 +137,6 @@ function postReply(replyButton, username, profPic) {
             <div class="comment-actions">
                 <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                 0 likes   
-                <button class="rating"><i class="fa-regular fa-thumbs-down"></i></button>
                 <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
             </div>
             <div class="replies"></div>
@@ -176,6 +181,10 @@ function toggleLike() {
   
   isPressed ? bloglikes-- : bloglikes++;
   likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+}
+
+function toggleCommentLike(){
+    
 }
 
 //Light box

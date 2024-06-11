@@ -33,7 +33,7 @@ public class BlogPageController extends HttpServlet {
         
         User curUser = (User)session.getAttribute("Admin");
         
-        Vector<Comment> comments = daoComment.findCommentsById(1);
+        Vector<Comment> comments = daoComment.findCommentsByBlog_id(1);
         Vector<Images> imgs = daoImages.findImagesByBlog_id(1);
         Vector<String> avatars = new Vector<>();
         for(Comment comm : comments) avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));

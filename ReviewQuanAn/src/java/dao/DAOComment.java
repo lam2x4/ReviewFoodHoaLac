@@ -13,13 +13,10 @@ import java.util.logging.Logger;
 public class DAOComment extends DBConnect {
     
     public int addComment(Comment comm) throws SQLException {
-        DAOUser daoUser = new DAOUser();
         String sql = "INSERT INTO [dbo].[Comment] "
                 + "([user_id], [blog_id], [content], [likes]) "
                 + "VALUES (?,?,?,?)";
         
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, daoUser.getUser_id(comm.getUsername()));
         try(PreparedStatement pre = conn.prepareStatement(sql)){
             pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
@@ -78,9 +75,9 @@ public class DAOComment extends DBConnect {
         return vector;
     }
     
-    public Vector<Comment> findCommentsById(int id) throws SQLException {
+    public Vector<Comment> findCommentsByBlog_id(int id) throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment WHERE id = ?";
+        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
@@ -138,17 +135,6 @@ public class DAOComment extends DBConnect {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        DAOComment dao = new DAOComment();
-        
-        
-        try {
-            System.out.println(dao.viewAll());
-        } catch (SQLException ex) {
-            Logger.getLogger(DAOComment.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     public String findAvatarByUser_id(int user_id) throws SQLException{
         String sql = "SELECT avatar FROM [User] WHERE id = (SELECT TOP 1 user_id FROM Comment WHERE user_id = ?)";
@@ -166,20 +152,4 @@ public class DAOComment extends DBConnect {
         }
         return null;
     }
-    
-//    public static void main(String[] args) {
-//        DAOComment dao = new DAOComment();
-//        Comment comm = new Comment(1, 1, "New Edited Content", 0);
-//        
-//        try {
-//            dao.addComment(comm);
-//            comm.setId(8);
-//            dao.editComment(comm);
-//            dao.deleteComment(8);
-//            Vector<Comment> vector = dao.viewAll();
-//            for(Comment c : vector) System.out.println(c);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DAOComment.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
 }
