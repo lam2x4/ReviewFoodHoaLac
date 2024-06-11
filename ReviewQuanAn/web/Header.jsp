@@ -138,6 +138,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> User Profile</a>
+                        </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
                                 <a class="nav-link" href="#"><i class="fas fa-user-circle"></i></i> Profile</a>

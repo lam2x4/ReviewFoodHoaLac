@@ -19,7 +19,6 @@ import entity.User;
  *
  * @author kyler
  */
-@WebServlet(name = "ChangeInformation", urlPatterns = {"/change-information"})
 public class ChangeInformation extends HttpServlet {
 
     /**
