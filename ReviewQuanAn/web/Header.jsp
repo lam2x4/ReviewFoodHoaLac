@@ -138,12 +138,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="change-information"><i class="fas fa-book-open"></i> User Profile</a>
-                        </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
-                                <a class="nav-link" href="#"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="change-information"><i class="fas fa-user-circle"></i></i> Profile</a>
                                 <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:when test="${sessionScope.Admin!=null}">
@@ -158,7 +155,7 @@
                                 </li>
                             </c:otherwise>
                         </c:choose>
-                        
+
                     </ul>
                 </div>
             </nav>
