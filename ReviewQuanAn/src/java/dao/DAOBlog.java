@@ -20,7 +20,10 @@ public class DAOBlog extends DBConnect {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
-            pre.setInt(4, b.getLikes());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getLikes());
+            pre.setInt(6, b.getIs_approved());
+            pre.setInt(7, b.getIs_banned());
 
             return pre.executeUpdate();
         }
@@ -69,12 +72,29 @@ public class DAOBlog extends DBConnect {
                 b.setUser_id(rs.getInt(2));
                 b.setTitle(rs.getString(3));
                 b.setContent(rs.getString(4));
-                b.setLikes(rs.getInt(5));
+                b.setCreate_date(rs.getString(5));
+                b.setLikes(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+                b.setIs_banned(rs.getInt(8));
 
                 vector.add(b);
             }
         }
         return vector;
+    }
+    
+    public int editBlogApproved(int id,int approved) throws SQLException {
+        String sql = "UPDATE [dbo].[Blog] "
+                + "SET [is_approved] = ? "            
+                + "WHERE id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, approved);
+            pre.setInt(2, id);
+            
+
+            return pre.executeUpdate();
+        }
     }
 
     public Blog getBlog(int id) throws SQLException {
@@ -123,11 +143,7 @@ public class DAOBlog extends DBConnect {
         
         Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
         try {
-            dao.addBlog(b);
-            Blog newB = dao.getBlog(6);
-            newB.setTitle("New Edited Title");
-            dao.editBlog(newB);
-            dao.deleteBlog(6);
+            dao.editBlogApproved(17, 1);
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
