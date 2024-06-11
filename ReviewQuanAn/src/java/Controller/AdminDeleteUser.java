@@ -5,12 +5,17 @@
 
 package Controller;
 
+import dao.DAOBlog;
+import dao.DAOUser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,7 +58,16 @@ public class AdminDeleteUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       try {
+            int user_id = Integer.parseInt(request.getParameter("id"));
+            DAOUser daoUser = new DAOUser();
+            DAOBlog daoBlog = new DAOBlog();
+            daoUser.deleteUserIgnoreConstraint(user_id);
+            daoBlog.updateBlogUser_id(user_id);
+            response.sendRedirect("AdminUserManagement");
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminDeleteUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
 
     /** 
@@ -66,7 +80,9 @@ public class AdminDeleteUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        
+        
+        
     }
 
     /** 
