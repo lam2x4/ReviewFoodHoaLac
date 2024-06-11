@@ -58,7 +58,7 @@ public class Login extends HttpServlet {
                 switch (role) {
                     case "admin":
                         session.setAttribute("Admin", user);
-                        response.sendRedirect("Admin");
+                        response.sendRedirect("BlogPageController");
                         break;
                     case "customer":
                         session.setAttribute("User", user);

@@ -8,31 +8,36 @@ document.getElementById('cancel-button').addEventListener('click', function () {
     document.getElementById('add-comment-button').style.display = 'none';
 });
 
-document.getElementById('add-comment-button').addEventListener('click', function () {
+function postComment(username, profPic) {
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
+    
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    
+    let currentDate = `${day}/${month}/${year}`;
 
     if (commentValue) {
-        // Assuming the current user is 'Current User' and using a placeholder image for the profile picture
         const newComment = document.createElement('div');
         newComment.classList.add('comment');
         newComment.innerHTML = `
             <div class="thumbnail">
                 <a class="toProfile">
-                    <img src="img/photo_6_2024-06-06_11-09-40.jpg" alt="Profile Picture" class="profile-pic">
+                    <img src="${profPic}" alt="Profile Picture" class="profile-pic">
                 </a>
             </div>
             <div class="comment-body">
-                <p><a href="" class="profile-link">Current User</a></p>
+                <p><a href="" class="profile-link">${username}</a> ${currentDate}</p>
                 <p>${commentValue}</p>
                 <div class="comment-actions">
                     <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                     0 likes   
-                    <button class="rating"><i class="fa-regular fa-thumbs-down"></i></button>
-                    <button class="reply-button" onclick="showReplyInput(this)">Reply</button>
+                    <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
                 </div>
+                <div class="replies"></div>
             </div>
-            <div class="replies"></div>
         `;
 
         // Append the new comment to the comment list
@@ -46,6 +51,11 @@ document.getElementById('add-comment-button').addEventListener('click', function
 
         updateCommentCount();
     }
+}
+
+document.getElementById('commentButton').addEventListener('click', function () {
+    document.getElementById('comment-box').scrollIntoView({behavior: 'smooth'});
+    document.getElementById('comment-input').focus();
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -77,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function showReplyInput(replyBtn) {
+function showReplyInput(replyBtn, username, profPic) {
     // Check if reply input already exists
     let existingInput = replyBtn.parentElement.nextElementSibling;
     if (existingInput && existingInput.classList.contains('reply-section')) {
@@ -89,11 +99,11 @@ function showReplyInput(replyBtn) {
     const replyInput = document.createElement('div');
     replyInput.classList.add('reply-section');
     replyInput.id = "reply-section";
-    replyInput.innerHTML = `<img src="img/photo_6_2024-06-06_11-09-40.jpg" alt="Profile Picture" class="profile-pic">
+    replyInput.innerHTML = `<img src="${profPic}" alt="Profile Picture" class="profile-pic">
                             <input type="text" name="add-reply" id="comment-input" class="glowing-input" placeholder="Add a reply...">
                             <div class="buttons">
                                 <button class="button" onclick="cancelReply(this)">Cancel</button>
-                                <button class="button" onclick="postReply(this)">Reply</button>
+                                <button class="button" onclick="postReply(this, '${username}', '${profPic}')">Reply</button>
                             </div>`;
 
     // Insert the reply input element after the comment actions
@@ -105,7 +115,7 @@ function cancelReply(cancelButton) {
     cancelButton.closest('.reply-section').style.display = 'none';
 }
 
-function postReply(replyButton) {
+function postReply(replyButton, username, profPic) {
     const replyInputValue = replyButton.closest('.reply-section').querySelector('input').value;
 
     // Check if the input is empty
@@ -117,18 +127,19 @@ function postReply(replyButton) {
     reply.classList.add('comment', 'reply');
     reply.innerHTML = `
         <div class="thumbnail">
-            <img src="img/photo_6_2024-06-06_11-09-40.jpg" alt="Profile Picture" class="profile-pic">
+            <a class="toProfile">
+                <img src="${profPic}" alt="Profile Picture" class="profile-pic">
+            </a>
         </div>
         <div class="comment-body">
-            <p><a href="" class="profile-link">Current User</a></p>
+            <p><a href="" class="profile-link">${username}</a></p>
             <p>${replyInputValue}</p>
             <div class="comment-actions">
                 <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                 0 likes   
-                <button class="rating"><i class="fa-regular fa-thumbs-down"></i></button>
-                <button class="reply-button" onclick="showReplyInput(this)">Reply</button>
+                <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
             </div>
-    <div class="replies"></div>
+            <div class="replies"></div>
         </div>
     `;
 
@@ -157,6 +168,23 @@ function updateCommentCount() {
 
     // Update the span with the new comment count
     document.getElementById('commentCount').textContent = `Comments: ${commentCount}`;
+}
+
+function toggleLike() {
+  let likeBtn = document.getElementById("like-button");
+  let likeCount = document.getElementById("likeCount");
+  
+  let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+
+  const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
+  likeBtn.setAttribute('aria-pressed', !isPressed);
+  
+  isPressed ? bloglikes-- : bloglikes++;
+  likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+}
+
+function toggleCommentLike(){
+    
 }
 
 //Light box
