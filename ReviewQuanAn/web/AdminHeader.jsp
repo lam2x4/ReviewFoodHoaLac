@@ -128,7 +128,7 @@
         <div class="d-flex" id="wrapper">
 
             <!-- Sidebar -->
-            <div class="bg-dark border-right" " >
+            <div class="bg-dark border-right" >
                 <div class="sidebar-heading text-white"><i class="fas fa-tachometer-alt"></i> Admin Dashboard </div>
                 <div class="list-group list-group-flush">
                     <a href="Admin" class="list-group-item list-group-item-action bg-dark text-white "  ><i class="fas fa-home"></i> DashBoard</a>
@@ -148,7 +148,7 @@
                                 <a class="nav-link" href="ProfileAdmin.jsp"><i class="fas fa-user-circle"></i> Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                <a class="nav-link" href="Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </li>
                         </ul>
                     </div>

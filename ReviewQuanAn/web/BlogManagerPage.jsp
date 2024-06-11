@@ -14,7 +14,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
-        <title>Post Management</title>
+        <title>Blog Management</title>
         <style>
             body {
                 background-color: #f8f9fa;
@@ -131,7 +131,7 @@
 
 
             <div class="container-fluid mt-4">
-                <h1 class="mb-4">Post Management</h1>
+                <h1 class="mb-4">Blog Management</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
@@ -149,8 +149,8 @@
                             <c:forEach items="${requestScope.BlogList}" var="i" >
                                 <c:if test="${i.getIs_approved()!=0}" > 
                                     <tr>
-                                        <td>${i.id}</td>
-                                        <td>${i.title}</td>
+                                        <td>   ${i.id} </td>
+                                        <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
                                         <c:if test="${requestScope.Blog_User.get(i.user_id)==null}">
                                             <td>Author is deleted</td>
                                         </c:if>
@@ -229,6 +229,9 @@
     </div>
 
     <script>
+        function form(id){
+            window.location.href = 'haha.jsp';
+        }
         // Handle status button click
         $('.status-btn').click(function () {
             const id = $(this).data('id');

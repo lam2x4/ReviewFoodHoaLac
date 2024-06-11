@@ -20,7 +20,7 @@ public class DAOBlog extends DBConnect {
             pre.setInt(1, b.getUser_id());
             pre.setString(2, b.getTitle());
             pre.setString(3, b.getContent());
-            pre.setString(4,b.getCreate_date());
+            pre.setString(4, b.getCreate_date());
             pre.setInt(5, b.getLikes());
             pre.setInt(6, b.getIs_approved());
             pre.setInt(7, b.getIs_banned());
@@ -36,7 +36,6 @@ public class DAOBlog extends DBConnect {
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
-            
 
             return pre.executeUpdate();
         }
@@ -55,7 +54,7 @@ public class DAOBlog extends DBConnect {
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setString(1, b.getTitle());
             pre.setString(2, b.getContent());
-            pre.setString(3,b.getCreate_date());
+            pre.setString(3, b.getCreate_date());
             pre.setInt(4, b.getLikes());
             pre.setInt(5, b.getIs_approved());
             pre.setInt(6, b.getIs_banned());
@@ -68,6 +67,20 @@ public class DAOBlog extends DBConnect {
         String sql = "DELETE FROM Blog WHERE id = ? "
                 + "AND id NOT IN (SELECT blog_id FROM Comment WHERE blog_id = ?) "
                 + "AND id NOT IN (SELECT blog_id FROM Images WHERE blog_id = ?)";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, id);
+            pre.setInt(2, id);
+            pre.setInt(3, id);
+
+            return pre.executeUpdate();
+        }
+    }
+
+    public int deleteBlogIgnoreConstraint(int id) throws SQLException {
+        String sql = "delete from images where blog_id=? "
+                + "delete from comment where blog_id=? "
+                + "delete from blog where id=?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
@@ -98,6 +111,32 @@ public class DAOBlog extends DBConnect {
                 b.setIs_banned(rs.getInt(8));
 
                 vector.add(b);
+            }
+        }
+        return vector;
+    }
+
+    public Vector<Blog> getAllApproved() throws SQLException {
+        Vector<Blog> vector = new Vector<>();
+        String sql = "SELECT * FROM Blog";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Blog b = new Blog();
+
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setTitle(rs.getString(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setLikes(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+                b.setIs_banned(rs.getInt(8));
+                if (b.getIs_approved() == 1) {
+                    vector.add(b);
+                }
             }
         }
         return vector;
@@ -162,7 +201,7 @@ public class DAOBlog extends DBConnect {
 
         Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
         try {
-            dao.updateBlogUser_id(10);
+            dao.getAllApproved();
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
