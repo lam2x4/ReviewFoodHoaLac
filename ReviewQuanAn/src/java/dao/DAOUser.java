@@ -11,6 +11,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utility.Mapper;
+import entity.Blog;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.mindrot.jbcrypt.BCrypt;
@@ -133,18 +134,30 @@ public class DAOUser extends DBContext {
         return 0;
     }
 
+    public int deleteUserIgnoreConstraint(int user_id) {
+        String sql = "ALTER TABLE blog NOCHECK CONSTRAINT FK__Blog__user_id__440B1D61 "
+                + "delete from comment where [user_id]=?"
+                + " delete from draft where [user_id]=? "
+                + "delete [user] where id = ? "
+                + "ALTER TABLE blog CHECK CONSTRAINT FK__Blog__user_id__440B1D61 ";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            pre.setInt(2, user_id);
+            pre.setInt(3, user_id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
 
-        
-        LocalDate create_date = LocalDate.now();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = create_date.format(dateFormat);
-        
-        Vector<User> vector = dao.getAll();
-        for (User user1 : vector) {
-            System.out.println(user1.toString());
-        }
+        dao.deleteUserIgnoreConstraint(9);
+
     }
 
     public static boolean checkPassword(String password) {
@@ -152,6 +165,58 @@ public class DAOUser extends DBContext {
             return true;
         }
         return false;
+    }
+    
+    public Vector<String> search(String search){
+        String sql = """
+                     select u.username, b.title, b.content, b.create_date from blog b left join [user] u on b.user_id = u.id
+                     """;
+        Vector<String> vector = new Vector<>();
+        try (Statement state
+                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                String searchContent = "";
+                searchContent += rs.getString(1);
+                searchContent += rs.getString(2);
+                searchContent += rs.getString(3);
+                searchContent += rs.getString(4);
+                vector.add(searchContent);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vector;
+    }
+    
+    public Vector<Blog> search1 (String search){
+        String sql = "select u.username, b.* from blog b left join [user] u on b.user_id = u.id";
+
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                String username = rs.getString(1);
+                int blog_id = rs.getInt(2);
+                int user_id = rs.getInt(3);
+                String title = rs.getString(4);
+                String content = rs.getString(5);
+                String create_date = rs.getString(6);
+                int likes = rs.getInt(7);
+                int is_approved = rs.getInt(8);
+                int is_banned = rs.getInt(9);
+                Blog blog = new Blog(username, blog_id, user_id, title, content, create_date, likes, is_approved, is_banned);
+                String a = username + title + content+ create_date;
+                if(a.contains(search)){
+                    vector.add(blog);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vector;
+            
     }
 
 }

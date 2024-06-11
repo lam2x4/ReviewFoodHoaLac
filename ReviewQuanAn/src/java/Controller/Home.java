@@ -85,7 +85,16 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        DAOBlog dao = new DAOBlog();
+        try {
+            Vector<Blog> list = dao.getAll();
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        } catch (Exception e) {
+             
+        }
     }
 
     /**

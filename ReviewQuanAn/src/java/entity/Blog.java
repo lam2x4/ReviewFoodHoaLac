@@ -11,6 +11,34 @@ public class Blog {
     private int is_approved;
     private int is_banned;
 
+    //ADDED BY TUAN ANH ---- FOR SEARCH FUNCTION
+    private String username;
+
+    public Blog(String username, int id, int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned) {
+        this.username = username;
+        this.id = id;
+        this.user_id = user_id;
+        this.title = title;
+        this.content = content;
+        this.create_date = create_date;
+        this.likes = likes;
+        this.is_approved = is_approved;
+        this.is_banned = is_banned;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
+    
+    // THIS CODE DOES NOT AFFECT ANY OTHER EXISTING FUNCTIONS
+    
+    
     public Blog() {
     }
 

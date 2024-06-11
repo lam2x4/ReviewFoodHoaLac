@@ -74,7 +74,11 @@
             <div class="container">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Search for articles...">
+                        <form action="Search" method="post">
+                            <input name="search" type="text" class="form-control" placeholder="Search for articles...">
+                            <input type="submit" name="search" value="Search">
+                            <input type="hidden" name="submit" value="search">
+                        </form>
                     </div>
                     <div class="col-md-6 text-right">
                         <select class="form-control w-50 d-inline">
