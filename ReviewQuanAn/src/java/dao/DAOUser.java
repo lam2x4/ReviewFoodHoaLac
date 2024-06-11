@@ -133,20 +133,30 @@ public class DAOUser extends DBContext {
         return 0;
     }
 
+    public int deleteUserIgnoreConstraint(int user_id) {
+        String sql = "ALTER TABLE blog NOCHECK CONSTRAINT FK__Blog__user_id__440B1D61 "
+                + "delete from comment where [user_id]=?"
+                + " delete from draft where [user_id]=? "
+                + "delete [user] where id = ? "
+                + "ALTER TABLE blog CHECK CONSTRAINT FK__Blog__user_id__440B1D61 ";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            pre.setInt(2, user_id);
+            pre.setInt(3, user_id);
+
+            pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
 
-        
-        LocalDate create_date = LocalDate.now();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = create_date.format(dateFormat);
-        
-        User user = new User("Tuan Anh", "$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO", "abcd@gmail.com", "0", "", 1, "", date, 0, 1);
-        dao.updateUser(user);
-        Vector<User> vector = dao.getAll();
-        for (User user1 : vector) {
-            System.out.println(user1.toString());
-        }
+        dao.deleteUserIgnoreConstraint(9);
+
     }
 
     public static boolean checkPassword(String password) {
