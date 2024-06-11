@@ -140,11 +140,12 @@
                         </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
-                                <a class="nav-link" href="#"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="change-information"><i class="fas fa-user-circle"></i></i> Profile</a>
                                 <a class="nav-link" href="UserController?service=logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:when test="${sessionScope.Admin!=null}">
-
+                                <a class="nav-link" href="change-information"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:otherwise>
                                 <li class="nav-item">
@@ -155,7 +156,7 @@
                                 </li>
                             </c:otherwise>
                         </c:choose>
-                        
+
                     </ul>
                 </div>
             </nav>
