@@ -111,6 +111,7 @@ public class ChangeInformation extends HttpServlet {
 //                    response.getWriter().println(tempUser.toString());
                     dao.updateUser(tempUser);
                     session.setAttribute("User", tempUser);
+                    response.sendRedirect("ChangeInformation.jsp");
 //                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + avatarURL);
                 }
             }
