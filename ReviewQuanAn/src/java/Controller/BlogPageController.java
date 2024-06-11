@@ -20,12 +20,13 @@ public class BlogPageController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        int blogId = Integer.parseInt(request.getParameter("id"));
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
         DAOComment daoComment = new DAOComment();
         DAOUser daoUser = new DAOUser();
         
-        Blog b = daoBlog.getBlog(1);
+        Blog b = daoBlog.getBlog(blogId);
         User u = daoUser.getUser(b.getUser_id());
         
         String[] ppLinks = {"img/photo_1_2024-06-06_11-09-40.jpg", "img/photo_2_2024-06-06_11-09-40.jpg", "img/photo_3_2024-06-06_11-09-40.jpg"};

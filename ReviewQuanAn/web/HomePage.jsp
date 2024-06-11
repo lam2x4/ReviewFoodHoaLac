@@ -97,7 +97,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">${i.title}</h4>
                                     <p class="card-text">${i.content}</p>
-                                    <a href="#" class="btn btn-primary">See Profile</a>
+                                    <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
                                 </div>
                             </div>
                         </div>

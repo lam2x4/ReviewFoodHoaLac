@@ -77,6 +77,20 @@ public class DAOBlog extends DBConnect {
             return pre.executeUpdate();
         }
     }
+    
+    public int deleteBlogIgnoreConstraint(int id) throws SQLException {
+        String sql = "delete from images where blog_id=? "
+                + "delete from comment where blog_id=? "
+                + "delete from blog where id=?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, id);
+            pre.setInt(2, id);
+            pre.setInt(3, id);
+
+            return pre.executeUpdate();
+        }
+    }
 
     public Vector<Blog> getAll() throws SQLException {
         Vector<Blog> vector = new Vector<>();
