@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="entity.*, dao.DAOComment, java.util.Vector"%>
+<%@page import="entity.*, java.util.Vector"%>
 
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -70,13 +70,15 @@
             <hr>
             <div class="comment-section">
                 <div class="comment-box" id="comment-box">
-                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic">
-                    <form action="BlogPageController" method="post">
-                    <input type="text" name="comment" id="comment-input" class="glowing-input" placeholder="Add a comment...">
-                    <div class="buttons">
-                        <button class="button" id="cancel-button">Cancel</button>
-                        <button class="button" name="submit" id="add-comment-button" onclick="updateCommentCount();postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Add Comment</button>
-                    </div>
+                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
+                    <form action="BlogPageController?id=<%=request.getParameter("id")%>" id="commentForm" method="post" style="width:90%">
+                        <input type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment...">
+                        <div class="buttons">
+                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="submit" name="submit" value="add-comment" id="add-comment-button">Add Comment</button>
+                        </div>
+                        <input type="hidden" name="service" value="addComment">
                     </form>
                 </div>
                 <div class="comment-list" id="comment-list">
@@ -106,6 +108,10 @@
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
                                     updateCommentCount();
+            <%if(request.getAttribute("commentProfPic") == null){%>
+                                    const commentBox = document.getElementById('comment-box');
+                                    commentBox.style.display = "none";
+            <%}%>
         </script>
     </body>
 </html>

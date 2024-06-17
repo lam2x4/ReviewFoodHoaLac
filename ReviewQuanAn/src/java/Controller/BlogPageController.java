@@ -15,8 +15,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.text.SimpleDateFormat;  
-import java.util.Date;  
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
@@ -25,6 +25,10 @@ public class BlogPageController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
+        String service = request.getParameter("service");
+        if (service == null) {
+            service = "viewPage";
+        }
         int blogId = Integer.parseInt(request.getParameter("id"));
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
@@ -57,8 +61,34 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
 
-        request.setAttribute("commentProfPic",  "img/" + curUser.getAvatar());
-        request.setAttribute("commentUsername", curUser.getUsername());
+        if (curUser != null) {
+            request.setAttribute("commentProfPic", "img/" + curUser.getAvatar());
+            request.setAttribute("commentUsername", curUser.getUsername());
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+            if (service.equals("addComment")) {
+                String submit = request.getParameter("submit");
+                if (submit != null) {
+                    String content = request.getParameter("comment-input");
+                    System.out.println("Comment Content: " + content);
+                    if (!content.isEmpty()) {
+                        Comment comm = new Comment();
+
+                        comm.setUser_id(curUser.getId());
+                        comm.setBlog_id(blogId);
+                        comm.setContent(content);
+                        comm.setCreate_date(formatter.format(new Date()));
+                        comm.setLikes(0);
+                        comm.setIs_banned(0);
+                        
+                        daoComment.addComment(comm);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
+                }
+                
+            }
+        }
 
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
         dispth.forward(request, response);

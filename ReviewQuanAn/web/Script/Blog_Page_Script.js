@@ -8,6 +8,35 @@ document.getElementById('cancel-button').addEventListener('click', function () {
     document.getElementById('add-comment-button').style.display = 'none';
 });
 
+document.getElementById('commentForm').addEventListener('submit', function () {
+    var imgElement = document.getElementById("UserPP");
+    var profPic = imgElement.src;
+    var username = document.getElementById("Username");
+    var form = document.getElementById('commentForm');
+    event.preventDefault();
+    const commentInput = document.getElementById('comment-input');
+    const commentValue = commentInput.value.trim();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log(xhr.status);
+                form.submit();
+                postComment(username, profPic);
+                updateCommentCount();
+            } else {
+                console.log(xhr.status);
+            }
+        }
+    };
+
+    xhr.send('service=addComment');
+
+});
+
 function postComment(username, profPic) {
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
@@ -35,8 +64,8 @@ function postComment(username, profPic) {
                     <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
                     0 likes   
                     <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
+                    <div class="replies"></div>
                 </div>
-                <div class="replies"></div>
             </div>
         `;
 
@@ -48,8 +77,6 @@ function postComment(username, profPic) {
         commentInput.value = '';
         document.getElementById('cancel-button').style.display = 'none';
         document.getElementById('add-comment-button').style.display = 'none';
-
-        updateCommentCount();
     }
 }
 
@@ -230,7 +257,7 @@ function showSlides(n) {
     var dots = document.getElementsByClassName("demo");
     var captionText = document.getElementById("caption");
     if (n > slides.length) {
-        slideIndex = 1
+        slideIndex = 1;
     }
     if (n < 1) {
         slideIndex = slides.length;
