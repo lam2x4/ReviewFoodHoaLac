@@ -16,50 +16,74 @@ window.addEventListener('DOMContentLoaded', () => {
     const imageUpload = document.getElementById('imageUpload');
     const imagePreview = document.getElementById('imagePreview');
 
-    const clearButton = form.querySelector('input[type="reset"]');
+//    const editorConfigs = ['postDescription', 'postTitle'];
+//    editorConfigs.forEach(function (id) {
+//        var editor = CKEDITOR.replace(id);
+//        editor.on('required', function (evt) {
+//            editor.showNotification('This field is required.', 'warning');
+//            evt.cancel();
+//        });
+//    });
 
-    function showMessage(message, alertClass) {
-        const messageDiv = document.getElementById("message");
-        if (message !== null) {
-            messageDiv.textContent = message;
-            messageDiv.className = `alert ${alertClass}`;
-            messageDiv.style.display = "flex";
-        } else {
-            messageDiv.style.display = "none";
+    const editorConfigs = [
+        {id: 'postTitle', config: 'basic'},
+        {id: 'postDescription', config: 'standard'}
+    ];
+
+    editorConfigs.forEach(function (item) {
+        let editor;
+        if (item.config === 'basic') {
+            editor = CKEDITOR.replace(item.id, {toolbar: 'Basic'});
+        } else if (item.config === 'standard') {
+            editor = CKEDITOR.replace(item.id, {toolbar: 'Full'});
         }
-    }
-
-    // Load data from session storage if available
-    if (sessionStorage.getItem('formData')) {
-        const formData = JSON.parse(sessionStorage.getItem('formData'));
-        postTitle.value = formData.postTitle;
-        postDescription.value = formData.postDescription;
-    }
-
-    // Save form data to session storage whenever there's a change in form fields
-    form.addEventListener('input', () => {
-        const formData = {
-            postTitle: postTitle.value,
-            postDescription: postDescription.value
-        };
-        sessionStorage.setItem('formData', JSON.stringify(formData));
+        editor.on('required', function (evt) {
+            editor.showNotification('This field is required.', 'warning');
+            evt.cancel();
+        });
     });
 
-    if (clearButton) {
-        clearButton.addEventListener('click', () => {
-            clear(true);
-        });
-    }
-    function clear(clearAlert) {
-        if (clearAlert) {
-           showMessage(null);
+    CKEDITOR.config.toolbar_Basic = [
+        //{name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+        //{name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
+        {name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField']},
+        {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+        {name: 'document', items: ['Source', '-', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+        //{name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize']},
+        {name: 'tools', items: ['Maximize']}
+    ];
+
+    CKEDITOR.config.toolbar_Full = [
+        //{name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+        //{name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
+        {name: 'forms', items: ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField']},
+        {name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+        {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+        {name: 'document', items: ['Source', '-', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+
+        '/',
+        {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
+        {name: 'insert', items: ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
+        {name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize']},
+        {name: 'tools', items: ['Maximize']}
+    ];
+
+
+    //Custom form reset
+    form.addEventListener("reset", () => {
+        reset();
+    });
+
+    function reset() {
+        // Clear session storage for form data
+        /* global CKEDITOR */
+        for (let instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].setData('');
         }
 
-        // Clear session storage for form data
-        sessionStorage.removeItem('formData');
-        form.reset();
-        
-        // Clear previews
+        imageUpload.value = '';
+        billUpload.value = '';
+
         imagePreview.innerHTML = '';
         billPreview.innerHTML = '';
     }
@@ -103,41 +127,34 @@ window.addEventListener('DOMContentLoaded', () => {
         console.error("Element with ID 'imageUpload' not found.");
     }
 
-    $("textarea").each(function () {
-        // Store the original height of the textarea
-        this.originalHeight = this.scrollHeight;
-        this.style.overflowY = 'hidden';
-        this.style.resize = 'none'; // Disable manual resizing
-    }).on("input", function () {
-        // If scrollHeight exceeds the clientHeight, adjust the height and show scrollbar
-        if (this.scrollHeight > this.clientHeight) {
-            this.style.height = 0;
-            this.style.height = (this.scrollHeight) + "px";
-        } else {
-            this.style.height = this.originalHeight + 'px'; // Restore original height
-        }
-    });
+//    form.addEventListener("submit", function (event) {
+//        event.preventDefault();
 
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
+//        const editor = CKEDITOR.instances.postDescription;
+//        if (!editor || editor.getData().trim() === "") {
+//            alert("Post content cannot be empty.");
+//            return; // Exit the function early
+//        }
 
-        const formData = new FormData(form);
-
-        fetch(form.action, {
-            method: form.method,
-            body: formData
-        })
-                .then(response => {
-                    if (response.ok) {
-                        showMessage("Your post application has been submitted successfully!", "alert-success");
-                        clear(false);
-                    } else {
-                        showMessage("There was an error submitting your application. Please try again.", "alert-danger");
-                    }
-                })
-//                .catch(error => {
-//                    showMessage("An error occurred. Please try again later.", "alert-danger");
+//        alert("Your post application has been submitted successfully!", "alert-success");
+//        const formData = new FormData(form);
+//
+//        fetch(form.action, {
+//            method: form.method,
+//            body: formData
+//        })
+//                .then(response => {
+//                    if (response.ok) {
+//                        alert("Your post application has been submitted successfully!", "alert-success");
+//                        resetForm(); // Call function to reset the form
+//                    } else {
+//                        response.text().then(text => {
+//                            alert(`Error: ${text}`, "alert-danger");
+//                        });
+//                    }
 //                })
-                ;
-    });
+//                .catch(error => {
+//                    alert("An error occurred. Please try again later.", "alert-danger");
+//                });
+//    });
 });
