@@ -133,7 +133,7 @@
                 <div class="list-group list-group-flush">
                     <a href="Admin" class="list-group-item list-group-item-action bg-dark text-white "  ><i class="fas fa-home"></i> DashBoard</a>
                     <a href="AdminUserManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-users"></i> User </a>
-                    <a href="AdminBlogManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-file-alt"></i> Post</a>
+                    <a href="AdminBlogManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-file-alt"></i> Blog</a>
                     <a href="home" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-comments"></i> HomePage</a>
 
                 </div>

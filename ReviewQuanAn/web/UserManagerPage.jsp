@@ -142,6 +142,7 @@
                                     <th>Phone</th>                                   
                                     <th>Gender</th>
                                     <th>Role</th> 
+                                    <th>Status</th> 
                                     <th>Action</th> 
                                 </tr>
                             </thead>
@@ -161,11 +162,19 @@
                                         <c:if test="${i.gender==0}">
                                             <td>Female</td>
                                         </c:if>
+                                            
                                             <c:if test="${i.role_id==1}">
                                             <td>Admin</td>
                                         </c:if>
                                         <c:if test="${i.role_id==2}">
                                             <td>User</td>
+                                        </c:if>
+                                            
+                                             <c:if test="${i.verify_status==1}">
+                                            <td>Verified</td>
+                                        </c:if>
+                                        <c:if test="${i.verify_status==0}">
+                                            <td>Not Verified</td>
                                         </c:if>
                                                 
                                                 
