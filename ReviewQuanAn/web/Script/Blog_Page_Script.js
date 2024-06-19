@@ -9,22 +9,28 @@ document.getElementById('cancel-button').addEventListener('click', function () {
 });
 
 document.getElementById('commentForm').addEventListener('submit', function () {
+    event.preventDefault();
+    
     var imgElement = document.getElementById("UserPP");
     var profPic = imgElement.src;
-    var username = document.getElementById("Username");
-    var form = document.getElementById('commentForm');
-    event.preventDefault();
+    var username = document.getElementById("Username").value;
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
+    
+    var blogId = 1;
+    if (!commentValue) {
+        console.log("Comment is empty");
+        return;
+    }
+    
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'BlogPageController', true);
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 console.log(xhr.status);
-                form.submit();
                 postComment(username, profPic);
                 updateCommentCount();
             } else {
@@ -33,7 +39,7 @@ document.getElementById('commentForm').addEventListener('submit', function () {
         }
     };
 
-    xhr.send('service=addComment');
+    xhr.send('service=addComment&comment-input=' + encodeURIComponent(commentValue));
 
 });
 
@@ -80,11 +86,6 @@ function postComment(username, profPic) {
     }
 }
 
-document.getElementById('commentButton').addEventListener('click', function () {
-    document.getElementById('comment-box').scrollIntoView({behavior: 'smooth'});
-    document.getElementById('comment-input').focus();
-});
-
 document.addEventListener('DOMContentLoaded', function () {
     const postImagesContainer = document.getElementById('post-images');
     const postImages = postImagesContainer.getElementsByClassName('post-image');
@@ -113,71 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
         postImagesContainer.replaceChild(wrapperDiv, fourthImage);
     }
 });
-
-function showReplyInput(replyBtn, username, profPic) {
-    // Check if reply input already exists
-    let existingInput = replyBtn.parentElement.nextElementSibling;
-    if (existingInput && existingInput.classList.contains('reply-section')) {
-        existingInput.style.display = 'inline';
-        return;
-    }
-
-    // Create a new reply input element
-    const replyInput = document.createElement('div');
-    replyInput.classList.add('reply-section');
-    replyInput.id = "reply-section";
-    replyInput.innerHTML = `<img src="${profPic}" alt="Profile Picture" class="profile-pic">
-                            <input type="text" name="add-reply" id="comment-input" class="glowing-input" placeholder="Add a reply...">
-                            <div class="buttons">
-                                <button class="button" onclick="cancelReply(this)">Cancel</button>
-                                <button class="button" onclick="postReply(this, '${username}', '${profPic}')">Reply</button>
-                            </div>`;
-
-    // Insert the reply input element after the comment actions
-    replyBtn.parentElement.parentElement.appendChild(replyInput);
-}
-
-function cancelReply(cancelButton) {
-    // Hide the reply input form
-    cancelButton.closest('.reply-section').style.display = 'none';
-}
-
-function postReply(replyButton, username, profPic) {
-    const replyInputValue = replyButton.closest('.reply-section').querySelector('input').value;
-
-    // Check if the input is empty
-    if (!replyInputValue.trim())
-        return;
-
-    // Create a new reply element
-    const reply = document.createElement('div');
-    reply.classList.add('comment', 'reply');
-    reply.innerHTML = `
-        <div class="thumbnail">
-            <a class="toProfile">
-                <img src="${profPic}" alt="Profile Picture" class="profile-pic">
-            </a>
-        </div>
-        <div class="comment-body">
-            <p><a href="" class="profile-link">${username}</a></p>
-            <p>${replyInputValue}</p>
-            <div class="comment-actions">
-                <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
-                0 likes   
-                <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
-            </div>
-            <div class="replies"></div>
-        </div>
-    `;
-
-    // Find the replies container and prepend the new reply
-    const repliesContainer = replyButton.closest('.comment-body').querySelector('.replies');
-    repliesContainer.prepend(reply);
-
-    // Clear and hide the reply input
-    replyButton.closest('.reply-section').querySelector('input').value = '';
-    replyButton.closest('.reply-section').style.display = 'none';
-}
 
 document.getElementById('commentButton').addEventListener('click', function () {
     document.getElementById('comment-box').scrollIntoView({behavior: 'smooth'});

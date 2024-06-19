@@ -63,8 +63,7 @@
             </div>
             <hr>
             <div class="like-comment-share">
-                <button class="button likeBtn" role="button" id="like-button" onclick="toggleLike()" aria-pressed="false">Like</button>
-                <button class="button" role="button" id="commentButton">Comment</button>
+                <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="false">Like</button>
                 <button class="button" role="button">Share</button>
             </div>
             <hr>
@@ -72,11 +71,12 @@
                 <div class="comment-box" id="comment-box">
                     <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
                     <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
-                    <form action="BlogPageController?id=<%=request.getParameter("id")%>" id="commentForm" method="post" style="width:90%">
+                    <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
+                    <form id="commentForm" style="width:90%">
                         <input type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment...">
                         <div class="buttons">
                             <button class="button" id="cancel-button">Cancel</button>
-                            <button class="button" type="submit" name="submit" value="add-comment" id="add-comment-button">Add Comment</button>
+                            <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
                         </div>
                         <input type="hidden" name="service" value="addComment">
                     </form>
@@ -93,10 +93,8 @@
                             <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
                             <p><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
-                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"><i class="fa-regular fa-thumbs-up"></i></button>   
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"<%}%>><i class="fa-regular fa-thumbs-up"></i></button>   
                                 <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes   </span>
-                                <button class="reply-button" onclick="showReplyInput(this, '<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Reply</button>
-                                <div class="replies" id="replies"></div>
                             </div>
                         </div>
                     </div>
