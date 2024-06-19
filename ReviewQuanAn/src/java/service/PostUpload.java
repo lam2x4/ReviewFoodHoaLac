@@ -21,10 +21,13 @@ import dao.DAOBlog;
 import entity.Blog;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -50,9 +53,10 @@ public class PostUpload extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String postTitle = request.getParameter("postTitle");
         String postDescription = request.getParameter("postDescription");
-        HttpSession session = request.getSession(true);
+//        response.getWriter().println("Post Title: " + postTitle);
+//        response.getWriter().println("Post Description: " + postDescription);
 
-        // Uploaded to: ReviewQuanAn\build\web\img\
+        //Uploaded to: ReviewQuanAn\build\web\img\
         String uploadPath = getServletContext().getRealPath("/img") + File.separator;
         DAOImages daoImg = new DAOImages();
         DAOBlog daoBlog = new DAOBlog();
@@ -62,8 +66,8 @@ public class PostUpload extends HttpServlet {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String create_date = date.format(dateFormat);
             int userId = Integer.parseInt(request.getParameter("userId"));
-            Blog blogTemp = new Blog(userId, postTitle, postDescription,create_date, 0,0,0);
-            System.out.println(blogTemp.toString());
+            Blog blogTemp = new Blog(userId, postTitle, postDescription, create_date, 0, 0, 0);
+//            response.getWriter().println(blogTemp.toString());
 //            Blog blogTemp = new Blog(1, postTitle, postDescription, 0);
             daoBlog.addBlog(blogTemp);
             for (Part part : request.getParts()) {
@@ -73,15 +77,14 @@ public class PostUpload extends HttpServlet {
                     String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                     daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
-                    System.out.println("The file uploaded sucessfully to: " + uploadPath + fileName);
-                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
+//                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
         } catch (ServletException | IOException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
+            response.getWriter().println("Error: " + e.getMessage());
             //response.sendRedirect("HomePage.jsp");
         }
-        response.sendRedirect("ApplyPostPage.jsp");
+//        response.sendRedirect("ApplyPostPage.jsp");
     }
 
     /**
