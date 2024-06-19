@@ -91,7 +91,7 @@
     </servlet>
     <servlet>
         <servlet-name>ChangeInformation</servlet-name>
-            <servlet-class>service.ChangeInformation</servlet-class>
+        <servlet-class>service.ChangeInformation</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
