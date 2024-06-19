@@ -63,19 +63,23 @@
             </div>
             <hr>
             <div class="like-comment-share">
-                <button class="button likeBtn" role="button" id="like-button" onclick="toggleLike()" aria-pressed="false">Like</button>
-                <button class="button" role="button" id="commentButton">Comment</button>
+                <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="false">Like</button>
                 <button class="button" role="button">Share</button>
             </div>
             <hr>
             <div class="comment-section">
                 <div class="comment-box" id="comment-box">
-                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic">
-                    <input type="text" id="comment-input" class="glowing-input" placeholder="Add a comment...">
-                    <div class="buttons">
-                        <button class="button" id="cancel-button">Cancel</button>
-                        <button class="button" id="add-comment-button" onclick="updateCommentCount();postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Add Comment</button>
-                    </div>
+                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
+                    <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
+                    <form id="commentForm" style="width:90%">
+                        <input type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment...">
+                        <div class="buttons">
+                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
+                        </div>
+                        <input type="hidden" name="service" value="addComment">
+                    </form>
                 </div>
                 <div class="comment-list" id="comment-list">
                     <%for(int i = 0; i < comments.size() && i < avatars.size(); i++){%>
@@ -89,10 +93,8 @@
                             <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
                             <p><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
-                                <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
-                                <%=comments.get(i).getLikes()%> likes   
-                                <button class="reply-button" onclick="showReplyInput(this, '<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Reply</button>
-                                <div class="replies" id="replies"></div>
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"<%}%>><i class="fa-regular fa-thumbs-up"></i></button>   
+                                <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes   </span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +105,11 @@
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-            updateCommentCount();
+                                    updateCommentCount();
+            <%if(request.getAttribute("commentProfPic") == null){%>
+                                    const commentBox = document.getElementById('comment-box');
+                                    commentBox.style.display = "none";
+            <%}%>
         </script>
     </body>
 </html>

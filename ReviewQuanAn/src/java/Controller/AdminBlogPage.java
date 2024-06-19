@@ -15,7 +15,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
+@WebServlet(name = "AdminBlogPage", urlPatterns = {"/AdminBlogPage"})
 public class AdminBlogPage extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -54,8 +54,10 @@ public class AdminBlogPage extends HttpServlet {
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
 
-        request.setAttribute("commentProfPic",  curUser.getAvatar());
-        request.setAttribute("commentUsername", curUser.getUsername());
+        if (curUser != null) {
+            request.setAttribute("commentProfPic", curUser.getAvatar());
+            request.setAttribute("commentUsername", curUser.getUsername());
+        }
 
         RequestDispatcher dispth = request.getRequestDispatcher("AdminBlogPage.jsp");
         dispth.forward(request, response);

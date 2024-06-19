@@ -15,6 +15,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
 
@@ -22,6 +25,10 @@ public class BlogPageController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
+        String service = request.getParameter("service");
+        if (service == null) {
+            service = "viewPage";
+        }
         int blogId = Integer.parseInt(request.getParameter("id"));
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
@@ -35,6 +42,11 @@ public class BlogPageController extends HttpServlet {
         if (curUser == null) {
             curUser = (User) session.getAttribute("User");
         }
+        
+        if(service.equals("addComment")){
+            handleAddComment(request, response, curUser, blogId, daoComment);
+            return;
+        }
 
         Vector<Comment> comments = daoComment.findCommentsByBlog_id(blogId);
         Vector<Images> imgs = daoImages.findImagesByBlog_id(blogId);
@@ -42,11 +54,12 @@ public class BlogPageController extends HttpServlet {
         for (Comment comm : comments) {
             avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));
         }
-
+        
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
-        request.setAttribute("profPic", u.getAvatar());
+        request.setAttribute("profPic", "img/" + u.getAvatar());
 
+        request.setAttribute("blogId", request.getParameter("id"));
         request.setAttribute("blogTitle", b.getTitle());
         request.setAttribute("blogContent", b.getContent());
         request.setAttribute("blogLikes", b.getLikes());
@@ -54,12 +67,43 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
 
-        request.setAttribute("commentProfPic",  curUser.getAvatar());
-        request.setAttribute("commentUsername", curUser.getUsername());
+        if (curUser != null) {
+            request.setAttribute("commentProfPic", "img/" + curUser.getAvatar());
+            request.setAttribute("commentUsername", curUser.getUsername());
+        }
 
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
         dispth.forward(request, response);
     }
+    
+     private void handleAddComment(HttpServletRequest request, HttpServletResponse response, User curUser, int blogId, DAOComment daoComment)
+            throws IOException, SQLException {
+         if (curUser == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("User not logged in");
+            return;
+        }
+         
+          String content = request.getParameter("comment-input");
+        if (content == null || content.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Comment content cannot be empty");
+            return;
+        }
+        
+         Comment comm = new Comment();
+        comm.setUser_id(curUser.getId());
+        comm.setBlog_id(blogId);
+        comm.setContent(content);
+        comm.setCreate_date(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        comm.setLikes(0);
+        comm.setIs_banned(0);
+        
+        daoComment.addComment(comm);
+        
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("Comment added successfully");
+     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
