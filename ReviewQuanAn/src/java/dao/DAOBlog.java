@@ -195,6 +195,17 @@ public class DAOBlog extends DBConnect {
             }
         }
     }
+    
+     public Vector<Blog> getListBlogByPage(Vector<Blog> list, int start, int end) {
+        Vector<Blog> blog = new Vector<>();
+        if (list == null) {
+            return null;
+        }
+        for (int i = start; i < end; i++) {
+            blog.add(list.get(i));
+        }
+        return blog;
+    }
 
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
