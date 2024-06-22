@@ -47,8 +47,8 @@ CREATE TABLE Approve_Name(
 CREATE TABLE Blog(
 	id int Identity(1,1) primary key,
 	[user_id] int foreign key references [user](id),
-	title nvarchar(50) not null,
-	content nvarchar(750) not null,
+	title nvarchar(max) not null,
+	content nvarchar(max) not null,
 	create_date nvarchar(20) not null,
 	likes int,
 	is_approved int foreign key references Approve_Name(id),
@@ -74,8 +74,8 @@ CREATE TABLE Comment(
 CREATE TABLE Draft(
 	id int Identity(1,1) primary key,
 	[user_id] int foreign key references [user](id),
-	title nvarchar(50) not null,
-	content nvarchar(750) not null,
+	title nvarchar(max) not null,
+	content nvarchar(max) not null,
 	create_date nvarchar(20) not null,
 )
 

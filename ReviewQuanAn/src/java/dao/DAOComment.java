@@ -54,7 +54,7 @@ public class DAOComment extends DBConnect {
     
     public Vector<Comment> viewAll() throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment";
+        String sql = "SELECT * FROM Comment ORDER BY create_date DESC";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
@@ -79,7 +79,7 @@ public class DAOComment extends DBConnect {
     
     public Vector<Comment> findCommentsByBlog_id(int id) throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date";
+        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date DESC";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
