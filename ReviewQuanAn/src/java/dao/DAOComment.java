@@ -154,4 +154,18 @@ public class DAOComment extends DBConnect {
         }
         return null;
     }
+    public static void main(String[] args) {
+        DAOComment dao = new DAOComment();
+        try{
+            Comment comment = new Comment(1, "username" ,1, "content", "1", 1, 1);
+            int n = dao.addComment(comment);
+            if(n > 0){
+                System.out.println("A");
+            }else{
+                System.out.println("b");
+            }
+        }catch(Exception e){
+            
+        }
+    }
 }

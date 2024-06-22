@@ -82,8 +82,13 @@ public class BlogPageController extends HttpServlet {
                         comm.setLikes(0);
                         comm.setIs_banned(0);
                         
-                        daoComment.addComment(comm);
-                        response.setStatus(HttpServletResponse.SC_OK);
+                        int n = daoComment.addComment(comm);
+                        if(n > 0) {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            return;
+                        }else{
+                            
+                        }
                     }
                 }
                 

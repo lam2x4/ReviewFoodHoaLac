@@ -9,11 +9,13 @@ document.getElementById('cancel-button').addEventListener('click', function () {
 });
 
 document.getElementById('commentForm').addEventListener('submit', function () {
+    event.preventDefault();
     var imgElement = document.getElementById("UserPP");
     var profPic = imgElement.src;
     var username = document.getElementById("Username");
     var form = document.getElementById('commentForm');
-    event.preventDefault();
+
+
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
     var xhr = new XMLHttpRequest();
@@ -33,7 +35,7 @@ document.getElementById('commentForm').addEventListener('submit', function () {
         }
     };
 
-    xhr.send('service=addComment');
+    xhr.send('service=addComment&submit=true');
 
 });
 
