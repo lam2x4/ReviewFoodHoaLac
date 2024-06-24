@@ -40,6 +40,19 @@ public class DAOBlog extends DBConnect {
             return pre.executeUpdate();
         }
     }
+    
+    public int updateLikes(int blog_id, int likes) throws SQLException{
+        String sql = "UPDATE Blog " +
+                    "SET likes = ? " +
+                    "WHERE id = ?";
+        
+        try(PreparedStatement pre = conn.prepareStatement(sql)){
+            pre.setInt(1, likes);
+            pre.setInt(2, blog_id);
+            
+            return pre.executeUpdate();
+        }
+    }
 
     public int editBlog(Blog b) throws SQLException {
         String sql = "UPDATE [dbo].[Blog] "

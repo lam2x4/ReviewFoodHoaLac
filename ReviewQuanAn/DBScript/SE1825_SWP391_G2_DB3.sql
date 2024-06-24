@@ -79,6 +79,26 @@ CREATE TABLE Draft(
 	create_date nvarchar(20) not null,
 )
 
+CREATE TABLE BlogLikes(
+	[user_id] int,
+	blog_id int,
+	interaction_type varchar(10),
+	primary key ([user_id], blog_id),
+	foreign key ([user_id]) references [User](id),
+	foreign key (blog_id) references Blog(id)
+)
+
+CREATE TABLE CommentLikes(
+	blog_id int,
+	[user_id] int,
+	comment_id int,
+	interaction_type varchar(10),
+	primary key (blog_id, [user_id], comment_id),
+	foreign key (blog_id) references Blog(id),
+	foreign key ([user_id]) references [User](id),
+	foreign key (comment_id) references Comment(id)
+)
+
 
 -- Insert data into the Role table
 INSERT INTO [Role] (role_id, role_name)
@@ -91,11 +111,11 @@ VALUES (0, 'Active'),
 
 -- Insert data into the User table
 INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], create_date, verify_status, role_id, is_banned)
-VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', NULL, 1, 'Tuan Anh', '15/6/2024', 1, 1, 0),
-       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', NULL, 1, 'Hoang Anh','15/6/2024', 1, 2, 0),
-       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', NULL, 1, 'Kien', '15/6/2024', 1, 2, 0),
-	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', NULL, 1, 'Viet', '15/6/2024', 1, 2, 0),
-       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', NULL, 1, 'Lam', '15/6/2024', 1, 2, 0);
+VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', 'photo_7_2024-06-06_11-09-40.jpg', 1, 'Tuan Anh', '15/6/2024', 1, 1, 0),
+       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', 'photo_5_2024-06-06_11-09-40.jpg', 1, 'Hoang Anh','15/6/2024', 1, 2, 0),
+       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', 'photo_6_2024-06-06_11-09-40.jpg', 1, 'Kien', '15/6/2024', 1, 2, 0),
+	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', 'photo_1_2024-06-06_11-09-40.jpg', 1, 'Viet', '15/6/2024', 1, 2, 0),
+       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0);
 
 INSERT INTO Approve_Name(id, [name])
 VALUES (0, 'Waiting'),
