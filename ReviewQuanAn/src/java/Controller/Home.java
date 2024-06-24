@@ -70,15 +70,15 @@ public class Home extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
-        HashMap<Blog, ArrayList<Images>> Blog_Image = new HashMap<>();
-        ArrayList<Images> listFake;
+        HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
+        Vector<Images> listFake;
         try {
 
             Vector<Blog> list = dao.getAllApproved();
             Vector<Images> imageList = daoImage.getAll();
             for (Blog blog : list) {
 
-                listFake = new ArrayList();
+                listFake = new Vector();
 
                 for (Images images : imageList) {
 
@@ -91,7 +91,7 @@ public class Home extends HttpServlet {
             }
             //Pagination
             int page, numberpage = 6;
-            int size = dao.getAll().size();
+            int size = list.size();
             int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
             String xpage = request.getParameter("page");
             if (xpage == null) {

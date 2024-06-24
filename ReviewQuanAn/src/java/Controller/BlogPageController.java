@@ -26,6 +26,7 @@ public class BlogPageController extends HttpServlet {
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
         DAOComment daoComment = new DAOComment();
+        DAOReportType daoType = new DAOReportType();
         DAOUser daoUser = new DAOUser();
 
         Blog b = daoBlog.getBlog(blogId);
@@ -39,14 +40,19 @@ public class BlogPageController extends HttpServlet {
         Vector<Comment> comments = daoComment.findCommentsByBlog_id(blogId);
         Vector<Images> imgs = daoImages.findImagesByBlog_id(blogId);
         Vector<String> avatars = new Vector<>();
+        Vector<ReportType> listReportType = new Vector<>();
+        listReportType = daoType.getAll();
         for (Comment comm : comments) {
             avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));
         }
+
+        request.setAttribute("listReportType", listReportType);
 
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
         request.setAttribute("profPic", u.getAvatar());
 
+        request.setAttribute("blogId", blogId);
         request.setAttribute("blogTitle", b.getTitle());
         request.setAttribute("blogContent", b.getContent());
         request.setAttribute("blogLikes", b.getLikes());
@@ -54,7 +60,7 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
 
-        request.setAttribute("commentProfPic",  curUser.getAvatar());
+        request.setAttribute("commentProfPic", curUser.getAvatar());
         request.setAttribute("commentUsername", curUser.getUsername());
 
         RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");

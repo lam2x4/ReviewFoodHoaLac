@@ -10,6 +10,15 @@ public class Blog {
     private int likes;
     private int is_approved;
     private int is_banned;
+    private String reason;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     //ADDED BY TUAN ANH ---- FOR SEARCH FUNCTION
     private String username;

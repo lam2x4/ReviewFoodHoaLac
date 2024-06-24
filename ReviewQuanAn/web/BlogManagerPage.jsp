@@ -139,7 +139,7 @@
                                 <th>ID</th>
                                 <th>Title</th>
                                 <th>Author</th>
-                                <th>Content</th>
+                                
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -158,15 +158,15 @@
                                         <c:if test="${requestScope.Blog_User.get(i.user_id)!=null}">
                                             <td>${requestScope.Blog_User.get(i.user_id)}</td>
                                         </c:if>                                                                              
-                                        <td>${i.content}</td>
+                                        
                                         <td>${i.create_date}</td>
                                         <td id="status-${i.id}">${requestScope.blog_Approved.get(i.id)}</td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${requestScope.blog_Approved.get(i.id) == 'Approved'}">
-                                                    <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-ban"></i> Reject</button>
+                                                    <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-ban"></i> Ban</button>
                                                 </c:when>
-                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Reject'}">
+                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Banned'}">
                                                     <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-check"></i> Approved</button>
                                                 </c:when>
                                             </c:choose>

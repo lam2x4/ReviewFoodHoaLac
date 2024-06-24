@@ -2,6 +2,7 @@ package dao;
 
 import dal.DBContext;
 import entity.Blog;
+import java.awt.BorderLayout;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -109,7 +110,7 @@ public class DAOBlog extends DBConnect {
                 b.setLikes(rs.getInt(6));
                 b.setIs_approved(rs.getInt(7));
                 b.setIs_banned(rs.getInt(8));
-
+                b.setReason(rs.getString(9));
                 vector.add(b);
             }
         }
@@ -152,6 +153,18 @@ public class DAOBlog extends DBConnect {
             pre.setInt(2, id);
 
             return pre.executeUpdate();
+        }
+    }
+    
+    public void addReason(int id,String reason) throws SQLException{
+        String sql = "UPDATE [dbo].[Blog] "
+                + "SET [reason] = ? "
+                + " WHERE id = ?";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, reason);
+            pre.setInt(2, id);
+            pre.executeUpdate();
+           
         }
     }
 
@@ -212,7 +225,12 @@ public class DAOBlog extends DBConnect {
 
         Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
         try {
-            dao.getAllApproved();
+           
+            for(Blog blog:dao.getListBlogByPage(dao.getAllApproved(), 0, 0)){
+                System.out.println(blog.getContent());
+            }
+                   
+                
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
