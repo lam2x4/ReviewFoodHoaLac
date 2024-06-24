@@ -14,14 +14,16 @@ public class DAOComment extends DBConnect {
     
     public int addComment(Comment comm) throws SQLException {
         String sql = "INSERT INTO [dbo].[Comment] "
-                + "([user_id], [blog_id], [content], [likes]) "
-                + "VALUES (?,?,?,?)";
+                + "([user_id], [blog_id], [content], [create_date], [likes], [is_banned]) "
+                + "VALUES (?,?,?,?,?,?)";
         
         try(PreparedStatement pre = conn.prepareStatement(sql)){
             pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
             pre.setString(3, comm.getContent());
-            pre.setInt(4, comm.getLikes());
+            pre.setString(4, comm.getCreate_date());
+            pre.setInt(5, comm.getLikes());
+            pre.setInt(6, comm.getIs_banned());
             
             return pre.executeUpdate();
         }
@@ -40,6 +42,19 @@ public class DAOComment extends DBConnect {
         }
     }
     
+    public int updateLikes(int comment_id, int likes) throws SQLException{
+        String sql = "UPDATE Comment "
+                + "SET likes = ? "
+                + "WHERE id = ?";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, likes);
+            pre.setInt(2, comment_id);
+            
+            return pre.executeUpdate();
+        }
+    }
+    
     public int deleteComment(int id) throws SQLException {
         String sql = "DELETE FROM Comment WHERE id = ?";
         
@@ -52,7 +67,7 @@ public class DAOComment extends DBConnect {
     
     public Vector<Comment> viewAll() throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment";
+        String sql = "SELECT * FROM Comment ORDER BY create_date DESC";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
@@ -77,7 +92,7 @@ public class DAOComment extends DBConnect {
     
     public Vector<Comment> findCommentsByBlog_id(int id) throws SQLException {
         Vector vector = new Vector<>();
-        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date";
+        String sql = "SELECT * FROM Comment WHERE blog_id = ? ORDER BY create_date DESC";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
@@ -151,5 +166,21 @@ public class DAOComment extends DBConnect {
             Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public int getLastestId(){
+        String sql = "SELECT TOP 1 id FROM Comment ORDER BY id DESC;";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
 }

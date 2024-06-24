@@ -1,5 +1,5 @@
 <%-- 
-    Document   : StorePage
+    Document   : BlogPage
     Created on : May 21, 2024, 6:03:04 PM
     Author     : ADMIN
 --%>
@@ -118,23 +118,54 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form action="Report" method="post">
-                        <div class="form-group">
-                            <label for="reportReason">Reason for reporting:</label>
-                            <select class="form-control" id="reportReason" name="reportReason">
-                                <c:forEach items="${requestScope.listReportType}" var="l">
-                                    <option value="${l.id}" >${l.name}</option>
-                                    
-                                </c:forEach>
-                                
-                                
-                            </select>
+            </div>
+            <hr>
+            <div class="post-sub-info">
+                <span id="likeCount" class="count"><i class="fa-solid fa-thumbs-up"></i> Likes: <%=(int)request.getAttribute("blogLikes")%></span>
+                <span id="commentCount" class="count">Comments: 0</span>
+            </div>
+            <hr>
+            <div class="rate-share">
+                <div class="rating">
+                    <%String post_interaction_type = (String)request.getAttribute("postLikeInteractionType") != null ? (String)request.getAttribute("postLikeInteractionType") : "nothing";%>
+                    <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("like")%><%} else{%>false<%}%>">Like</button>
+                    <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
+                </div>
+                <button class="button" role="button">Share</button>
+            </div>
+            <hr>
+            <div class="comment-section">
+                <div class="comment-box" id="comment-box">
+                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
+                    <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
+                    <form id="commentForm">
+                        <textarea type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment..."></textarea>
+                        <div class="buttons">
+                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
                         </div>
-                        <div style="display: none"><input type="text" value="${requestScope.blogId}" name="URL"></div> 
-                        <div class="form-group">
-                            <label for="reportDetails">Details (optional):</label>
-                            <textarea class="form-control" id="reportDetails" name="reportDetails" rows="3"></textarea>
+                        <input type="hidden" name="service" value="addComment">
+                    </form>
+                </div>
+                <div class="comment-list" id="comment-list">
+                    <%for(int i = 0; i < comments.size() && i < avatars.size(); i++){%>
+                    <input type="hidden" id="commentId-<%=comments.get(i).getId()%>" value="<%=comments.get(i).getId()%>">
+                    <div class="comment">
+                        <div class="thumbnail">
+                            <a class="toProfile">
+                                <img src="<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
+                            </a>
+                        </div>
+                        <div class="comment-body">
+                            <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
+                            <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
+                            <div class="comment-actions">
+                                <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("like")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-up"></i></button>
+                                <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes</span>
+                                <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentDislike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("dislike")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-down"></i></button>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -144,11 +175,14 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="Script/Blog_Page_Script.js"></script>
-    <script>
-        updateCommentCount();
-    </script>
-</body>
+        <%@ include file="./Footer.jsp" %>
+        <script src="Script/Blog_Page_Script.js"></script>
+        <script>
+                                    updateCommentCount();
+            <%if(request.getAttribute("commentProfPic") == null){%>
+                                    const commentBox = document.getElementById('comment-box');
+                                    commentBox.style.display = "none";
+            <%}%>
+        </script>
+    </body>
 </html>

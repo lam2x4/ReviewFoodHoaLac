@@ -63,7 +63,7 @@
             </div>
             <hr>
             <div class="like-comment-share">
-                <button class="button likeBtn" role="button" id="like-button" onclick="toggleLike()" aria-pressed="false">Like</button>
+                <button class="button likeBtn" role="button" id="like-button" <%if((String)request.getAttribute("commentUsername") != null){%>onclick="toggleLike()"<%}%> aria-pressed="false">Like</button>
                 <button class="button" role="button" id="commentButton">Comment</button>
                 <button class="button" role="button">Share</button>
             </div>
@@ -74,7 +74,7 @@
                     <input type="text" id="comment-input" class="glowing-input" placeholder="Add a comment...">
                     <div class="buttons">
                         <button class="button" id="cancel-button">Cancel</button>
-                        <button class="button" id="add-comment-button" onclick="updateCommentCount();postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')">Add Comment</button>
+                        <button class="button" id="add-comment-button" onclick="updateCommentCount();<%if((String)request.getAttribute("commentUsername") != null){%>postComment('<%=(String)request.getAttribute("commentUsername")%>', '<%=(String)request.getAttribute("commentProfPic")%>')<%}%>">Add Comment</button>
                     </div>
                 </div>
                 <div class="comment-list" id="comment-list">
@@ -104,6 +104,10 @@
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
             updateCommentCount();
+            <%if(request.getAttribute("commentProfPic") == null){%>
+                                    const commentBox = document.getElementById('comment-box');
+                                    commentBox.style.display = "none";
+            <%}%>
         </script>
     </body>
 </html>

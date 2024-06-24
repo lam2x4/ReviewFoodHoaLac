@@ -27,8 +27,8 @@
         <style>
             body {
                 font-family: 'Open Sans', sans-serif;
+                padding-top: 70px;
             }
-
             .navbar-brand {
                 font-weight: bold;
                 display: flex;
@@ -113,6 +113,12 @@
                 width: 100%;
                 height: 200px;
                 object-fit: cover;
+            }
+            header {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 1030;
             }
         </style>
 
