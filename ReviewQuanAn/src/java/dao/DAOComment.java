@@ -42,6 +42,19 @@ public class DAOComment extends DBConnect {
         }
     }
     
+    public int updateLikes(int comment_id, int likes) throws SQLException{
+        String sql = "UPDATE Comment "
+                + "SET likes = ? "
+                + "WHERE id = ?";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, likes);
+            pre.setInt(2, comment_id);
+            
+            return pre.executeUpdate();
+        }
+    }
+    
     public int deleteComment(int id) throws SQLException {
         String sql = "DELETE FROM Comment WHERE id = ?";
         
@@ -153,5 +166,21 @@ public class DAOComment extends DBConnect {
             Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public int getLastestId(){
+        String sql = "SELECT TOP 1 id FROM Comment ORDER BY id DESC;";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
     }
 }
