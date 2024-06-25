@@ -30,6 +30,7 @@
                 <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
+                    <h2><a href="" class="profile-link">Original Author: <%=(String)request.getAttribute("authorname")%></a></h2>
                     <p><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
             </div>
@@ -68,7 +69,10 @@
                     <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("like")%><%} else{%>false<%}%>">Like</button>
                     <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
                 </div>
-                <button class="button" role="button">Share</button>
+                <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
+                <input type="submit" class="button" role="button" value="Share">
+                <input type="hidden" name="service" value="repost">
+                </form>
             </div>
             <hr>
             <div class="comment-section">

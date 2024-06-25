@@ -91,6 +91,7 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogPictures", imgs);
         request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
+        request.setAttribute("authorname", b.getAuthor_name());
 
         if (bl != null) {
             request.setAttribute("postLikeInteractionType", bl.getInteraction_type());

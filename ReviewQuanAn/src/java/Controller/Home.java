@@ -74,20 +74,16 @@ public class Home extends HttpServlet {
         try {
 
             Vector<Blog> list = dao.getAllApproved();
-            Vector<Images> imageList = daoImage.getAll();
             for (Blog blog : list) {
-                
+                System.out.println(blog.toString());
+                Vector<Images> imgs = daoImage.findImagesByBlog_id(blog.getId());
                 listFake = new ArrayList();
-                
-                for (Images images : imageList) {
-                    
-                    if (images.getBlog_id() == blog.getId()) {
-                        listFake.add(images);
-                    }
+
+                for (Images images : imgs) {
+                    listFake.add(images);
                 }
-                Blog_Image.put(blog, listFake); 
-               
-                
+                Blog_Image.put(blog, listFake);
+
             }
             request.setAttribute("blog_image", Blog_Image);
             request.setAttribute("list", list);
