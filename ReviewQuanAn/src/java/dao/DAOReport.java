@@ -4,31 +4,68 @@
  */
 package dao;
 
-
 import entity.Report;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author lam1
  */
-public class DAOReport extends DBConnect{
-//     public int addReport(Report b) throws SQLException {
-//        String sql = "INSERT INTO [dbo].[Report] "
-//                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned]) "
-//                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-//
-//        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-//            pre.setInt(1, b.getUser_id());
-//            pre.setString(2, b.getTitle());
-//            pre.setString(3, b.getContent());
-//            pre.setString(4, b.getCreate_date());
-//            pre.setInt(5, b.getLikes());
-//            pre.setInt(6, b.getIs_approved());
-//            pre.setInt(7, b.getIs_banned());
-//
-//            return pre.executeUpdate();
-//        }
-//    }
+public class DAOReport extends DBConnect {
+
+    public int addReport(Report b) throws SQLException {
+        String sql = "INSERT INTO [dbo].[Report] "
+                + "([user_id],[blog_id],[content],create_date,[type_id],[is_approved]) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, b.getUser_id());
+            pre.setInt(2, b.getBlog_id());
+            pre.setString(3, b.getContent());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getType_id());
+            pre.setInt(6, b.getIs_approved());
+            
+            return pre.executeUpdate();
+        }
+    }
+    
+    public Vector<Report> getAll() throws SQLException {
+        Vector<Report> vector = new Vector<>();
+        String sql = "SELECT * FROM Report";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            ResultSet rs = pre.executeQuery();
+            
+            while (rs.next()) {
+                Report b = new Report();
+                
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setBlog_id(rs.getInt(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setType_id(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+                
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
+    
+    public static void main(String[] args) {
+        DAOReport dao = new DAOReport();
+        try {
+            dao.addReport(new Report(1, 8, "rathay", "12/6/2024", 2, 1));
+            System.out.println(dao.getAll().get(0).getContent());
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReport.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

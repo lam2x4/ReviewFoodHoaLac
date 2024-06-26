@@ -143,7 +143,7 @@
                                     <th>Gender</th>
                                     <th>Role</th> 
                                     <th>Status</th> 
-                                    <th>Action</th> 
+                                    
                                 </tr>
                             </thead>
 
@@ -179,9 +179,7 @@
                                                 
                                                 
                                             </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-email="${i.email}" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
-                                        </td>
+                                        
                                     </tr>
                                 </c:forEach>
                                 <!-- Add more user rows as needed -->

@@ -128,12 +128,13 @@
         <div class="d-flex" id="wrapper">
 
             <!-- Sidebar -->
-            <div class="bg-dark border-right" >
+            <div class="bg-dark border-right" style="min-height:742px ;height: auto">
                 <div class="sidebar-heading text-white"><i class="fas fa-tachometer-alt"></i> Admin Dashboard </div>
                 <div class="list-group list-group-flush">
                     <a href="Admin" class="list-group-item list-group-item-action bg-dark text-white "  ><i class="fas fa-home"></i> DashBoard</a>
                     <a href="AdminUserManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-users"></i> User </a>
                     <a href="AdminBlogManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-file-alt"></i> Blog</a>
+                    <a href="AdminReportManagement" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-flag"></i> Report</a>
                     <a href="home" class="list-group-item list-group-item-action bg-dark text-white"><i class="fas fa-comments"></i> HomePage</a>
 
                 </div>

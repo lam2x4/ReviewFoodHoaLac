@@ -11,6 +11,7 @@ package entity;
 public class ReportType {
     int id;
     String name;
+    String description;
 
     public ReportType() {
     }
@@ -18,6 +19,14 @@ public class ReportType {
     public ReportType(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {

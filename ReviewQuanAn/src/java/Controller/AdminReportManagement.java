@@ -4,10 +4,8 @@
  */
 package Controller;
 
-import dao.DAOBlog;
-import dao.DAOUser;
-import entity.Blog;
-import entity.User;
+import dao.DAOReport;
+import entity.Report;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,7 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class AdminBlogManagement extends HttpServlet {
+public class AdminReportManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +40,10 @@ public class AdminBlogManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminBlogManagement</title>");
+            out.println("<title>Servlet AdminReportManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminBlogManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AdminReportManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,40 +62,14 @@ public class AdminBlogManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            DAOBlog daoBlog = new DAOBlog();
-            DAOUser daoUser = new DAOUser();
-            HashMap<Integer, String> blog_User = new HashMap<>();
-            HashMap<Integer, String> blog_Approved = new HashMap<>();
-            
-            for (Blog blog : daoBlog.getAll()) {
-                for (User user : daoUser.getAll()) {
-                    if (blog.getUser_id() == user.getId()) {
-                        blog_User.put(blog.getUser_id(), user.getUsername());
-                    }
-                }
-            }
-            for (Blog blog : daoBlog.getAll()) {
-                if (blog.getIs_approved() == 1) {
-                    blog_Approved.put(blog.getId(), "Approved");
-                   
-                } else if (blog.getIs_approved() == 3) {
-                    blog_Approved.put(blog.getId(), "Banned");
-                     
-                } else if (blog.getIs_approved() == 2) {
-                    blog_Approved.put(blog.getId(), "Reject");
-                     
-                }
-                
-            }
-            
-            
-            request.setAttribute("blog_Approved", blog_Approved);
-            request.setAttribute("BlogList", daoBlog.getAll());
-            request.setAttribute("Blog_User", blog_User);
-            request.getRequestDispatcher("AdminBlogManagerPage.jsp").forward(request, response);
+            DAOReport dao = new DAOReport();
+            Vector<Report> reportList = dao.getAll();
+            request.setAttribute("reportList", reportList);
+            request.getRequestDispatcher("AdminReportManager.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdminBlogManagement.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminReportManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**

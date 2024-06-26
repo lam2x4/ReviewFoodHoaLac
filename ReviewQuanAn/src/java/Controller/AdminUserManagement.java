@@ -50,7 +50,7 @@ public class AdminUserManagement extends HttpServlet {
         DAOUser daouser = new DAOUser();
         Vector<User> list = daouser.getAll();
         request.setAttribute("list", list);
-        request.getRequestDispatcher("UserManagerPage.jsp").forward(request, response);
+        request.getRequestDispatcher("AdminUserManagerPage.jsp").forward(request, response);
     } 
 
     /** 

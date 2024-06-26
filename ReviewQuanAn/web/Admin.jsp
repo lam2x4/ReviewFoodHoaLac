@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-
     <!-- Popper JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
@@ -160,6 +158,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- Waiting Blog -->
         <div class="card mt-4 shadow-sm">
             <div class="card-header"><i class="fas fa-history"></i> Waiting Blog</div>
@@ -254,7 +253,103 @@
                 </div>
 
             </div>
+        </div>
 
+        <!-- Waiting Report -->
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header"><i class="fas fa-flag"></i> Waiting Report</div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Reported By</th>
+                        <th>Reason</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${requestScope.ReportList}" var="r">
+                        <c:if test="${r.getIs_approved() == 0}">
+                            <tr>
+                                <td>${r.id}</td>
+                                <td>${requestScope.Report_User.get(r.user_id)}</td>
+                                <td>${r.reason}</td>
+                                <td>${r.description}</td>
+                                <td>${r.create_date}</td>
+                                <td id="status-${r.id}">Waiting</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                            data-target="#rejectReportModal" data-id="${r.id}" data-status="2"><i class="fas fa-ban"></i> Reject
+                                    </button>
+                                    <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
+                                            data-target="#statusReportModal" data-id="${r.id}" data-status="1"><i class="fas fa-check"></i> Approve
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                    <!-- Add more report rows as needed -->
+                    </tbody>
+                </table>
+                
+                <!-- Status Report Modal -->
+                <div class="modal fade" id="statusReportModal" tabindex="-1" role="dialog" aria-labelledby="statusReportModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="statusReportModalLabel">Confirm Action</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="statusReportModalMessage">Do you want to approve this report?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="confirmStatusReportBtn">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reject Report Modal -->
+                <div class="modal fade" id="rejectReportModal" tabindex="-1" role="dialog" aria-labelledby="rejectReportModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectReportModalLabel">Reason for Rejection</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form id="rejectReportForm" action="AdminWaitingReport" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="rejectReportReason">Reason:</label>
+                                        
+                                        <input type="text" class="form-control" id="reportId" name="id" readonly>
+                                        <input type="text" class="form-control" id="reportStatus" name="status" readonly>
+                                        <textarea class="form-control" id="rejectReportReason" name="reason" rows="3"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -288,6 +383,33 @@
        const status = $(this).data('status');
         $('#blogId').val(id);
         $('#status').val(status);
+    });
+
+    // Handle status report button click
+    $('.status-btn').click(function () {
+        const id = $(this).data('id');
+        const status = $(this).data('status');
+        $('#confirmStatusReportBtn').data('id', id);
+        $('#confirmStatusReportBtn').data('status', status);
+        $('#statusReportModalMessage').text(`Do you want to approve this report?`);
+    });
+
+    // Handle confirm status report button click
+    $('#confirmStatusReportBtn').click(function () {
+        const id = $(this).data('id');
+        const status = $(this).data('status');
+        $('#statusReportModal').modal('hide');
+
+        // Redirect to AdminWaitingReport servlet with report id
+        window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
+    });
+
+    // Handle reject report button click
+    $('.reject-btn').click(function () {
+        const id = $(this).data('id');
+        const status = $(this).data('status');
+        $('#reportId').val(id);
+        $('#reportStatus').val(status);
     });
 </script>
 </html>

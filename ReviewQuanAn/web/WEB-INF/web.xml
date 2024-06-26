@@ -94,8 +94,12 @@
         <servlet-class>service.ChangeInformation</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Report</servlet-name>
-        <servlet-class>Controller.Report</servlet-class>
+        <servlet-name>ReportControler</servlet-name>
+        <servlet-class>Controller.ReportControler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminReportManagement</servlet-name>
+        <servlet-class>Controller.AdminReportManagement</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
@@ -182,7 +186,11 @@
         <url-pattern>/change-information</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Report</servlet-name>
-        <url-pattern>/Report</url-pattern>
+        <servlet-name>ReportControler</servlet-name>
+        <url-pattern>/ReportControler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminReportManagement</servlet-name>
+        <url-pattern>/AdminReportManagement</url-pattern>
     </servlet-mapping>
 </web-app>

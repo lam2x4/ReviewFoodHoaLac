@@ -29,6 +29,7 @@ public class DAOReportType extends DBConnect {
 
                 b.setId(rs.getInt(1));
                 b.setName(rs.getString(2));
+                b.setDescription(rs.getString(3));
 
                 list.add(b);
             }
@@ -40,7 +41,7 @@ public class DAOReportType extends DBConnect {
     public static void main(String[] args) {
         DAOReportType dao = new DAOReportType();
         try {
-            System.out.println(dao.getAll().get(2).getName());
+            System.out.println(dao.getAll().get(2).getDescription());
         } catch (SQLException ex) {
             Logger.getLogger(DAOReportType.class.getName()).log(Level.SEVERE, null, ex);
         }
