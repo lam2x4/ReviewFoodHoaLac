@@ -10,7 +10,7 @@ public class Images {
 
     public Images(int blog_id, String link) {
         this.blog_id = blog_id;
-        this.link = link;
+        this.link = "img/" + link;
     }
 
     public int getId() {
@@ -34,7 +34,7 @@ public class Images {
     }
 
     public void setLink(String link) {
-        this.link = link;
+        this.link = "img/" + link;
     }
 
     @Override

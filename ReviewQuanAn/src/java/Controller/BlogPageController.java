@@ -15,8 +15,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 @WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
@@ -60,8 +60,8 @@ public class BlogPageController extends HttpServlet {
             handlePostLikes(request, response, curUser, blogId, daoBlog);
             return;
         }
-        
-        if(service.equals("handleCommentLikes")){
+
+        if (service.equals("handleCommentLikes")) {
             int comment_id = Integer.parseInt(request.getParameter("commentId"));
             handleCommentLikes(request, response, blogId, curUser, comment_id, daoComment);
             return;
@@ -73,8 +73,8 @@ public class BlogPageController extends HttpServlet {
         Vector<String> commentsInteractionType = new Vector<>();
         for (Comment comm : comments) {
             avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));
-            
-            if(curUser != null){
+
+            if (curUser != null) {
                 cl = daoCommentLikes.getCommentLikes(blogId, curUser.getId(), comm.getId()) != null ? daoCommentLikes.getCommentLikes(blogId, curUser.getId(), comm.getId()) : new CommentLikes(blogId, curUser.getId(), comm.getId(), "");
                 commentsInteractionType.add(cl.getInteraction_type());
             }
@@ -82,7 +82,7 @@ public class BlogPageController extends HttpServlet {
 
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
-        request.setAttribute("profPic", "img/" + u.getAvatar());
+        request.setAttribute("profPic", u.getAvatar());
 
         request.setAttribute("blogId", request.getParameter("id"));
         request.setAttribute("blogTitle", b.getTitle());
@@ -95,13 +95,13 @@ public class BlogPageController extends HttpServlet {
         if (bl != null) {
             request.setAttribute("postLikeInteractionType", bl.getInteraction_type());
         }
-        
-        if(!commentsInteractionType.isEmpty()){
+
+        if (!commentsInteractionType.isEmpty()) {
             request.setAttribute("commentsLikeInteractionType", commentsInteractionType);
         }
 
         if (curUser != null) {
-            request.setAttribute("commentProfPic", "img/" + curUser.getAvatar());
+            request.setAttribute("commentProfPic", curUser.getAvatar());
             request.setAttribute("commentUsername", curUser.getUsername());
         }
 
@@ -123,21 +123,24 @@ public class BlogPageController extends HttpServlet {
             response.getWriter().write("Comment content cannot be empty");
             return;
         }
+        
+        LocalDateTime curDate = LocalDateTime.now();
+        DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         Comment comm = new Comment();
         comm.setUser_id(curUser.getId());
         comm.setBlog_id(blogId);
         comm.setContent(content);
-        comm.setCreate_date(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        comm.setCreate_date(curDate.format(myFormat));
         comm.setLikes(0);
         comm.setIs_banned(0);
 
         daoComment.addComment(comm);
-        
+
         int id = daoComment.getLastestId();
         response.setContentType("text/plain");
         response.getWriter().write(String.valueOf(id));
-        
+
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
@@ -164,7 +167,7 @@ public class BlogPageController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     private void handleCommentLikes(HttpServletRequest request, HttpServletResponse response, int blogId, User curUser, int comment_id, DAOComment daoComment)
             throws IOException, SQLException {
         DAOCommentLikes dao = new DAOCommentLikes();
@@ -173,7 +176,7 @@ public class BlogPageController extends HttpServlet {
 
         try {
             if (interaction_type.equals("nothing")) {
-                dao.deleteCommentLikes(blogId,curUser.getId(), comment_id);
+                dao.deleteCommentLikes(blogId, curUser.getId(), comment_id);
             } else {
                 if (dao.getCommentLikes(blogId, curUser.getId(), comment_id) == null) {
                     dao.addCommentLikes(new CommentLikes(blogId, curUser.getId(), comment_id, interaction_type));

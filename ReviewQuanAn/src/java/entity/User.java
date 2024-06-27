@@ -24,7 +24,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.avatar = avatar;
+        this.avatar = "img/" + avatar;
         this.gender = gender;
         this.description = description;
         this.create_date = create_date;
@@ -37,7 +37,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.avatar = avatar;
+        this.avatar = "img/" + avatar;
         this.gender = gender;
         this.description = description;
         this.create_date = create_date;
@@ -124,7 +124,7 @@ public class User {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = avatar;
+        this.avatar = "img/" + avatar;
     }
 
     public void setGender(int gender) {

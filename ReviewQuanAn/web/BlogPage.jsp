@@ -1,9 +1,3 @@
-<%-- 
-    Document   : BlogPage
-    Created on : May 21, 2024, 6:03:04 PM
-    Author     : ADMIN
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.*, java.util.Vector"%>
 
@@ -30,14 +24,14 @@
                 <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
-                    <p><%=(String)request.getAttribute("publishDate")%></p>
+                    <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
             </div>
             <h2 class="post-title"><%=(String)request.getAttribute("blogTitle")%></h2>
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
             <div class="post-images" id="post-images">
                 <%for(int i = 0; i < imgs.size(); i++){%>
-                <img src="<%=imgs.get(i).getLink()%>" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
+                <img src="<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
                 <%}%>
             </div>
 
@@ -65,8 +59,8 @@
             <div class="rate-share">
                 <div class="rating">
                     <%String post_interaction_type = (String)request.getAttribute("postLikeInteractionType") != null ? (String)request.getAttribute("postLikeInteractionType") : "nothing";%>
-                    <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("like")%><%} else{%>false<%}%>">Like</button>
-                    <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
+                    <button class="button likeBtn" role="button" id="like-button" aria-pressed="false">Like</button>
+                    <button class="button dislikeBtn" role="button" id="dislike-button" aria-pressed="false">Dislike</button>
                 </div>
                 <button class="button" role="button">Share</button>
             </div>
@@ -79,14 +73,14 @@
                     <form id="commentForm">
                         <textarea type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment..."></textarea>
                         <div class="buttons">
-                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="button" id="cancel-button">Cancel</button>
                             <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
                         </div>
                         <input type="hidden" name="service" value="addComment">
                     </form>
                 </div>
                 <div class="comment-list" id="comment-list">
-                    <%for(int i = 0; i < comments.size() && i < avatars.size(); i++){%>
+                    <%for(int i = 0; i < comments.size(); i++){%>
                     <input type="hidden" id="commentId-<%=comments.get(i).getId()%>" value="<%=comments.get(i).getId()%>">
                     <div class="comment">
                         <div class="thumbnail">
@@ -95,13 +89,16 @@
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
+                            <p>
+                                <a href="" class="profile-link"><%=comments.get(i).getUsername()%></a>
+                                <span class="comment-date"><%=comments.get(i).getCreate_date()%></span>
+                            </p>
                             <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
                                 <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
-                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("like")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-up"></i></button>
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
                                 <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes</span>
-                                <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentDislike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("dislike")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-down"></i></button>
+                                <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
                         </div>
                     </div>
@@ -112,10 +109,46 @@
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-                                    updateCommentCount();
+                        updateCommentCount();
             <%if(request.getAttribute("commentProfPic") == null){%>
-                                    const commentBox = document.getElementById('comment-box');
-                                    commentBox.style.display = "none";
+                        const commentBox = document.getElementById('comment-box');
+                        commentBox.style.display = "none";
+            <%}else{%>
+                        const likeBtn = document.getElementById('like-button');
+                        likeBtn.onclick = toggleLike;
+                        likeBtn.setAttribute('aria-pressed', <%=post_interaction_type.equals("like")%>);
+
+                        const dislikeBtn = document.getElementById('dislike-button');
+                        dislikeBtn.onclick = toggleDislike;
+                        dislikeBtn.setAttribute('aria-pressed', <%=post_interaction_type.equals("dislike")%>);
+
+                        <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
+                        <%for(int i = 0; i < comments.size(); i++){%>
+                            //toggle comment like btn
+                            var commentLikeBtn = document.getElementById('like-button-<%=comments.get(i).getId()%>');
+                            commentLikeBtn.onclick = function () {
+                                toggleCommentLike(<%=comments.get(i).getId()%>);
+                            };
+                            commentLikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("like")%>);
+
+                            <%if(comm_inter_type.get(i).equals("like")){%>
+                            commentLikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+                            <%}else{%>
+                            commentLikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-up"></i>';
+                            <%}%>
+                            //toggle comment dislike btn
+                            var commentDisikeBtn = document.getElementById('dislike-button-<%=comments.get(i).getId()%>');
+                            commentDisikeBtn.onclick = function () {
+                                toggleCommentDislike(<%=comments.get(i).getId()%>);
+                            };
+                            commentDisikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("dislike")%>);
+
+                            <%if(comm_inter_type.get(i).equals("dislike")){%>
+                                commentDisikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-down"></i>';
+                            <%}else{%>
+                                commentDisikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-down"></i>';
+                            <%}%>
+                        <%}%>
             <%}%>
         </script>
     </body>

@@ -1,11 +1,22 @@
 document.getElementById('comment-input').addEventListener('focus', function () {
     document.getElementById('cancel-button').style.display = 'inline-flex';
     document.getElementById('add-comment-button').style.display = 'inline-flex';
+    document.getElementById('add-comment-button').disabled = true;
+});
+
+document.getElementById('comment-input').addEventListener('input', function () {
+    const commentValue = document.getElementById('comment-input').value.trim();
+    const addButton = document.getElementById('add-comment-button');
+
+    addButton.disabled = commentValue === '' ? true : false;
 });
 
 document.getElementById('cancel-button').addEventListener('click', function () {
+    document.getElementById('comment-input').value = '';
+    document.getElementById('comment-input').style.height = '30px';
     document.getElementById('cancel-button').style.display = 'none';
     document.getElementById('add-comment-button').style.display = 'none';
+    document.getElementById('add-comment-button').disabled = true;
 });
 
 document.getElementById('commentForm').addEventListener('submit', function () {
@@ -31,7 +42,7 @@ document.getElementById('commentForm').addEventListener('submit', function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var commentId = xhr.responseText.trim();
-                
+
                 console.log(xhr.status);
                 postComment(username, profPic, commentId);
                 updateCommentCount();
@@ -50,11 +61,7 @@ function postComment(username, profPic, commentId) {
     const commentValue = commentInput.value.trim();
 
     const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-
-    let currentDate = `${day}/${month}/${year}`;
+    const formattedDate = timeAgo(date);
 
     if (commentValue) {
         const newComment = document.createElement('div');
@@ -65,7 +72,10 @@ function postComment(username, profPic, commentId) {
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="" class="profile-link">${username}</a> ${currentDate}</p>
+                            <p>
+                                <a href="" class="profile-link">${username}</a>
+                                <span class="comment-date">just now</span>
+                            </p>
                             <p style="word-wrap: break-word;">${commentValue}</p>
                             <div class="comment-actions">
                                 <button class="rating" id="like-button-${commentId}" onclick="toggleCommentLike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
@@ -73,8 +83,8 @@ function postComment(username, profPic, commentId) {
                                 <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
                         </div>`;
-        
-        
+
+
 
         // Append the new comment to the comment list
         const commentList = document.querySelector('.comment-list');
@@ -202,7 +212,7 @@ function toggleCommentLike(commentId) {
 
     const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
     likeBtn.setAttribute('aria-pressed', !isPressed);
-    
+
     let interactionType = likeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'like';
 
     if (!isPressed && dislikeBtn.getAttribute('aria-pressed') === 'true') {
@@ -220,7 +230,7 @@ function toggleCommentLike(commentId) {
     }
 
     likeCount.innerText = `${likes} likes`;
-    
+
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
 
@@ -233,7 +243,7 @@ function toggleCommentDislike(commentId) {
 
     const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
     dislikeBtn.setAttribute('aria-pressed', !isPressed);
-    
+
     let interactionType = dislikeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'dislike';
 
     if (!isPressed && likeBtn.getAttribute('aria-pressed') === 'true') {
@@ -251,7 +261,7 @@ function toggleCommentDislike(commentId) {
     }
 
     likeCount.innerText = `${likes} likes`;
-    
+
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
 
@@ -281,6 +291,67 @@ function autoResize() {
     this.style.height = this.scrollHeight + 'px';
 }
 
+//date for blog
+document.addEventListener("DOMContentLoaded", function() {
+    const blogDate = document.getElementById('blogPublishDate');
+    const dateString = blogDate.innerHTML;
+    const date = new Date(dateString);
+    const relativeTime = timeAgo(date);
+    blogDate.innerHTML = relativeTime;
+});
+//date for comments
+document.addEventListener("DOMContentLoaded", function() {
+    // Get all elements with the class "comment-date"
+    const commentDates = document.querySelectorAll('.comment-date');
+
+    commentDates.forEach(function(span) {
+        // Get the original date string from the span's innerHTML
+        const dateString = span.innerHTML;
+
+        // Convert the date string to a Date object
+        const date = new Date(dateString);
+
+        // Get the relative time string using the timeAgo function
+        const relativeTime = timeAgo(date);
+
+        // Update the span's innerHTML with the relative time string
+        span.innerHTML = relativeTime;
+    });
+});
+
+function timeAgo(date) {
+    const now = new Date();
+    const secondsPast = (now.getTime() - date.getTime()) / 1000;
+
+    if (secondsPast < 60) {
+        return `${Math.floor(secondsPast)} second${Math.floor(secondsPast) === 1 ? '' : 's'} ago`;
+    }
+    if (secondsPast < 3600) {
+        const minutes = Math.floor(secondsPast / 60);
+        return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    }
+    if (secondsPast < 86400) {
+        const hours = Math.floor(secondsPast / 3600);
+        return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    }
+    if (secondsPast < 172800) {
+        return 'Yesterday';
+    }
+    if (secondsPast < 604800) {
+        const days = Math.floor(secondsPast / 86400);
+        return `${days} day${days === 1 ? '' : 's'} ago`;
+    }
+    if (secondsPast < 2592000) {
+        const weeks = Math.floor(secondsPast / 604800);
+        return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
+    }
+    if (secondsPast < 31536000) {
+        const months = Math.floor(secondsPast / 2592000);
+        return `${months} month${months === 1 ? '' : 's'} ago`;
+    }
+    const years = Math.floor(secondsPast / 31536000);
+    return `${years} year${years === 1 ? '' : 's'} ago`;
+}
 
 //Light box
 //------------------------------------------------------------------------------

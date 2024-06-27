@@ -1,4 +1,8 @@
+body{
+    background: url('../img/Background.jpg') no-repeat center center fixed;
+}
 .post-container {
+    background-color: white;
     width: 80%;
     margin: 40px auto;
     padding: 20px;
@@ -18,6 +22,7 @@
     height: 50px;
     border-radius: 50%;
     margin-right: 16px;
+    object-fit: cover;
 }
 
 .user-info h2{
@@ -56,6 +61,7 @@
     height: 200px;
     overflow-x: hidden;
     overflow-y: hidden;
+    object-fit: cover;
 }
 
 .post-image{
@@ -70,8 +76,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
     background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
@@ -148,6 +154,12 @@
     }
 }
 
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .likeBtn[aria-pressed="true"]{
   background-color: #27ae60;
   color: #27ae60;
@@ -163,12 +175,17 @@
 }
 
 .profile-link{
+    padding-right: 5px;
     color: black;
     text-decoration: none;
 }
 
 .profile-link:hover{
     text-decoration: none;
+}
+
+.comment-date{
+    font-size: smaller;
 }
 
 .rate-share{
@@ -239,6 +256,7 @@
 }
 
 .comment-box textarea{
+    height: 30px;
     width: 100%;
     padding: 0 10px;
     margin-bottom: 10px;
@@ -254,7 +272,6 @@
 
 .comment-box textarea:focus{
     border-bottom: 2px solid #333;
-    box-shadow: 0 1px 0 0 #333, 0 1px 6px 0 rgba(51, 51, 51, 0.5);
 }
 
 .comment-box .buttons {

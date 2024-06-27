@@ -49,7 +49,7 @@ CREATE TABLE Blog(
 	[user_id] int foreign key references [user](id),
 	title nvarchar(max) not null,
 	content nvarchar(max) not null,
-	create_date nvarchar(20) not null,
+	create_date datetime not null,
 	likes int,
 	is_approved int foreign key references Approve_Name(id),
 	is_banned int not null
@@ -66,7 +66,7 @@ CREATE TABLE Comment(
 	[user_id] int foreign key references [User](id),
 	blog_id int foreign key references Blog(id),
 	content nvarchar(750),
-	create_date nvarchar(20),
+	create_date datetime,
 	likes int,
 	is_banned int not null
 )
@@ -124,11 +124,11 @@ VALUES (0, 'Waiting'),
 
 -- Insert data into the Blog table
 INSERT INTO Blog ([user_id], title, content, create_date, likes, is_approved, is_banned)
-VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', '15/06/2024', 10, 0, 0),
-       (2, 'Review of Cafeteria 2', 'The food is 7/10', '15/06/2024', 15, 0, 0),
-       (3, 'Review of Cafeteria 1', 'The food is 10/10', '15/06/2024', 20, 0, 0),
-       (4, 'Review of Cafeteria 2', 'The food is 9/10', '15/06/2024', 8, 0, 0),
-	   (5, 'Review of Cafeteria 3', 'The food is 11/10', '15/06/2024', 8, 0, 0);
+VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', '2024/06/15 11:45:30', 10, 0, 0),
+       (2, 'Review of Cafeteria 2', 'The food is 7/10', '2024/06/15 11:45:30', 15, 0, 0),
+       (3, 'Review of Cafeteria 1', 'The food is 10/10', '2024/06/15 11:45:30', 20, 0, 0),
+       (4, 'Review of Cafeteria 2', 'The food is 9/10', '2024/06/15 11:45:30', 8, 0, 0),
+	   (5, 'Review of Cafeteria 3', 'The food is 11/10', '2024/06/15 11:45:30', 8, 0, 0);
 
 -- Insert data into the Images table
 INSERT INTO Images (blog_id, link)
@@ -140,11 +140,11 @@ VALUES (1, 'https://tiki.vn/blog/wp-content/uploads/2023/07/thumb-12-768x433.jpg
 
 -- Insert data into the Comment table
 INSERT INTO Comment ([user_id], blog_id, content, create_date, likes, is_banned)
-VALUES (1, 1, 'Tuan Anh comment', '15/06/2024', 5, 0),
-       (2, 2, 'Hoang Anh comment', '15/06/2024', 3, 0),
-       (3, 3, 'Kien comment', '15/06/2024', 7, 0),
-       (4, 4, 'Viet comment', '15/06/2024', 12, 0),
-       (5, 5, 'Lam comment', '15/06/2024', 6, 0);
+VALUES (1, 1, 'Tuan Anh comment', '2024/06/15 18:45:30', 5, 0),
+       (2, 2, 'Hoang Anh comment', '2024/06/15 18:45:30', 3, 0),
+       (3, 3, 'Kien comment', '2024/06/15 18:45:30', 7, 0),
+       (4, 4, 'Viet comment', '2024/06/15 18:45:30', 12, 0),
+       (5, 5, 'Lam comment', '2024/06/15 18:45:30', 6, 0);
 
 INSERT INTO Draft ([user_id], title, content, create_date)
 VALUES (1, 'Tuan Anh Draft', 'Tuan Anh Sample content for the draft.', '15/06/2024'),

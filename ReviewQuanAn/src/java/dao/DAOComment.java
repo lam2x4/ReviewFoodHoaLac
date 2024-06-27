@@ -1,6 +1,7 @@
 package dao;
 
 import Utility.Mapper;
+import dal.DBContext;
 import entity.Comment;
 import entity.User;
 import java.sql.PreparedStatement;
@@ -10,7 +11,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DAOComment extends DBConnect {
+public class DAOComment extends DBContext {
     
     public int addComment(Comment comm) throws SQLException {
         String sql = "INSERT INTO [dbo].[Comment] "
@@ -18,12 +19,7 @@ public class DAOComment extends DBConnect {
                 + "VALUES (?,?,?,?,?,?)";
         
         try(PreparedStatement pre = conn.prepareStatement(sql)){
-            pre.setInt(1, comm.getUser_id());
-            pre.setInt(2, comm.getBlog_id());
-            pre.setString(3, comm.getContent());
-            pre.setString(4, comm.getCreate_date());
-            pre.setInt(5, comm.getLikes());
-            pre.setInt(6, comm.getIs_banned());
+            Mapper.setRowAddComment(comm, pre);
             
             return pre.executeUpdate();
         }
@@ -35,8 +31,7 @@ public class DAOComment extends DBConnect {
                 + "WHERE id = ?";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, comm.getContent());
-            pre.setInt(2, comm.getId());
+            Mapper.setRowEditComment(comm, pre);
             
             return pre.executeUpdate();
         }
@@ -124,7 +119,7 @@ public class DAOComment extends DBConnect {
             
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
-                    User user = Mapper.mapRow(rs);
+                    User user = Mapper.mapRowUser(rs);
                     return user;
                 }
             }
