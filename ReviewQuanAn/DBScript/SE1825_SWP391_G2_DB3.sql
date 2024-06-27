@@ -79,6 +79,18 @@ CREATE TABLE Draft(
 	create_date nvarchar(20) not null,
 )
 
+create table Report(
+id int Identity(1,1) primary key,
+[user_id] int foreign key references [User](id),
+[blog_id] int foreign key references Blog(id),
+content nvarchar(750),
+)
+
+create table BookMark(
+id int Identity(1,1) primary key,
+[user_id] int foreign key references [user](id),
+[blog_id] int foreign key references Blog(id),
+)
 
 -- Insert data into the Role table
 INSERT INTO [Role] (role_id, role_name)
