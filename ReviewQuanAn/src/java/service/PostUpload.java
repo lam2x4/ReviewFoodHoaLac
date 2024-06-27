@@ -88,7 +88,7 @@ public class PostUpload extends HttpServlet {
                 response.getWriter().println("Error: " + e.getMessage());
                 //response.sendRedirect("HomePage.jsp");
             }
-//        response.sendRedirect("ApplyPostPage.jsp");
+        response.sendRedirect("ApplyPostPage.jsp");
         } else if (service.equals("repost")) {
             try {
                 User currentUser = (User)session.getAttribute("User");
@@ -96,6 +96,15 @@ public class PostUpload extends HttpServlet {
                 Blog current = daoB.getBlog(Integer.parseInt(request.getParameter("bid")));
                 Blog repost = current;
                 repost.setUser_id(currentUser.getId());
+                repost.setTitle(repost.getTitle() + " (Repost)");
+                
+                LocalDate date = LocalDate.now();
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String create_date = date.format(dateFormat);
+                
+                repost.setCreate_date(create_date);
+                
+                repost.setCreate_date(service);
                 daoB.addBlog(repost);
                 daoB.getLastInsertedBlog();
                 
@@ -104,9 +113,10 @@ public class PostUpload extends HttpServlet {
                 Vector<Images> vector = daoI.findImagesByBlog_id(current.getId());
                 for(Images image: vector){
                     image.setBlog_id(lastBId);
+                    image.setLink(image.getLink().substring(4));
                     daoI.addImages(image);
                 }
-                response.sendRedirect("HomePage.jsp");
+                response.sendRedirect("home");
             } catch (Exception e) {
                 response.sendRedirect("LoginPage.jsp");
             }
