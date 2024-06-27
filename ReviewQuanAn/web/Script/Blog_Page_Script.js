@@ -8,37 +8,73 @@ document.getElementById('cancel-button').addEventListener('click', function () {
     document.getElementById('add-comment-button').style.display = 'none';
 });
 
-function postComment(username, profPic) {
+document.getElementById('commentForm').addEventListener('submit', function () {
+    event.preventDefault();
+
+    var imgElement = document.getElementById("UserPP");
+    var profPic = imgElement.src;
+    var username = document.getElementById("Username").value;
     const commentInput = document.getElementById('comment-input');
     const commentValue = commentInput.value.trim();
-    
+
+    var blogId = document.getElementById("BlogId").value;
+    if (!commentValue) {
+        console.log("Comment is empty");
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var commentId = xhr.responseText.trim();
+                
+                console.log(xhr.status);
+                postComment(username, profPic, commentId);
+                updateCommentCount();
+            } else {
+                console.log(xhr.status);
+            }
+        }
+    };
+
+    xhr.send('service=addComment&comment-input=' + encodeURIComponent(commentValue));
+
+});
+
+function postComment(username, profPic, commentId) {
+    const commentInput = document.getElementById('comment-input');
+    const commentValue = commentInput.value.trim();
+
     const date = new Date();
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    
+
     let currentDate = `${day}/${month}/${year}`;
 
     if (commentValue) {
         const newComment = document.createElement('div');
         newComment.classList.add('comment');
-        newComment.innerHTML = `
-            <div class="thumbnail">
-                <a class="toProfile">
-                    <img src="${profPic}" alt="Profile Picture" class="profile-pic">
-                </a>
-            </div>
-            <div class="comment-body">
-                <p><a href="" class="profile-link">${username}</a> ${currentDate}</p>
-                <p>${commentValue}</p>
-                <div class="comment-actions">
-                    <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
-                    0 likes   
-                    <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
-                </div>
-                <div class="replies"></div>
-            </div>
-        `;
+        newComment.innerHTML = `<div class="thumbnail">
+                            <a class="toProfile">
+                                <img src="${profPic}" alt="Profile Picture" class="profile-pic">
+                            </a>
+                        </div>
+                        <div class="comment-body">
+                            <p><a href="" class="profile-link">${username}</a> ${currentDate}</p>
+                            <p style="word-wrap: break-word;">${commentValue}</p>
+                            <div class="comment-actions">
+                                <button class="rating" id="like-button-${commentId}" onclick="toggleCommentLike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
+                                <span id="likeCommentCount-${commentId}">0 likes</span>
+                                <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
+                            </div>
+                        </div>`;
+        
+        
 
         // Append the new comment to the comment list
         const commentList = document.querySelector('.comment-list');
@@ -48,26 +84,19 @@ function postComment(username, profPic) {
         commentInput.value = '';
         document.getElementById('cancel-button').style.display = 'none';
         document.getElementById('add-comment-button').style.display = 'none';
-
-        updateCommentCount();
     }
 }
-
-document.getElementById('commentButton').addEventListener('click', function () {
-    document.getElementById('comment-box').scrollIntoView({behavior: 'smooth'});
-    document.getElementById('comment-input').focus();
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     const postImagesContainer = document.getElementById('post-images');
     const postImages = postImagesContainer.getElementsByClassName('post-image');
 
-    if (postImages.length > 4) {
-        for (let i = 4; i < postImages.length; i++) {
+    if (postImages.length > 5) {
+        for (let i = 5; i < postImages.length; i++) {
             postImages[i].style.display = 'none';
         }
-        const remainingImages = postImages.length - 4;
-        const fourthImage = postImages[3];
+        const remainingImages = postImages.length - 5;
+        const fifthImage = postImages[4];
 
         const moreOverlayDiv = document.createElement('div');
         moreOverlayDiv.className = 'more-overlay';
@@ -79,82 +108,12 @@ document.addEventListener('DOMContentLoaded', function () {
         wrapperDiv.style.position = 'relative';
         wrapperDiv.style.height = '100%';
         wrapperDiv.style.width = '100%';
-        wrapperDiv.appendChild(fourthImage.cloneNode(true));
+        wrapperDiv.appendChild(fifthImage.cloneNode(true));
         wrapperDiv.appendChild(moreOverlayDiv);
 
         // Replace the original fourth image with the new wrapped div
-        postImagesContainer.replaceChild(wrapperDiv, fourthImage);
+        postImagesContainer.replaceChild(wrapperDiv, fifthImage);
     }
-});
-
-function showReplyInput(replyBtn, username, profPic) {
-    // Check if reply input already exists
-    let existingInput = replyBtn.parentElement.nextElementSibling;
-    if (existingInput && existingInput.classList.contains('reply-section')) {
-        existingInput.style.display = 'inline';
-        return;
-    }
-
-    // Create a new reply input element
-    const replyInput = document.createElement('div');
-    replyInput.classList.add('reply-section');
-    replyInput.id = "reply-section";
-    replyInput.innerHTML = `<img src="${profPic}" alt="Profile Picture" class="profile-pic">
-                            <input type="text" name="add-reply" id="comment-input" class="glowing-input" placeholder="Add a reply...">
-                            <div class="buttons">
-                                <button class="button" onclick="cancelReply(this)">Cancel</button>
-                                <button class="button" onclick="postReply(this, '${username}', '${profPic}')">Reply</button>
-                            </div>`;
-
-    // Insert the reply input element after the comment actions
-    replyBtn.parentElement.parentElement.appendChild(replyInput);
-}
-
-function cancelReply(cancelButton) {
-    // Hide the reply input form
-    cancelButton.closest('.reply-section').style.display = 'none';
-}
-
-function postReply(replyButton, username, profPic) {
-    const replyInputValue = replyButton.closest('.reply-section').querySelector('input').value;
-
-    // Check if the input is empty
-    if (!replyInputValue.trim())
-        return;
-
-    // Create a new reply element
-    const reply = document.createElement('div');
-    reply.classList.add('comment', 'reply');
-    reply.innerHTML = `
-        <div class="thumbnail">
-            <a class="toProfile">
-                <img src="${profPic}" alt="Profile Picture" class="profile-pic">
-            </a>
-        </div>
-        <div class="comment-body">
-            <p><a href="" class="profile-link">${username}</a></p>
-            <p>${replyInputValue}</p>
-            <div class="comment-actions">
-                <button class="rating"><i class="fa-regular fa-thumbs-up"></i></button>   
-                0 likes   
-                <button class="reply-button" onclick="showReplyInput(this, '${username}', '${profPic}')">Reply</button>
-            </div>
-            <div class="replies"></div>
-        </div>
-    `;
-
-    // Find the replies container and prepend the new reply
-    const repliesContainer = replyButton.closest('.comment-body').querySelector('.replies');
-    repliesContainer.prepend(reply);
-
-    // Clear and hide the reply input
-    replyButton.closest('.reply-section').querySelector('input').value = '';
-    replyButton.closest('.reply-section').style.display = 'none';
-}
-
-document.getElementById('commentButton').addEventListener('click', function () {
-    document.getElementById('comment-box').scrollIntoView({behavior: 'smooth'});
-    document.getElementById('comment-input').focus();
 });
 
 // Function to count the comments and update the span
@@ -163,7 +122,7 @@ function updateCommentCount() {
     const commentList = document.querySelector('.comment-list');
 
     // Count the number of comments (excluding replies)
-    const comments = commentList.querySelectorAll('.comment:not(.reply)');
+    const comments = commentList.querySelectorAll('.comment');
     const commentCount = comments.length;
 
     // Update the span with the new comment count
@@ -171,21 +130,157 @@ function updateCommentCount() {
 }
 
 function toggleLike() {
-  let likeBtn = document.getElementById("like-button");
-  let likeCount = document.getElementById("likeCount");
-  
-  let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+    let likeBtn = document.getElementById("like-button");
+    let dislikeBtn = document.getElementById("dislike-button");
+    let likeCount = document.getElementById("likeCount");
 
-  const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
-  likeBtn.setAttribute('aria-pressed', !isPressed);
-  
-  isPressed ? bloglikes-- : bloglikes++;
-  likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+    let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+
+    const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
+    likeBtn.setAttribute('aria-pressed', !isPressed);
+
+    let interactionType = likeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'like';
+
+    if (!isPressed && dislikeBtn.getAttribute('aria-pressed') === 'true') {
+        dislikeBtn.setAttribute('aria-pressed', 'false');
+        bloglikes++;
+    }
+
+    isPressed ? bloglikes-- : bloglikes++;
+    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+
+    sendLikeUpdate(interactionType, bloglikes);
 }
 
-function toggleCommentLike(){
+function toggleDislike() {
+    let likeBtn = document.getElementById("like-button");
+    let dislikeBtn = document.getElementById("dislike-button");
+    let likeCount = document.getElementById("likeCount");
+
+    let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+
+    const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
+    dislikeBtn.setAttribute('aria-pressed', !isPressed);
+
+    let interactionType = dislikeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'dislike';
+
+    if (!isPressed && likeBtn.getAttribute('aria-pressed') === 'true') {
+        likeBtn.setAttribute('aria-pressed', 'false');
+        bloglikes--;
+    }
+
+    isPressed ? bloglikes++ : bloglikes--;
+    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+
+    sendLikeUpdate(interactionType, bloglikes);
+}
+
+function sendLikeUpdate(interactionType, blogLikes) {
+    var blogId = document.getElementById("BlogId").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status !== 200) {
+                console.error("Failed to update like/dislike. Status: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(`service=handlePostLikes&interactionType=${encodeURIComponent(interactionType)}&blogLikes=${encodeURIComponent(blogLikes)}`);
+}
+
+function toggleCommentLike(commentId) {
+    let likeBtn = document.getElementById(`like-button-${commentId}`);
+    let dislikeBtn = document.getElementById(`dislike-button-${commentId}`);
+    let likeCount = document.getElementById(`likeCommentCount-${commentId}`);
+
+    let likes = parseInt(likeCount.innerText.split(' ')[0]);
+
+    const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
+    likeBtn.setAttribute('aria-pressed', !isPressed);
     
+    let interactionType = likeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'like';
+
+    if (!isPressed && dislikeBtn.getAttribute('aria-pressed') === 'true') {
+        dislikeBtn.setAttribute('aria-pressed', 'false');
+        dislikeBtn.innerHTML = `<i class="fa-regular fa-thumbs-down"></i>`;
+        likes++;
+    }
+
+    if (isPressed) {
+        likes--;
+        likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i>`;
+    } else {
+        likes++;
+        likeBtn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
+    }
+
+    likeCount.innerText = `${likes} likes`;
+    
+    sendCommentLikeUpdate(interactionType, commentId, likes);
 }
+
+function toggleCommentDislike(commentId) {
+    let likeBtn = document.getElementById(`like-button-${commentId}`);
+    let dislikeBtn = document.getElementById(`dislike-button-${commentId}`);
+    let likeCount = document.getElementById(`likeCommentCount-${commentId}`);
+
+    let likes = parseInt(likeCount.innerText.split(' ')[0]);
+
+    const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
+    dislikeBtn.setAttribute('aria-pressed', !isPressed);
+    
+    let interactionType = dislikeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'dislike';
+
+    if (!isPressed && likeBtn.getAttribute('aria-pressed') === 'true') {
+        likeBtn.setAttribute('aria-pressed', 'false');
+        likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i>`;
+        likes--;
+    }
+
+    if (isPressed) {
+        likes++;
+        dislikeBtn.innerHTML = `<i class="fa-regular fa-thumbs-down"></i>`;
+    } else {
+        likes--;
+        dislikeBtn.innerHTML = `<i class="fa-solid fa-thumbs-down"></i>`;
+    }
+
+    likeCount.innerText = `${likes} likes`;
+    
+    sendCommentLikeUpdate(interactionType, commentId, likes);
+}
+
+function sendCommentLikeUpdate(interactionType, commentId, commentLikes) {
+    var blogId = document.getElementById("BlogId").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status !== 200) {
+                console.error("Failed to update like/dislike. Status: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(`service=handleCommentLikes&interactionType=${encodeURIComponent(interactionType)}&commentId=${encodeURIComponent(commentId)}&commentLikes=${encodeURIComponent(commentLikes)}`);
+}
+
+textarea = document.querySelector("#comment-input");
+textarea.addEventListener('input', autoResize, false);
+
+function autoResize() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+}
+
 
 //Light box
 //------------------------------------------------------------------------------
@@ -214,7 +309,7 @@ function showSlides(n) {
     var dots = document.getElementsByClassName("demo");
     var captionText = document.getElementById("caption");
     if (n > slides.length) {
-        slideIndex = 1
+        slideIndex = 1;
     }
     if (n < 1) {
         slideIndex = slides.length;

@@ -20,7 +20,7 @@ public class DBConnect {
     }
     
     public DBConnect(){
-        this("jdbc:sqlserver://localhost:1433;databaseName=SE1825_SWP391_G2_DB3", "sa", "123");
+        this("jdbc:sqlserver://localhost:1433;databaseName=SE1825_SWP391_G2_DB3", "sa", "123456");
     }
     
     public static void main(String[] args){

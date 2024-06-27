@@ -13,8 +13,8 @@ public class DAOBlog extends DBConnect {
 
     public int addBlog(Blog b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Blog] "
-                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned], [author_id]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, b.getUser_id());
@@ -24,6 +24,7 @@ public class DAOBlog extends DBConnect {
             pre.setInt(5, b.getLikes());
             pre.setInt(6, b.getIs_approved());
             pre.setInt(7, b.getIs_banned());
+            pre.setInt(8, b.getAuthor_id());
 
             return pre.executeUpdate();
         }
@@ -41,6 +42,19 @@ public class DAOBlog extends DBConnect {
         }
     }
 
+    public int updateLikes(int blog_id, int likes) throws SQLException {
+        String sql = "UPDATE Blog "
+                + "SET likes = ? "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, likes);
+            pre.setInt(2, blog_id);
+
+            return pre.executeUpdate();
+        }
+    }
+
     public int editBlog(Blog b) throws SQLException {
         String sql = "UPDATE [dbo].[Blog] "
                 + "SET [title] = ?, "
@@ -49,6 +63,7 @@ public class DAOBlog extends DBConnect {
                 + "[likes] = ? "
                 + "[is_approved] = ? "
                 + "[is_banned] = ? "
+                + "[author_id] = ? "
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
@@ -58,6 +73,7 @@ public class DAOBlog extends DBConnect {
             pre.setInt(4, b.getLikes());
             pre.setInt(5, b.getIs_approved());
             pre.setInt(6, b.getIs_banned());
+            pre.setInt(6, b.getAuthor_id());
 
             return pre.executeUpdate();
         }
@@ -109,6 +125,7 @@ public class DAOBlog extends DBConnect {
                 b.setLikes(rs.getInt(6));
                 b.setIs_approved(rs.getInt(7));
                 b.setIs_banned(rs.getInt(8));
+                b.setAuthor_id(rs.getInt(9));
 
                 vector.add(b);
             }
@@ -118,22 +135,37 @@ public class DAOBlog extends DBConnect {
 
     public Vector<Blog> getAllApproved() throws SQLException {
         Vector<Blog> vector = new Vector<>();
-        String sql = "SELECT * FROM Blog";
+        String sql = """
+                     SELECT 
+                         u.username AS poster,
+                         
+                         b.*,
+                     us.username AS author
+                     FROM 
+                         blog b
+                     LEFT JOIN 
+                         [user] u ON b.user_id = u.id
+                     LEFT JOIN 
+                         blog b1 ON b1.id = b.id -- Assuming you want to join the same blog table on an id match (this part needs clarification)
+                     LEFT JOIN 
+                         [user] us ON us.id = b1.user_id;""";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
 
             while (rs.next()) {
                 Blog b = new Blog();
-
-                b.setId(rs.getInt(1));
-                b.setUser_id(rs.getInt(2));
-                b.setTitle(rs.getString(3));
-                b.setContent(rs.getString(4));
-                b.setCreate_date(rs.getString(5));
-                b.setLikes(rs.getInt(6));
-                b.setIs_approved(rs.getInt(7));
-                b.setIs_banned(rs.getInt(8));
+                b.setUsername(rs.getString(1));
+                b.setId(rs.getInt(2));
+                b.setUser_id(rs.getInt(3));
+                b.setTitle(rs.getString(4));
+                b.setContent(rs.getString(5));
+                b.setCreate_date(rs.getString(6));
+                b.setLikes(rs.getInt(7));
+                b.setIs_approved(rs.getInt(8));
+                b.setIs_banned(rs.getInt(9));
+                b.setAuthor_id(rs.getInt(10));
+                b.setAuthor_name(rs.getString(11));
                 if (b.getIs_approved() == 1) {
                     vector.add(b);
                 }
@@ -156,7 +188,16 @@ public class DAOBlog extends DBConnect {
     }
 
     public Blog getBlog(int id) throws SQLException {
-        String sql = "SELECT * FROM Blog WHERE id = ?";
+        String sql = """
+                     SELECT 
+                         b.*,
+                     \tus.username AS author
+                     FROM 
+                         blog b
+                     LEFT JOIN 
+                         [user] us ON b.author_id = us.id
+                     WHERE 
+                     \tb.id = ?""";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
@@ -173,7 +214,8 @@ public class DAOBlog extends DBConnect {
                     b.setLikes(rs.getInt(6));
                     b.setIs_approved(rs.getInt(7));
                     b.setIs_banned(rs.getInt(8));
-
+                    b.setAuthor_id(rs.getInt(9));
+                    b.setAuthor_name(rs.getString(10));
                     return b;
                 } else {
                     throw new SQLException("No blog found with ID: " + id);
@@ -199,9 +241,11 @@ public class DAOBlog extends DBConnect {
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
-        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
+        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0, 1);
         try {
-            dao.getAllApproved();
+            for (Blog blog : dao.getAllApproved()) {
+                blog.customToString();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
