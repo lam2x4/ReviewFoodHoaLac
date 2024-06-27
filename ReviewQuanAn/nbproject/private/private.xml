@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/web/BlogPage.jsp</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/src/java/Controller/Home.java</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/web/Header.jsp</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/src/java/dao/DAOImages.java</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/src/java/entity/Blog.java</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/src/java/dao/DAOBlog.java</file>
-            <file>file:/C:/SWP391/Temp4/ReviewQuanAn/src/java/Controller/BlogPageController.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

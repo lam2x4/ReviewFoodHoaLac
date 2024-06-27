@@ -167,10 +167,6 @@ public class DAOBlog extends DBConnect {
                 b.setAuthor_id(rs.getInt(10));
                 b.setAuthor_name(rs.getString(11));
                 if (b.getIs_approved() == 1) {
-
-                    if (b.getAuthor_id() != b.getUser_id()) {
-                        b.setTitle(b.getTitle() + " (Repost)");
-                    }
                     vector.add(b);
                 }
             }
