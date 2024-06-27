@@ -189,7 +189,7 @@ public class DAOUser extends DBContext {
         return vector;
     }
 
-    public Vector<Blog> search1(String search) {
+    public Vector<Blog> search1 (String search){
         String sql = "select u.username, b.* from blog b left join [user] u on b.user_id = u.id";
 
         Vector<Blog> vector = new Vector<>();
@@ -206,9 +206,10 @@ public class DAOUser extends DBContext {
                 int likes = rs.getInt(7);
                 int is_approved = rs.getInt(8);
                 int is_banned = rs.getInt(9);
-                Blog blog = new Blog(username, blog_id, user_id, title, content, create_date, likes, is_approved, is_banned);
-                String a = username + title + content + create_date;
-                if (a.contains(search)) {
+                int author_id = rs.getInt(10);
+                Blog blog = new Blog(username, blog_id, user_id, title, content, create_date, likes, is_approved, is_banned, author_id);
+                String a = username + title + content+ create_date;
+                if(a.contains(search)){
                     vector.add(blog);
                 }
             }
@@ -216,7 +217,7 @@ public class DAOUser extends DBContext {
             Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return vector;
-
+            
     }
 
 }

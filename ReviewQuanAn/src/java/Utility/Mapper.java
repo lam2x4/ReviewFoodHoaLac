@@ -64,6 +64,7 @@ public class Mapper {
         pre.setInt(5, b.getLikes());
         pre.setInt(6, b.getIs_approved());
         pre.setInt(7, b.getIs_banned());
+        pre.setInt(8, b.getAuthor_id());
     }
 
     public static void setRowEditBlog(Blog b, PreparedStatement pre) throws SQLException {
@@ -73,6 +74,8 @@ public class Mapper {
         pre.setInt(4, b.getLikes());
         pre.setInt(5, b.getIs_approved());
         pre.setInt(6, b.getIs_banned());
+        pre.setInt(7, b.getAuthor_id());
+        pre.setInt(8, b.getId());
     }
 
     public static Blog mapRowBlog(ResultSet rs) throws SQLException {
@@ -86,6 +89,7 @@ public class Mapper {
         b.setLikes(rs.getInt(6));
         b.setIs_approved(rs.getInt(7));
         b.setIs_banned(rs.getInt(8));
+        b.setAuthor_id(rs.getInt(9));
 
         return b;
     }

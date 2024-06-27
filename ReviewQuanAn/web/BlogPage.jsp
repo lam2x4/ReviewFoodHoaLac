@@ -62,7 +62,10 @@
                     <button class="button likeBtn" role="button" id="like-button" aria-pressed="false">Like</button>
                     <button class="button dislikeBtn" role="button" id="dislike-button" aria-pressed="false">Dislike</button>
                 </div>
-                <button class="button" role="button">Share</button>
+                <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
+                    <input type="submit" class="button" role="button" value="Share">
+                    <input type="hidden" name="service" value="repost">
+                </form>
             </div>
             <hr>
             <div class="comment-section">
@@ -122,33 +125,33 @@
                         dislikeBtn.onclick = toggleDislike;
                         dislikeBtn.setAttribute('aria-pressed', <%=post_interaction_type.equals("dislike")%>);
 
-                        <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
-                        <%for(int i = 0; i < comments.size(); i++){%>
-                            //toggle comment like btn
-                            var commentLikeBtn = document.getElementById('like-button-<%=comments.get(i).getId()%>');
-                            commentLikeBtn.onclick = function () {
-                                toggleCommentLike(<%=comments.get(i).getId()%>);
-                            };
-                            commentLikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("like")%>);
+            <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
+            <%for(int i = 0; i < comments.size(); i++){%>
+                        //toggle comment like btn
+                        var commentLikeBtn = document.getElementById('like-button-<%=comments.get(i).getId()%>');
+                        commentLikeBtn.onclick = function () {
+                            toggleCommentLike(<%=comments.get(i).getId()%>);
+                        };
+                        commentLikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("like")%>);
 
-                            <%if(comm_inter_type.get(i).equals("like")){%>
-                            commentLikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
-                            <%}else{%>
-                            commentLikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-up"></i>';
-                            <%}%>
-                            //toggle comment dislike btn
-                            var commentDisikeBtn = document.getElementById('dislike-button-<%=comments.get(i).getId()%>');
-                            commentDisikeBtn.onclick = function () {
-                                toggleCommentDislike(<%=comments.get(i).getId()%>);
-                            };
-                            commentDisikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("dislike")%>);
+            <%if(comm_inter_type.get(i).equals("like")){%>
+                        commentLikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+            <%}else{%>
+                        commentLikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-up"></i>';
+            <%}%>
+                        //toggle comment dislike btn
+                        var commentDisikeBtn = document.getElementById('dislike-button-<%=comments.get(i).getId()%>');
+                        commentDisikeBtn.onclick = function () {
+                            toggleCommentDislike(<%=comments.get(i).getId()%>);
+                        };
+                        commentDisikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("dislike")%>);
 
-                            <%if(comm_inter_type.get(i).equals("dislike")){%>
-                                commentDisikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-down"></i>';
-                            <%}else{%>
-                                commentDisikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-down"></i>';
-                            <%}%>
-                        <%}%>
+            <%if(comm_inter_type.get(i).equals("dislike")){%>
+                        commentDisikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-down"></i>';
+            <%}else{%>
+                        commentDisikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-down"></i>';
+            <%}%>
+            <%}%>
             <%}%>
         </script>
     </body>

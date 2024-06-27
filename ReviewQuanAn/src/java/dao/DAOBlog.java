@@ -14,8 +14,8 @@ public class DAOBlog extends DBContext {
 
     public int addBlog(Blog b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Blog] "
-                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned], [author_id]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             Mapper.setRowAddBlog(b, pre);
@@ -57,6 +57,7 @@ public class DAOBlog extends DBContext {
                 + "[likes] = ? "
                 + "[is_approved] = ? "
                 + "[is_banned] = ? "
+                + "[author_id] = ?"
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
@@ -112,15 +113,40 @@ public class DAOBlog extends DBContext {
 
     public Vector<Blog> getAllApproved() throws SQLException {
         Vector<Blog> vector = new Vector<>();
-        String sql = "SELECT * FROM Blog WHERE is_approved = 1";
+        String sql = """
+                     SELECT 
+                         u.username AS poster,
+                         
+                         b.*,
+                     us.username AS author
+                     FROM 
+                         blog b
+                     LEFT JOIN 
+                         [user] u ON b.user_id = u.id
+                     LEFT JOIN 
+                         blog b1 ON b1.id = b.id -- Assuming you want to join the same blog table on an id match (this part needs clarification)
+                     LEFT JOIN 
+                         [user] us ON us.id = b1.user_id;""";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             ResultSet rs = pre.executeQuery();
 
             while (rs.next()) {
-                Blog b = Mapper.mapRowBlog(rs);
-
-                vector.add(b);
+                Blog b = new Blog();
+                b.setUsername(rs.getString(1));
+                b.setId(rs.getInt(2));
+                b.setUser_id(rs.getInt(3));
+                b.setTitle(rs.getString(4));
+                b.setContent(rs.getString(5));
+                b.setCreate_date(rs.getString(6));
+                b.setLikes(rs.getInt(7));
+                b.setIs_approved(rs.getInt(8));
+                b.setIs_banned(rs.getInt(9));
+                b.setAuthor_id(rs.getInt(10));
+                b.setAuthor_name(rs.getString(11));
+                if (b.getIs_approved() == 1) {
+                    vector.add(b);
+                }
             }
         }
         return vector;
@@ -140,15 +166,34 @@ public class DAOBlog extends DBContext {
     }
 
     public Blog getBlog(int id) throws SQLException {
-        String sql = "SELECT * FROM Blog WHERE id = ?";
+        String sql = """
+                     SELECT 
+                         b.*,
+                     \tus.username AS author
+                     FROM 
+                         blog b
+                     LEFT JOIN 
+                         [user] us ON b.author_id = us.id
+                     WHERE 
+                     \tb.id = ?""";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
 
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
-                    Blog b = Mapper.mapRowBlog(rs);
+                    Blog b = new Blog();
 
+                    b.setId(rs.getInt(1));
+                    b.setUser_id(rs.getInt(2));
+                    b.setTitle(rs.getString(3));
+                    b.setContent(rs.getString(4));
+                    b.setCreate_date(rs.getString(5));
+                    b.setLikes(rs.getInt(6));
+                    b.setIs_approved(rs.getInt(7));
+                    b.setIs_banned(rs.getInt(8));
+                    b.setAuthor_id(rs.getInt(9));
+                    b.setAuthor_name(rs.getString(10));
                     return b;
                 } else {
                     throw new SQLException("No blog found with ID: " + id);
@@ -168,17 +213,6 @@ public class DAOBlog extends DBContext {
                     throw new SQLException("Failed to retrieve last inserted blog ID");
                 }
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        DAOBlog dao = new DAOBlog();
-
-        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0);
-        try {
-            dao.getAllApproved();
-        } catch (SQLException ex) {
-            Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
