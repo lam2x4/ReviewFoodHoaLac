@@ -31,8 +31,10 @@ public class Blog {
 
     //ADDED BY TUAN ANH ---- FOR SEARCH FUNCTION
     private String username;
+    private int author_id;
+    private String author_name;
 
-    public Blog(String username, int id, int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned) {
+    public Blog(String username, int id, int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned, int author_id) {
         this.username = username;
         this.id = id;
         this.user_id = user_id;
@@ -42,7 +44,42 @@ public class Blog {
         this.likes = likes;
         this.is_approved = is_approved;
         this.is_banned = is_banned;
+        this.author_id = author_id;
     }
+    public Blog(String username, int id, int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned, int author_id, String author_name) {
+        this.username = username;
+        this.id = id;
+        this.user_id = user_id;
+        this.title = title;
+        this.content = content;
+        this.create_date = create_date;
+        this.likes = likes;
+        this.is_approved = is_approved;
+        this.is_banned = is_banned;
+        this.author_id = author_id;
+        this.author_name = author_name;
+    }
+    public Blog(int id, int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned, int author_id, String author_name) {
+        this.id = id;
+        this.user_id = user_id;
+        this.title = title;
+        this.content = content;
+        this.create_date = create_date;
+        this.likes = likes;
+        this.is_approved = is_approved;
+        this.is_banned = is_banned;
+        this.author_id = author_id;
+        this.author_name = author_name;
+    }
+
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
+    }
+    
 
     public String getUsername() {
         return username;
@@ -56,7 +93,7 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned) {
+    public Blog(int user_id, String title, String content, String create_date, int likes, int is_approved, int is_banned, int author_id) {
         this.user_id = user_id;
         this.title = title;
         this.content = content;
@@ -64,7 +101,17 @@ public class Blog {
         this.likes = likes;
         this.is_approved = is_approved;
         this.is_banned = is_banned;
+        this.author_id = author_id;
     }
+
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
+    }
+    
 
     public int getId() {
         return id;
@@ -132,7 +179,15 @@ public class Blog {
 
     @Override
     public String toString() {
-        return "Blog{" + "id=" + id + ", user_id=" + user_id + ", title=" + title + ", content=" + content + ", create_date=" + create_date + ", likes=" + likes + ", is_approved=" + is_approved + ", is_banned=" + is_banned + '}';
+        return "Blog{" + "id=" + id + ", user_id=" + user_id + ", title=" + title + ", content=" + content + ", create_date=" + create_date + ", likes=" + likes + ", is_approved=" + is_approved + ", is_banned=" + is_banned + ", author_id=" + author_id+'}';
+    }
+    
+    public void customToString(){
+        System.out.println("Blog{" + "id=" + id + ", user_id=" + user_id + ", title=" + title + ", "
+                + "content=" + content + ", create_date=" + create_date + ", likes=" + likes + 
+                ", is_approved=" + is_approved + ", is_banned=" + is_banned + ", author_id=" + author_id+
+                ", user_name=" + username + ", author_name=" + author_name+'}');
+
     }
 
 }

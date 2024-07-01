@@ -61,6 +61,7 @@
                 <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
+                    <h2><a href="" class="profile-link">Original Author: <%=(String)request.getAttribute("authorname")%></a></h2>
                     <p><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
             </div>
@@ -154,17 +155,35 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form action="ReportControler" method="post" id="reportForm" onsubmit="return showSuccessAlert()">
-                        <input type="hidden" name="blogId" value="<%=(String)request.getAttribute("blogId")%>">
-                        <input type="hidden" name="userId" value="${sessionScope.User.id}">
-                        <div class="form-group">
-                            <label for="reportReason">Select a reason for reporting:</label>
-                            <select class="form-control" id="reportReason" name="typeId" onchange="updateReasonDescription()">
-                                <c:forEach items="${requestScope.type_list}" var="i">
-                                    <option value="${i.id}" data-description="${i.description}">${i.name}</option>
-                                </c:forEach>
-                            </select>
+            </div>
+            <hr>
+            <div class="post-sub-info">
+                <span id="likeCount" class="count"><i class="fa-solid fa-thumbs-up"></i> Likes: <%=(int)request.getAttribute("blogLikes")%></span>
+                <span id="commentCount" class="count">Comments: 0</span>
+            </div>
+            <hr>
+            <div class="rate-share">
+                <div class="rating">
+                    <%String post_interaction_type = (String)request.getAttribute("postLikeInteractionType") != null ? (String)request.getAttribute("postLikeInteractionType") : "nothing";%>
+                    <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("like")%><%} else{%>false<%}%>">Like</button>
+                    <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
+                </div>
+                <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
+                <input type="submit" class="button" role="button" value="Share">
+                <input type="hidden" name="service" value="repost">
+                </form>
+            </div>
+            <hr>
+            <div class="comment-section">
+                <div class="comment-box" id="comment-box">
+                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
+                    <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
+                    <form id="commentForm">
+                        <textarea type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment..."></textarea>
+                        <div class="buttons">
+                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
                         </div>
                         <div id="reasonDescription" class="report-description">${requestScope.type_list.get(0).description}</div>
                         <div class="form-group">
