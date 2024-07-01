@@ -10,14 +10,23 @@ public class Blog {
     private int likes;
     private int is_approved;
     private int is_banned;
-    private String reason;
+    private int author_id;
+    private String reason_reject;
 
-    public String getReason() {
-        return reason;
+    public String getReason_reject() {
+        return reason_reject;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setReason_reject(String reason_reject) {
+        this.reason_reject = reason_reject;
+    }
+
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
     }
 
     //ADDED BY TUAN ANH ---- FOR SEARCH FUNCTION
@@ -42,12 +51,8 @@ public class Blog {
     public void setUsername(String username) {
         this.username = username;
     }
-    
-    
-    
+
     // THIS CODE DOES NOT AFFECT ANY OTHER EXISTING FUNCTIONS
-    
-    
     public Blog() {
     }
 

@@ -19,9 +19,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class AdminReportManagement extends HttpServlet {
+public class UserReportManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,10 +48,10 @@ public class AdminReportManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminReportManagement</title>");
+            out.println("<title>Servlet UserReportManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminReportManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UserReportManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,25 +70,15 @@ public class AdminReportManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
-            HashMap<Integer, String> blog_User = new HashMap<>();
+            HttpSession session = request.getSession();
+            User user1 = (User)session.getAttribute("User");
             HashMap<Integer, String> report_User = new HashMap<>();
             HashMap<Integer, String> report_ReportType = new HashMap<>();
             DAOUser daouser = new DAOUser();
             DAOBlog daoblog = new DAOBlog();
-            DAOComment daocomment = new DAOComment();
             DAOReport daoreport = new DAOReport();
             DAOReportType daoReportType = new DAOReportType();
-            int blogNumber = daoblog.getAll().size();
-            int commentNumber = daocomment.viewAll().size();
-            int userNumber = daouser.getAll().size();
-            for (Blog blog : daoblog.getAll()) {
-                for (User user : daouser.getAll()) {
-                    if (blog.getUser_id() == user.getId()) {
-                        blog_User.put(blog.getUser_id(), user.getUsername());
-                    }
-                }
-            }
+
             for (Report report : daoreport.getAll()) {
                 for (User user : daouser.getAll()) {
                     if (report.getUser_id() == user.getId()) {
@@ -106,17 +96,11 @@ public class AdminReportManagement extends HttpServlet {
 
             request.setAttribute("report_ReportType", report_ReportType);
             request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAll());
-            request.setAttribute("Blog_User", blog_User);
-            request.setAttribute("userNumber", userNumber);
-            request.setAttribute("blogNumber", blogNumber);
-            request.setAttribute("commentNumber", commentNumber);
-            request.setAttribute("BlogList", daoblog.getAll());
-            request.getRequestDispatcher("AdminReportManager.jsp").forward(request, response);
+            request.setAttribute("reportList", daoreport.getAllById(user1.getId()));
+            request.getRequestDispatcher("UserReportManager.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     /**

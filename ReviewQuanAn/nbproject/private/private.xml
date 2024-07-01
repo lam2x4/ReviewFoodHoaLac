@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/entity/ReportType.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/web/BlogPage.jsp</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/dao/DAOReportType.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/dao/DAOUser.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/entity/Report.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/entity/User.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/Controller/BlogPageController.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/dao/DAOBlog.java</file>
-            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/Controller/Home.java</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/Controller/AdminWaitingReport.java</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/web/AdminReportManager.jsp</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/Controller/AdminWaitingBlog.java</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/web/Admin.jsp</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/web/UserReportManager.jsp</file>
+            <file>file:/E:/SWP391_3/ReviewQuanAn/src/java/Controller/Admin.java</file>
         </group>
     </open-files>
 </project-private>

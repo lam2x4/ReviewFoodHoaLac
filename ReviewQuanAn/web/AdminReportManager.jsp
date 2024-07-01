@@ -131,25 +131,52 @@
 
 
             <div class="container-fluid mt-4">
-                <h1 class="mb-4">Blog Management</h1>
+                <h1 class="mb-4">Report Management</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
                             <tr>
                                 <th>ID</th>
-                                <th>Reporter</th>
+                                <th>Reported By</th>
                                 <th>Blog</th>
-                                <th>Type</th>
-                                <th>Description</th>    
+                                <th>Reason</th>
+                                <th>Description</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </tr>
+
                         </thead>
                         <tbody>
-                            
-                            <!-- Add more post rows as needed -->
-                        </tbody>
+                                <c:forEach items="${requestScope.reportList}" var="r">
+                                    <c:if test="${r.is_approved != 0}">
+                                        <tr>
+                                            <td>${r.id}</td>
+                                            <td>${requestScope.report_User.get(r.user_id)}</td>
+                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td>${requestScope.report_ReportType.get(r.type_id)}</td>
+                                            <td>${r.content}</td>                                       
+                                            <td>${r.create_date}</td>
+                                            <c:choose>
+
+                                            <c:when test = "${r.is_approved==0}">
+                                             <td>Waiting </td>
+                                            </c:when>
+
+                                            <c:when test = "${r.is_approved==1}">
+                                               <td>Approved </td>
+                                            </c:when>
+                                                <c:when test = "${r.is_approved==2}">
+                                               <td>Rejected </td>
+                                            </c:when>
+
+                                          
+                                        </c:choose>
+                                            
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                <!-- Add more report rows as needed -->
+                            </tbody>
                     </table>
                 </div>
             </div>

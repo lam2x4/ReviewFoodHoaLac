@@ -101,6 +101,22 @@
         <servlet-name>AdminReportManagement</servlet-name>
         <servlet-class>Controller.AdminReportManagement</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserBlogManagement</servlet-name>
+        <servlet-class>Controller.UserBlogManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserRemoveBlog</servlet-name>
+        <servlet-class>Controller.UserRemoveBlog</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserReportManagement</servlet-name>
+        <servlet-class>Controller.UserReportManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminWaitingReport</servlet-name>
+        <servlet-class>Controller.AdminWaitingReport</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -192,5 +208,21 @@
     <servlet-mapping>
         <servlet-name>AdminReportManagement</servlet-name>
         <url-pattern>/AdminReportManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserBlogManagement</servlet-name>
+        <url-pattern>/UserBlogManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserRemoveBlog</servlet-name>
+        <url-pattern>/UserRemoveBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserReportManagement</servlet-name>
+        <url-pattern>/UserReportManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminWaitingReport</servlet-name>
+        <url-pattern>/AdminWaitingReport</url-pattern>
     </servlet-mapping>
 </web-app>

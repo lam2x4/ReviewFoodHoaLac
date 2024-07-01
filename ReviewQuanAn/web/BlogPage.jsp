@@ -157,12 +157,12 @@
                 <div class="modal-body">
                     <form action="ReportControler" method="post" id="reportForm" onsubmit="return showSuccessAlert()">
                         <input type="hidden" name="blogId" value="<%=(String)request.getAttribute("blogId")%>">
-                        <input type="hidden" name="userId" value="${requestScope.userId}">
+                        <input type="hidden" name="userId" value="${sessionScope.User.id}">
                         <div class="form-group">
                             <label for="reportReason">Select a reason for reporting:</label>
-                            <select class="form-control" id="reportReason" name="typeId">
+                            <select class="form-control" id="reportReason" name="typeId" onchange="updateReasonDescription()">
                                 <c:forEach items="${requestScope.type_list}" var="i">
-                                    <option value="${i.id}">${i.name}</option>
+                                    <option value="${i.id}" data-description="${i.description}">${i.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -187,21 +187,17 @@
             commentBox.style.display = "none";
         <%}%>
         
-        const descriptions = {
-            <c:forEach items="${requestScope.type_list}" var="i">
-                "${i.name}": "${i.description}",
-            </c:forEach>
-        };
-
-        document.getElementById('reportReason').addEventListener('change', function() {
-            const selectedReason = this.value;
-            const description = descriptions[selectedReason];
-            document.getElementById('reasonDescription').innerText = description;
-        });
+       
 
         function showSuccessAlert() {
             alert('Report is successful');
             return true; // To allow form submission to proceed
+        }
+
+        function updateReasonDescription() {
+            const select = document.getElementById('reportReason');
+            const description = select.options[select.selectedIndex].getAttribute('data-description');
+            document.getElementById('reasonDescription').innerText = description;
         }
     </script>
 </body>
