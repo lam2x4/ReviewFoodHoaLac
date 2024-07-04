@@ -27,7 +27,7 @@
         <div class="profile-nav">
             
             <a href="UserProfile.jsp" >Overview</a>
-            <a href="UserBlogManagement">Post</a>
+            <a href="UserBlogManagement">Blog</a>
             <a href="UserReportManagement">Report</a>
             
         </div>

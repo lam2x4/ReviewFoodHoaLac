@@ -117,6 +117,10 @@
         <servlet-name>AdminWaitingReport</servlet-name>
         <servlet-class>Controller.AdminWaitingReport</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserProfile</servlet-name>
+        <servlet-class>Controller.UserProfile</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -224,5 +228,9 @@
     <servlet-mapping>
         <servlet-name>AdminWaitingReport</servlet-name>
         <url-pattern>/AdminWaitingReport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserProfile</servlet-name>
+        <url-pattern>/UserProfile</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -4,9 +4,18 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Reports</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script> <!-- Add Font Awesome -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>   
+        <title>Report</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -101,64 +110,76 @@
     <body>
         <%@ include file="Header.jsp" %>
         <%@include file="NavbarProfile.jsp" %>
-        <div class="content">       
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="container mt-5 mb-5">
-                    <h1>Reports</h1>
-                    <div class="table-container">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Blog</th>
-                                    <th>Reason</th>
-                                    <th>Description</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${requestScope.reportList}" var="r">
 
+        <c:if test="${requestScope.reportList.size()==0}">
+            <div class="content" style="height:450px"> 
+                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
+                <p>u/No-Butterscotch-1291 hasn't posted yet</p>
+            </div>
+        </c:if>
+
+        <c:if test="${requestScope.reportList.size()!=0}">
+
+
+
+            <div class="content">       
+                <!-- Main Content -->
+                <div class="main-content">
+                    <div class="container mt-5 mb-5">
+                        <h1>Reports</h1>
+                        <div class="table-container">
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <td>${r.id}</td>
-                                        <td>${requestScope.report_User.get(r.user_id)}</td>
-                                        <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
-                                        <td>${requestScope.report_ReportType.get(r.type_id)}</td>
-                                        <td>${r.content}</td>                                       
-                                        <td>${r.create_date} </td>
-                                        <c:choose>
-
-                                            <c:when test = "${r.is_approved==0}">
-                                             <td>Waiting </td>
-                                            </c:when>
-
-                                            <c:when test = "${r.is_approved==1}">
-                                               <td>Approved </td>
-                                            </c:when>
-                                                <c:when test = "${r.is_approved==2}">
-                                               <td>Rejected </td>
-                                            </c:when>
-
-                                          
-                                        </c:choose>
-                                       
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Blog</th>
+                                        <th>Reason</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
                                     </tr>
+                                </thead>
 
-                                </c:forEach>
-                                <!-- Add more post rows as needed -->
-                            </tbody>
-                        </table>
+                                <tbody>
+                                    <c:forEach items="${requestScope.reportList}" var="r">
+
+                                        <tr>
+                                            <td>${r.id}</td>
+                                            <td>${requestScope.report_User.get(r.user_id)}</td>
+                                            <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td>${requestScope.report_ReportType.get(r.type_id)}</td>
+                                            <td>${r.content}</td>                                       
+                                            <td>${r.create_date} </td>
+                                            <c:choose>
+
+                                                <c:when test = "${r.is_approved==0}">
+                                                    <td>Waiting </td>
+                                                </c:when>
+
+                                                <c:when test = "${r.is_approved==1}">
+                                                    <td>Approved </td>
+                                                </c:when>
+                                                <c:when test = "${r.is_approved==2}">
+                                                    <td>Rejected </td>
+                                                </c:when>
+
+
+                                            </c:choose>
+
+                                        </tr>
+
+                                    </c:forEach>
+                                    <!-- Add more post rows as needed -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </c:if>
         <footer>
             <%@ include file="Footer.jsp" %>
         </footer>
 
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0V
+

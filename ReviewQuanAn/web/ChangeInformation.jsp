@@ -56,12 +56,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <a href="ChangeInformation.jsp"><i class="fas fa-user"></i> Profile</a>
-                <a href="posts.jsp"><i class="fas fa-pencil-alt"></i> Posts</a>
-                <a href="report.jsp"><i class="fas fa-chart-bar"></i> Report</a>
-                <a href="bookmark.jsp"><i class="fas fa-bookmark"></i> Bookmark</a>
-            </div>
+           
 
             <!-- Main Content -->
             <div class="col-md-10 main-content">

@@ -10,7 +10,7 @@ public class Blog {
     private int likes;
     private int is_approved;
     private int is_banned;
-    private int author_id;
+    
     private String reason_reject;
 
     public String getReason_reject() {
@@ -104,13 +104,7 @@ public class Blog {
         this.author_id = author_id;
     }
 
-    public int getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
-    }
+   
     
 
     public int getId() {
