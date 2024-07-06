@@ -5,8 +5,14 @@
 package Controller;
 
 import dao.DAOBlog;
+import dao.DAOComment;
+import dao.DAOReport;
+import dao.DAOReportType;
 import dao.DAOUser;
 import entity.Blog;
+import entity.Comment;
+import entity.Report;
+import entity.ReportType;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +20,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -23,7 +30,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class AdminBlogManagement extends HttpServlet {
+public class UserCommentManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +49,10 @@ public class AdminBlogManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminBlogManagement</title>");
+            out.println("<title>Servlet UserCommentManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminBlogManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UserCommentManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,39 +71,35 @@ public class AdminBlogManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            DAOBlog daoBlog = new DAOBlog();
+
             DAOUser daoUser = new DAOUser();
-            HashMap<Integer, String> blog_User = new HashMap<>();
-            HashMap<Integer, String> blog_Approved = new HashMap<>();
-            
-            for (Blog blog : daoBlog.getAll()) {
+            User user1 = daoUser.getUser(Integer.parseInt(request.getParameter("user_id")));
+            HashMap<Integer, String> Comment_User = new HashMap<>();
+            HashMap<Integer, String> Comment_Blog = new HashMap<>();
+            DAOBlog daoBlog = new DAOBlog();
+            DAOComment daoComment = new DAOComment();
+            for (Comment comment : daoComment.GetAllById(user1.getId())) {
                 for (User user : daoUser.getAll()) {
-                    if (blog.getUser_id() == user.getId()) {
-                        blog_User.put(blog.getUser_id(), user.getUsername());
+                    if (comment.getUser_id() == user.getId()) {
+                        Comment_User.put(comment.getUser_id(), user.getUsername());
                     }
                 }
             }
-            for (Blog blog : daoBlog.getAll()) {
-                if (blog.getIs_approved() == 1) {
-                    blog_Approved.put(blog.getId(), "Approved");
-                   
-                } else if (blog.getIs_approved() == 3) {
-                    blog_Approved.put(blog.getId(), "Banned");
-                     
-                } else if (blog.getIs_approved() == 2) {
-                    blog_Approved.put(blog.getId(), "Reject");
-                     
+            for (Comment comment : daoComment.GetAllById(user1.getId())) {
+                for (Blog blog : daoBlog.getAll()) {
+                    if (comment.getBlog_id() == blog.getId()) {
+                        Comment_Blog.put(comment.getBlog_id(), blog.getTitle());
+                    }
                 }
-                
             }
-            
-            
-            request.setAttribute("blog_Approved", blog_Approved);
-            request.setAttribute("BlogList", daoBlog.getAll());
-            request.setAttribute("Blog_User", blog_User);
-            request.getRequestDispatcher("AdminBlogManagerPage.jsp").forward(request, response);
+
+            request.setAttribute("user", user1);
+            request.setAttribute("commentList", daoComment.GetAllById(user1.getId()));
+            request.setAttribute("Comment_Blog", Comment_Blog);
+            request.setAttribute("Comment_User", Comment_User);
+            request.getRequestDispatcher("UserCommentManager.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdminBlogManagement.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

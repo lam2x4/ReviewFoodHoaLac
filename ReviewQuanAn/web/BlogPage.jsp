@@ -18,6 +18,40 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <style>
+            .report-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .report-button:hover {
+                background-color: #f5c6cb;
+            }
+            .report-modal .modal-body {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+          
+            .modal-header .close {
+                margin: -1rem -1rem -1rem auto;
+            }
+            .report-description {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+                width: 100%;
+            }
+        </style>
     </head>
     <body>
         <!-- Navigation Bar -->
@@ -26,13 +60,17 @@
           Vector<Images> imgs = (Vector<Images>)request.getAttribute("blogPictures");
           Vector<String> avatars = (Vector<String>)request.getAttribute("commentAvatars");%>
         <div class="post-container">
-            <div class="post-header">
+            <div class="post-header" style="position: relative;">
                 <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
                     <h2><a href="" class="profile-link">Original Author: <%=(String)request.getAttribute("authorname")%></a></h2>
                     <p><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
+                    <c:if test="${sessionScope.User!=null}">
+                         <button class="report-button" data-toggle="modal" data-target="#reportModal">Report</button>
+                    </c:if>
+               
             </div>
             <h2 class="post-title"><%=(String)request.getAttribute("blogTitle")%></h2>
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
@@ -45,14 +83,12 @@
             <div id="myModal" class="modal">
                 <span class="close cursor" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i></span>
                 <div class="modal-content">
-
                     <%for(int i = 0; i < imgs.size(); i++){ %>
                     <div class="mySlides">
                         <div class="numbertext"><%=i+1%> / <%=imgs.size()%></div>
                         <img src="<%=imgs.get(i).getLink()%>" style="width:100%">
                     </div>
                     <%}%>
-
                     <a class="prev" onclick="plusSlides(-1)"><i class="fa-solid fa-chevron-left"></i></a>
                     <a class="next" onclick="plusSlides(1)"><i class="fa-solid fa-chevron-right"></i></a>
                 </div>
@@ -70,8 +106,8 @@
                     <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
                 </div>
                 <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
-                <input type="submit" class="button" role="button" value="Share">
-                <input type="hidden" name="service" value="repost">
+                    <input type="submit" class="button" role="button" value="Share">
+                    <input type="hidden" name="service" value="repost">
                 </form>
             </div>
             <hr>
@@ -99,7 +135,7 @@
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
+                            <p><a href="UserBlogManagement?user_id=<%=comments.get(i).getUser_id()%>" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
                             <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
                                 <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
@@ -113,14 +149,59 @@
                 </div>
             </div>
         </div>
+
+        <!-- Report Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Report Content</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="ReportControler" method="post" id="reportForm" onsubmit="return showSuccessAlert()">
+                            <input  name="blogId" value="<%=(String)request.getAttribute("blogId")%>" hidden="true">
+                            <input  name="userId" value="${sessionScope.User.id}" hidden="true">
+                            <div class="form-group">
+                                <label for="reportReason">Select a reason for reporting:</label>
+                                <select class="form-control" id="reportReason" name="typeId" onchange="updateReasonDescription()">
+                                    <c:forEach items="${requestScope.type_list}" var="i">
+                                        <option value="${i.id}" data-description="${i.description}">${i.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div id="reasonDescription" class="report-description">${requestScope.type_list.get(0).description}</div>
+                            <div class="form-group">
+                                <label for="reportDescription">Description:</label>
+                                <textarea class="form-control" id="reportDescription" name="reportDescription" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Report</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-                                    updateCommentCount();
+            updateCommentCount();
             <%if(request.getAttribute("commentProfPic") == null){%>
-                                    const commentBox = document.getElementById('comment-box');
-                                    commentBox.style.display = "none";
+            const commentBox = document.getElementById('comment-box');
+            commentBox.style.display = "none";
             <%}%>
+
+            function showSuccessAlert() {
+                alert('Report is successful');
+                return true; // To allow form submission to proceed
+            }
+
+            function updateReasonDescription() {
+                const select = document.getElementById('reportReason');
+                const description = select.options[select.selectedIndex].getAttribute('data-description');
+                document.getElementById('reasonDescription').innerText = description;
+            }
         </script>
     </body>
 </html>

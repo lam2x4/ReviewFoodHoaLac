@@ -5,8 +5,13 @@
 package Controller;
 
 import dao.DAOBlog;
+import dao.DAOComment;
+import dao.DAOReport;
+import dao.DAOReportType;
 import dao.DAOUser;
 import entity.Blog;
+import entity.Report;
+import entity.ReportType;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +29,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class AdminBlogManagement extends HttpServlet {
+public class AdminReportManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +48,10 @@ public class AdminBlogManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminBlogManagement</title>");
+            out.println("<title>Servlet AdminReportManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminBlogManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AdminReportManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,40 +70,53 @@ public class AdminBlogManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            DAOBlog daoBlog = new DAOBlog();
-            DAOUser daoUser = new DAOUser();
+
             HashMap<Integer, String> blog_User = new HashMap<>();
-            HashMap<Integer, String> blog_Approved = new HashMap<>();
-            
-            for (Blog blog : daoBlog.getAll()) {
-                for (User user : daoUser.getAll()) {
+            HashMap<Integer, String> report_User = new HashMap<>();
+            HashMap<Integer, String> report_ReportType = new HashMap<>();
+            DAOUser daouser = new DAOUser();
+            DAOBlog daoblog = new DAOBlog();
+            DAOComment daocomment = new DAOComment();
+            DAOReport daoreport = new DAOReport();
+            DAOReportType daoReportType = new DAOReportType();
+            int blogNumber = daoblog.getAll().size();
+            int commentNumber = daocomment.viewAll().size();
+            int userNumber = daouser.getAll().size();
+            for (Blog blog : daoblog.getAll()) {
+                for (User user : daouser.getAll()) {
                     if (blog.getUser_id() == user.getId()) {
                         blog_User.put(blog.getUser_id(), user.getUsername());
                     }
                 }
             }
-            for (Blog blog : daoBlog.getAll()) {
-                if (blog.getIs_approved() == 1) {
-                    blog_Approved.put(blog.getId(), "Approved");
-                   
-                } else if (blog.getIs_approved() == 3) {
-                    blog_Approved.put(blog.getId(), "Banned");
-                     
-                } else if (blog.getIs_approved() == 2) {
-                    blog_Approved.put(blog.getId(), "Reject");
-                     
+            for (Report report : daoreport.getAll()) {
+                for (User user : daouser.getAll()) {
+                    if (report.getUser_id() == user.getId()) {
+                        report_User.put(report.getUser_id(), user.getUsername());
+                    }
                 }
-                
             }
-            
-            
-            request.setAttribute("blog_Approved", blog_Approved);
-            request.setAttribute("BlogList", daoBlog.getAll());
+            for (Report report : daoreport.getAll()) {
+                for (ReportType reportType : daoReportType.getAll()) {
+                    if (report.getType_id() == reportType.getId()) {
+                        report_ReportType.put(report.getType_id(), reportType.getName());
+                    }
+                }
+            }
+
+            request.setAttribute("report_ReportType", report_ReportType);
+            request.setAttribute("report_User", report_User);
+            request.setAttribute("reportList", daoreport.getAll());
             request.setAttribute("Blog_User", blog_User);
-            request.getRequestDispatcher("AdminBlogManagerPage.jsp").forward(request, response);
+            request.setAttribute("userNumber", userNumber);
+            request.setAttribute("blogNumber", blogNumber);
+            request.setAttribute("commentNumber", commentNumber);
+            request.setAttribute("BlogList", daoblog.getAll());
+            request.getRequestDispatcher("AdminReportManager.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AdminBlogManagement.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**

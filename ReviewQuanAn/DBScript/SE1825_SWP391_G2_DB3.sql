@@ -1,4 +1,4 @@
-USE [master]
+﻿USE [master]
 GO
 
 IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'SE1825_SWP391_G2_DB3')
@@ -24,6 +24,7 @@ CREATE TABLE Ban_Name(
 	id int primary key,
 	[name] nvarchar(10)
 )
+
 CREATE TABLE [User](
 	id int IDENTITY(1,1) primary key,
 	username nvarchar(50) Unique,
@@ -46,15 +47,15 @@ CREATE TABLE Approve_Name(
 
 CREATE TABLE Blog(
 	id int Identity(1,1) primary key,
-	[user_id] int foreign key references [user](id),
-	title nvarchar(max) not null,
+	[user_id] int foreign key references [user](id), 
+    title nvarchar(max) not null,
 	content nvarchar(max) not null,
 	create_date nvarchar(20) not null,
 	likes int,
 	is_approved int foreign key references Approve_Name(id),
-	is_banned int not null,
-	author_id int foreign key references [user](id),
-
+	is_banned int foreign key references Ban_Name(id),
+	[author_id] int foreign key references [user](id),
+	reason_reject nvarchar(100),
 )
 
 CREATE TABLE Images(
@@ -92,6 +93,32 @@ CREATE TABLE CommentLikes(
 	foreign key ([user_id]) references [User](id),
 	foreign key (comment_id) references Comment(id)
 )
+CREATE TABLE Report_Type(
+	id int identity(1,1) primary key ,
+	[type_name] nvarchar(30),
+	[description] nvarchar(150),
+	
+)
+
+CREATE TABLE Report(
+	id int identity(1,1) primary key,
+	[user_id] int foreign key references [User](id),
+	[blog_id] int foreign key references Blog(id),
+	[content] nvarchar(100),
+	create_date nvarchar(20) not null,
+	[type_id] int foreign key references Report_Type(id),
+	[is_approved] int foreign key references Approve_Name(id),
+	
+)
+
+create table BookMark(
+id int Identity(1,1) primary key,
+[user_id] int foreign key references [user](id),
+[blog_id] int foreign key references Blog(id),
+)
+
+
+
 
 create table Report(
 id int Identity(1,1) primary key,
@@ -107,6 +134,21 @@ id int Identity(1,1) primary key,
 )
 
 -- Insert data into the Role table
+
+
+INSERT INTO Report_Type([type_name],[description])  VALUES
+('Harassment', 'Reports related to harassment or abusive behavior'),
+('Spam', 'Reports regarding unsolicited or irrelevant messages'),
+('Violence', 'Reports of violent content or threatening behavior'),
+('Hate Speech', 'Reports involving discriminatory or hateful speech'),
+('Misinformation', 'Reports about false or misleading information'),
+('Impersonation', 'Reports about accounts impersonating other individuals or entities'),
+('Child Exploitation', 'Reports related to child exploitation or abuse'),
+('Scams', 'Reports regarding fraudulent schemes or deceptive practices'),
+('Privacy Violation', 'Reports about unauthorized use of personal information'),
+('Self-Harm', 'Reports related to content promoting self-harm or suicide'),
+('Other', 'Reports that do not fit into any other predefined categories');
+
 INSERT INTO [Role] (role_id, role_name)
 VALUES (1, 'admin'),
        (2, 'user');
@@ -117,41 +159,73 @@ VALUES (0, 'Active'),
 
 -- Insert data into the User table
 INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], create_date, verify_status, role_id, is_banned)
-VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', 'photo_7_2024-06-06_11-09-40.jpg', 1, 'Tuan Anh', '15/6/2024', 1, 2, 0),
+VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', 'photo_7_2024-06-06_11-09-40.jpg', 1, 'Tuan Anh', '15/6/2024', 1, 1, 0),
        ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', 'photo_5_2024-06-06_11-09-40.jpg', 1, 'Hoang Anh','15/6/2024', 1, 2, 0),
        ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', 'photo_6_2024-06-06_11-09-40.jpg', 1, 'Kien', '15/6/2024', 1, 2, 0),
 	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', 'photo_1_2024-06-06_11-09-40.jpg', 1, 'Viet', '15/6/2024', 1, 2, 0),
-       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0);
+       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0),
+	    ('lam', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'haha@fpt.edu.vn', '123', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0);
 
 INSERT INTO Approve_Name(id, [name])
 VALUES (0, 'Waiting'),
 	   (1, 'Approved'),
-	   (2, 'Reject');
+	   (2, 'Reject'),
+	   (3,'Ban'),
+	   (4,'Remove');
 
+	   SET IDENTITY_INSERT [dbo].[Blog] ON 
 -- Insert data into the Blog table
-INSERT INTO Blog ([user_id], title, content, create_date, likes, is_approved, is_banned, author_id)
-VALUES (1, 'Review of Cafeteria 1', 'The food is 6/10', '15/06/2024', 10, 1, 0, 2),
-       (2, 'Review of Cafeteria 2', 'The food is 7/10', '15/06/2024', 15, 1, 0, 2),
-       (3, 'Review of Cafeteria 1', 'The food is 10/10', '15/06/2024', 20, 1, 0, 3),
-       (4, 'Review of Cafeteria 2', 'The food is 9/10', '15/06/2024', 8, 1, 0, 4),
-	   (5, 'Review of Cafeteria 3', 'The food is 11/10', '15/06/2024', 8, 1, 0, 5);
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (7, 5, N'Review Quán Ăn Bún Đậu Đồng Mô', N'Đây là một quán rất ngon và tuyệt vời, nhân viên nhiệt tình nhanh nhạy, bún đậu ngon, nhiều topping ', N'11/06/2024', 0, 2, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (8, 5, N'Review Quán Kem Mixue Cây Xăng 39', N'Kem ngon,rẻ , nhưng nước uống hơi ngọt, không hợp với tôi ', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (9, 5, N'Review Quán Ăn Bún Bò Huế Thái Anh', N'Nước dùng đậm đà, mỗi tội không có điều hòa', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (10, 5, N'Review Quán Ăn Gà Ri Phú Bình', N'Rất ngon, đậm đà, gà rất dai và ngon', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (11, 5, N'Review Nhà Hàng Huy Cường', N'Cực sang trọng, rất nên thử, thức ăn đa dạng phong phú, món ăn đậm đà, đặc biệt món bò xào hành tây cực cuốn', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject)VALUES (12, 5, N'Review Quán Ăn 1988 BBQ', N'Thịt hơi động lạnh tí, ăn không ngon, thịt rất mỏng , thái nhỏ xíu, nhân viên thái độ không tốt ', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (13,5 ,N'Review Nhà Hãng Nguyễn Gia', N'Rất ngon , trông sang trọng , giá trung bình từ 200-300k một món, rất vừa túi với người giàu ', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject)VALUES (14, 5, N'Review Quán Nước Cà Phê Bao Cấp', N'Khá ổn, giá nước tầm 30-35k khá vừa giá, đặc biệt cà phê rất ngon', N'11/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (17, 5, N'Review Quán Bún bò đồng đậu', N'Quán ăn rất ngon
 
+Nhưng hơi đắt
+
+
+Ủng hộ', N'12/06/2024', 0, 1, 0,5,null)
+   SET IDENTITY_INSERT [dbo].[Blog] off 
+
+SET IDENTITY_INSERT [dbo].[Images] ON 
 -- Insert data into the Images table
-INSERT INTO Images (blog_id, link)
-VALUES (1, '1.jpg'),
-       (1, '2.jpg'),
-       (1, '3.jpg'),
-	   (2, '4.jpg'),
-       (2, '5.png'),
-	   (3, '5.png'),
-	   (3, '5.png'),
-	   (4, '5.png'),
-	   (4, '5.png'),
-	   (5, '5.png');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (10, 7, N'9aa017e7-207d-4afd-8197-127bf84ddd29_mau-bill-an-uong-6_1597330928.jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (11, 7, N'fa5c1abd-6a4b-4ec0-aca6-8a8cb2eef78e_nội-thất-quán-ăn-2.jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (12, 7, N'd6898f36-7926-4a98-81aa-e4888fce80fc_thiet-ke-quan-an.jpeg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (13, 8, N'30ac5e9a-534e-40f3-919f-c46441d6c073_mau-bill-an-uong-6_1597330928.jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (14, 8, N'058be914-e6e6-439f-bf8b-c4d0fdbaf2d6_1670824558-franchise-mixue-20230725145847105.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (15, 9, N'af3eb0f1-8893-4a15-985a-990bb8a6eec6_mau-bill-an-uong-6_1597330928.jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (16, 9, N'a07a2f59-47e9-4bd1-b5a1-6ee6bba77de2_images (1).jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (17, 9, N'2eeb23cc-b1bc-4e6e-9ecb-0a9462651dd0_images.jpg');
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (18, 10, N'6d0ab0f0-b265-49c7-a436-f16533ac1734_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (19, 10, N'3217c234-899f-4246-9c1e-84f7e7566405_len1435799157.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (20, 10, N'7e4020f8-cbc8-4248-888e-a85ecc059119_nội-thất-quán-ăn-2.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (21, 10, N'3c07468f-ad7e-47aa-bdd1-451093f21ec2_thiet-ke-quan-an.jpeg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (22, 11, N'1e5dbc8c-ca70-43e9-81dd-096fe9769017_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (23, 11, N'e0576909-dc47-463d-8b25-70dcba5eea8f_2019-11-17.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (24, 12, N'934f88ca-b4f0-41b2-8613-893b27ff4027_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (25, 12, N'956ad4ba-2df1-4135-8caa-366df19d6a47_2021-10-23.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (26, 12, N'e2e8cf05-4e37-4358-904c-31dc9b09e175_2019-11-17.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (27, 13, N'3f1a9557-e860-49a1-ac41-3f248ebf6c29_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (28, 13, N'0b96b021-8eae-44df-8de2-c7ba4e7a8e57_IMG20221119105711.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (29, 13, N'3f0bab1e-7a69-4803-93b9-18671a82f4c5_2021-10-23.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (30, 14, N'f9f9f1e5-ab8a-4fd4-8f0e-376eaca220c1_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (31, 14, N'e09c1800-4bb3-4279-a4fa-05405fd62a21_2023-07-18.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (38, 17, N'f2d74e2f-b899-48d5-bfb4-b5b03d5ce5b2_mau-bill-an-uong-6_1597330928.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (39, 17, N'e45c3fff-2038-4975-b62f-0d7fa7a6f714_2023-07-18.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (40, 17, N'f05f1c20-6003-4972-9a4c-f5b160954fe7_IMG20221119105711.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (41, 17, N'6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (42, 17, N'e11c0278-76df-486a-aed9-f58f949767a9_2021-10-23.jpg')
+INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (43, 17, N'ff26210e-44bb-49f6-b8cc-bc7ee405363b_2019-11-17.jpg')
+SET IDENTITY_INSERT [dbo].[Images] off 
 -- Insert data into the Comment table
 INSERT INTO Comment ([user_id], blog_id, content, create_date, likes, is_banned)
-VALUES (1, 1, 'Tuan Anh comment', '15/06/2024', 5, 0),
-       (2, 2, 'Hoang Anh comment', '15/06/2024', 3, 0),
-       (3, 3, 'Kien comment', '15/06/2024', 7, 0),
-       (4, 4, 'Viet comment', '15/06/2024', 12, 0),
-       (5, 5, 'Lam comment', '15/06/2024', 6, 0);
+VALUES (1, 7, 'Tuan Anh comment', '15/06/2024', 5, 0),
+       (2, 8, 'Hoang Anh comment', '15/06/2024', 3, 0),
+       (3, 9, 'Kien comment', '15/06/2024', 7, 0),
+       (4, 9, 'Viet comment', '15/06/2024', 12, 0),
+       (5, 9, 'Lam comment', '15/06/2024', 6, 0);
