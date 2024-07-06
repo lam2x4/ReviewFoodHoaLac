@@ -161,7 +161,7 @@
                                         <img src="img/${sessionScope.User.getAvatar()}" class="rounded-circle" alt="User Profile">
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="UserProfile.jsp"><i class="fas fa-user-circle"></i> profile</a>
+                                        <a class="dropdown-item" href="UserBlogManagement?user_id=${sessionScope.User.id}"><i class="fas fa-user-circle"></i> profile</a>
                                         <a class="dropdown-item" href="ChangeInformation.jsp"><i class="fas fa-user-edit"></i> update</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="UserController?service=logout"><i class="fas fa-sign-out-alt"></i> Logout</a>

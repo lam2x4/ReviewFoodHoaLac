@@ -103,7 +103,7 @@
                                 <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 <div class="card-body">
                                     <h4 class="card-title">${i.title}</h4>
-                                    <p class="card-text">${i.content}</p>
+                                   
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <div class="text-muted" >${i.create_date}</div>
                                         <c:choose>

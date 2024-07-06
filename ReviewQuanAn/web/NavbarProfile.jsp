@@ -10,26 +10,25 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+
     </head>
     <style>
-        
+
     </style>
-    
+
     <body>
         <div class="profile-header">
-                <img src="img/${sessionScope.User.avatar}" alt="Profile Picture">
-                <div class="profile-info">
-                    <h1>${sessionScope.User.username}</h1>
-                 
-                </div>
+            <img src="img/${requestScope.user.avatar}" alt="Profile Picture">
+            <div class="profile-info">
+                <h1>${requestScope.user.username}</h1>
+
             </div>
+        </div>
         <div class="profile-nav">
-            
-            <a href="UserProfile.jsp" >Overview</a>
-            <a href="UserBlogManagement">Blog</a>
-            <a href="UserReportManagement">Report</a>
-            
+         
+            <a href="UserBlogManagement?user_id=${requestScope.user.id}">Blog</a>
+            <a href="UserReportManagement?user_id=${requestScope.user.id}">Report</a>
+            <a href="UserCommentManagement?user_id=${requestScope.user.id}">Comment</a>
         </div>
     </body>
 </html>

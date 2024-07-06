@@ -121,6 +121,14 @@
         <servlet-name>UserProfile</servlet-name>
         <servlet-class>Controller.UserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserCommentManagement</servlet-name>
+        <servlet-class>Controller.UserCommentManagement</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserUnremoveBlog</servlet-name>
+        <servlet-class>Controller.UserUnremoveBlog</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -232,5 +240,13 @@
     <servlet-mapping>
         <servlet-name>UserProfile</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserCommentManagement</servlet-name>
+        <url-pattern>/UserCommentManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserUnremoveBlog</servlet-name>
+        <url-pattern>/UserUnremoveBlog</url-pattern>
     </servlet-mapping>
 </web-app>

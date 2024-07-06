@@ -135,7 +135,7 @@
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
+                            <p><a href="UserBlogManagement?user_id=<%=comments.get(i).getUser_id()%>" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
                             <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
                                 <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
@@ -162,8 +162,8 @@
                     </div>
                     <div class="modal-body">
                         <form action="ReportControler" method="post" id="reportForm" onsubmit="return showSuccessAlert()">
-                            <input  name="blogId" value="<%=(String)request.getAttribute("blogId")%>">
-                            <input  name="userId" value="${sessionScope.User.id}">
+                            <input  name="blogId" value="<%=(String)request.getAttribute("blogId")%>" hidden="true">
+                            <input  name="userId" value="${sessionScope.User.id}" hidden="true">
                             <div class="form-group">
                                 <label for="reportReason">Select a reason for reporting:</label>
                                 <select class="form-control" id="reportReason" name="typeId" onchange="updateReasonDescription()">

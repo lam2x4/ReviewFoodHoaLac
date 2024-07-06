@@ -116,6 +116,13 @@
         <%@include file="./Header.jsp" %>
         <%@include file="./NavbarProfile.jsp" %>
 
+        <c:if test="${requestScope.list.size()==0}">
+            <div class="content" style="height:450px"> 
+                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
+                <p>${requestScope.user.username} hasn't posted yet</p>
+            </div>
+        </c:if>
+
         <div class="container mt-4">
             <div class="row">
                 <c:forEach items="${requestScope.list}" var="i">
@@ -124,59 +131,66 @@
                             <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                             <div class="card-body">
                                 <h4 class="card-title">${i.title}</h4>
-                                <p class="card-text">${i.content}</p>
+                                
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <div class="text-muted">${i.create_date}</div>
-                                    <c:choose>
-                                        <c:when test="${i.reason_reject != null}">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='This blog is rejected by admin.Reason:${i.reason_reject}'>
+                                    <c:if test="${requestScope.user.id==sessionScope.User.id}"> 
+                                        <c:choose>
+                                            <c:when test="${i.reason_reject != null}">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='This blog is rejected by admin.Reason:${i.reason_reject}'>
 
-                                                Rejected
-                                            </button>
-                                        </c:when>
-                                        <c:when test="${i.is_approved ==0}">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                Waiting
-                                            </button>
-                                        </c:when>
-                                        
-                                           <c:when test="${i.is_approved ==4}">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                Hidden
-                                            </button>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="This blog is approved by admin">
-                                                Approved
-                                            </button>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:choose>
-                                        <c:when test="${i.id != null}">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Actions
+                                                    Rejected
                                                 </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
-                                                    <a class="dropdown-item" href="UserRemoveBlog?id=${i.id}">Hide Blog</a>
-                                                </div>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Actions
+                                            </c:when>
+                                            <c:when test="${i.is_approved ==0}">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
+
+                                                    Waiting
                                                 </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="BlogPageController">See Detail</a>
-                                                    <a class="dropdown-item" href="RemoveBlog">Remove</a>
+                                            </c:when>
+
+                                            <c:when test="${i.is_approved ==4}">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
+
+                                                    Hidden
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="This blog is approved by admin">
+                                                    Approved
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
+                                    <c:if test="${requestScope.user.id!=sessionScope.User.id}">                         
+
+                                        <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
+
+                                    </c:if>
+                                    <c:if test="${requestScope.user.id==sessionScope.User.id}">                                                          
+
+                                        <c:choose>
+                                            <c:when test="${i.id != null}">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
+                                                        <c:if test="${i.is_approved==4}">
+                                                             <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
+                                                        </c:if>
+                                                       <c:if test="${i.is_approved!=4}">
+                                                             <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
+                                                       </c:if>
+                                                       
+                                                       
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                            </c:when>
+
+                                        </c:choose> 
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -193,19 +207,19 @@
                         <ul class="pagination justify-content-center">
                             <c:if test="${page > 1}">
                                 <li class="page-item">
-                                    <a class="page-link" href="UserBlogManagement?page=${page - 1}" aria-label="Previous">
+                                    <a class="page-link" href="UserBlogManagement?user_id=${requestScope.user.id}&&page=${page - 1}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                             </c:if>
                             <c:forEach begin="1" end="${requestScope.num}" var="i">
                                 <li class="page-item ${i == page ? 'active' : ''}">
-                                    <a class="page-link" href="UserBlogManagement?page=${i}">${i}</a>
+                                    <a class="page-link" href="UserBlogManagement?user_id=${requestScope.user.id}&&page=${i}">${i}</a>
                                 </li>
                             </c:forEach>
                             <c:if test="${page < requestScope.num}">
                                 <li class="page-item">
-                                    <a class="page-link" href="UserBlogManagement?page=${page + 1}" aria-label="Next">
+                                    <a class="page-link" href="UserBlogManagement?user_id=${requestScope.user.id}&&page=${page + 1}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

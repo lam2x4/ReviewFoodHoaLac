@@ -70,15 +70,24 @@ public class UserBlogManagement extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        HttpSession session= request.getSession();
-        User user = (User)session.getAttribute("User");
+        HttpSession session = request.getSession();
+        DAOUser daoUser = new DAOUser();
+
+        User user = daoUser.getUser(Integer.parseInt(request.getParameter("user_id")));
+        User account = (User) session.getAttribute("User");
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
         HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
         Vector<Images> listFake;
+        Vector<Blog> list;
         try {
+            if (account != null && user.getId() == account.getId()) {
+                list = dao.getAllById(user.getId());
+            } else {
+                list = dao.getAllByIdApproved(user.getId());
+            }
 
-            Vector<Blog> list = dao.getAllById(user.getId());
+           
             Vector<Images> imageList = daoImage.getAll();
             for (Blog blog : list) {
 
@@ -108,6 +117,7 @@ public class UserBlogManagement extends HttpServlet {
             end = Math.min(page * numberpage, size);
             Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
 
+            request.setAttribute("user", user);
             request.setAttribute("page", page);
             request.setAttribute("num", num);
             request.setAttribute("blog_image", Blog_Image);

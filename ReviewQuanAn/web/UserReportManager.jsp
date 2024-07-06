@@ -114,7 +114,7 @@
         <c:if test="${requestScope.reportList.size()==0}">
             <div class="content" style="height:450px"> 
                 <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
-                <p>u/No-Butterscotch-1291 hasn't posted yet</p>
+                <p>${requestScope.user.username} hasn't reported yet</p>
             </div>
         </c:if>
 

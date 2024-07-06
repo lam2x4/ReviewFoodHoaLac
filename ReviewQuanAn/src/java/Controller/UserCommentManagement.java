@@ -10,6 +10,7 @@ import dao.DAOReport;
 import dao.DAOReportType;
 import dao.DAOUser;
 import entity.Blog;
+import entity.Comment;
 import entity.Report;
 import entity.ReportType;
 import entity.User;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class UserReportManagement extends HttpServlet {
+public class UserCommentManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,10 +49,10 @@ public class UserReportManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UserReportManagement</title>");
+            out.println("<title>Servlet UserCommentManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UserReportManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UserCommentManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,39 +71,33 @@ public class UserReportManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            DAOUser daoUser = new DAOUser();
-            User user1 = (User) session.getAttribute("User");
-            if (request.getParameter("user_id") != null) {
-                user1 = daoUser.getUser(Integer.parseInt(request.getParameter("user_id")));
-            }
-            HashMap<Integer, String> report_User = new HashMap<>();
-            HashMap<Integer, String> report_ReportType = new HashMap<>();
-            DAOUser daouser = new DAOUser();
-            DAOBlog daoblog = new DAOBlog();
-            DAOReport daoreport = new DAOReport();
-            DAOReportType daoReportType = new DAOReportType();
 
-            for (Report report : daoreport.getAll()) {
-                for (User user : daouser.getAll()) {
-                    if (report.getUser_id() == user.getId()) {
-                        report_User.put(report.getUser_id(), user.getUsername());
+            DAOUser daoUser = new DAOUser();
+            User user1 = daoUser.getUser(Integer.parseInt(request.getParameter("user_id")));
+            HashMap<Integer, String> Comment_User = new HashMap<>();
+            HashMap<Integer, String> Comment_Blog = new HashMap<>();
+            DAOBlog daoBlog = new DAOBlog();
+            DAOComment daoComment = new DAOComment();
+            for (Comment comment : daoComment.GetAllById(user1.getId())) {
+                for (User user : daoUser.getAll()) {
+                    if (comment.getUser_id() == user.getId()) {
+                        Comment_User.put(comment.getUser_id(), user.getUsername());
                     }
                 }
             }
-            for (Report report : daoreport.getAll()) {
-                for (ReportType reportType : daoReportType.getAll()) {
-                    if (report.getType_id() == reportType.getId()) {
-                        report_ReportType.put(report.getType_id(), reportType.getName());
+            for (Comment comment : daoComment.GetAllById(user1.getId())) {
+                for (Blog blog : daoBlog.getAll()) {
+                    if (comment.getBlog_id() == blog.getId()) {
+                        Comment_Blog.put(comment.getBlog_id(), blog.getTitle());
                     }
                 }
             }
 
             request.setAttribute("user", user1);
-            request.setAttribute("report_ReportType", report_ReportType);
-            request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAllById(user1.getId()));
-            request.getRequestDispatcher("UserReportManager.jsp").forward(request, response);
+            request.setAttribute("commentList", daoComment.GetAllById(user1.getId()));
+            request.setAttribute("Comment_Blog", Comment_Blog);
+            request.setAttribute("Comment_User", Comment_User);
+            request.getRequestDispatcher("UserCommentManager.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }

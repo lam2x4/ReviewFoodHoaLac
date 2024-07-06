@@ -59,9 +59,10 @@ public class UserRemoveBlog extends HttpServlet {
     throws ServletException, IOException {
         try {
             DAOBlog dao = new DAOBlog();
+            
             int blog_id = Integer.parseInt(request.getParameter("id"));
             dao.editBlogApproved(blog_id,4);
-            response.sendRedirect("UserBlogManagement");
+            response.sendRedirect("UserBlogManagement?user_id="+request.getParameter("user_id"));
         } catch (SQLException ex) {
             Logger.getLogger(UserRemoveBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
