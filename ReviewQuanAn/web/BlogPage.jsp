@@ -15,10 +15,25 @@
         <title>Blog Page</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="Css/Blog_Page_Css.css">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <style>
+            .bookmark-button {
+                position: absolute;
+                top: 10px;
+                right: 100px;
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .bookmark-button:hover {
+                background-color: #c3e6cb;
+            }
             .report-button {
                 position: absolute;
                 top: 10px;
@@ -39,7 +54,7 @@
                 flex-wrap: wrap;
                 gap: 10px;
             }
-          
+
             .modal-header .close {
                 margin: -1rem -1rem -1rem auto;
             }
@@ -67,10 +82,13 @@
                     <h2><a href="" class="profile-link">Original Author: <%=(String)request.getAttribute("authorname")%></a></h2>
                     <p><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
-                    <c:if test="${sessionScope.User!=null}">
-                         <button class="report-button" data-toggle="modal" data-target="#reportModal">Report</button>
-                    </c:if>
-               
+                <c:if test="${sessionScope.User!=null}">
+                    <button class="report-button" data-toggle="modal" data-target="#reportModal">Report</button>
+                    <button type="button" class="bookmark-button" id="bookmarkButton" onclick="toggleBookmark()">
+                        <i id="bookmarkButtonIcon" class="${requestScope.isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark'}"></i>
+                        <span id="bookmarkButtonText">${requestScope.isBookmarked ? 'Unbookmark' : 'Bookmark'}</span>
+                    </button>
+                </c:if>
             </div>
             <h2 class="post-title"><%=(String)request.getAttribute("blogTitle")%></h2>
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
@@ -183,25 +201,26 @@
                 </div>
             </div>
         </div>
+
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-            updateCommentCount();
+                                    updateCommentCount();
             <%if(request.getAttribute("commentProfPic") == null){%>
-            const commentBox = document.getElementById('comment-box');
-            commentBox.style.display = "none";
+                                    const commentBox = document.getElementById('comment-box');
+                                    commentBox.style.display = "none";
             <%}%>
 
-            function showSuccessAlert() {
-                alert('Report is successful');
-                return true; // To allow form submission to proceed
-            }
+                                    function showSuccessAlert() {
+                                        alert('Report is successful');
+                                        return true; // To allow form submission to proceed
+                                    }
 
-            function updateReasonDescription() {
-                const select = document.getElementById('reportReason');
-                const description = select.options[select.selectedIndex].getAttribute('data-description');
-                document.getElementById('reasonDescription').innerText = description;
-            }
+                                    function updateReasonDescription() {
+                                        const select = document.getElementById('reportReason');
+                                        const description = select.options[select.selectedIndex].getAttribute('data-description');
+                                        document.getElementById('reasonDescription').innerText = description;
+                                    }
         </script>
     </body>
 </html>

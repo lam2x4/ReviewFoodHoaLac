@@ -129,6 +129,14 @@
         <servlet-name>UserUnremoveBlog</servlet-name>
         <servlet-class>Controller.UserUnremoveBlog</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserBookmark</servlet-name>
+        <servlet-class>Controller.UserBookmark</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookmarkController</servlet-name>
+        <servlet-class>Controller.BookmarkController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -248,5 +256,13 @@
     <servlet-mapping>
         <servlet-name>UserUnremoveBlog</servlet-name>
         <url-pattern>/UserUnremoveBlog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserBookmark</servlet-name>
+        <url-pattern>/UserBookmark</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookmarkController</servlet-name>
+        <url-pattern>/BookmarkController</url-pattern>
     </servlet-mapping>
 </web-app>

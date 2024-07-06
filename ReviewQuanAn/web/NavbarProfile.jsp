@@ -12,10 +12,6 @@
         <title>JSP Page</title>
 
     </head>
-    <style>
-
-    </style>
-
     <body>
         <div class="profile-header">
             <img src="img/${requestScope.user.avatar}" alt="Profile Picture">
@@ -29,6 +25,7 @@
             <a href="UserBlogManagement?user_id=${requestScope.user.id}">Blog</a>
             <a href="UserReportManagement?user_id=${requestScope.user.id}">Report</a>
             <a href="UserCommentManagement?user_id=${requestScope.user.id}">Comment</a>
+            <a href="UserBookmark?user_id=${requestScope.user.id}">Bookmark</a>
         </div>
     </body>
 </html>

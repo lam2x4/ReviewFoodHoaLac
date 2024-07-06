@@ -111,26 +111,10 @@ CREATE TABLE Report(
 	
 )
 
-create table BookMark(
-id int Identity(1,1) primary key,
-[user_id] int foreign key references [user](id),
-[blog_id] int foreign key references Blog(id),
-)
-
-
-
-
-create table Report(
-id int Identity(1,1) primary key,
-[user_id] int foreign key references [User](id),
-[blog_id] int foreign key references Blog(id),
-content nvarchar(750),
-)
-
-create table BookMark(
-id int Identity(1,1) primary key,
-[user_id] int foreign key references [user](id),
-[blog_id] int foreign key references Blog(id),
+create table Bookmark(
+	id int identity(1,1) primary key,
+	[user_id] int foreign key references [User](id),
+	blog_id int foreign key references Blog(id),
 )
 
 -- Insert data into the Role table
@@ -165,6 +149,8 @@ VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.S
 	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', 'photo_1_2024-06-06_11-09-40.jpg', 1, 'Viet', '15/6/2024', 1, 2, 0),
        ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0),
 	    ('lam', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'haha@fpt.edu.vn', '123', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0);
+
+
 
 INSERT INTO Approve_Name(id, [name])
 VALUES (0, 'Waiting'),
@@ -229,3 +215,11 @@ VALUES (1, 7, 'Tuan Anh comment', '15/06/2024', 5, 0),
        (3, 9, 'Kien comment', '15/06/2024', 7, 0),
        (4, 9, 'Viet comment', '15/06/2024', 12, 0),
        (5, 9, 'Lam comment', '15/06/2024', 6, 0);
+
+INSERT INTO Bookmark([user_id], blog_id) 
+VALUES (2,7),
+		(2,8),
+		(2,9),
+		(5,7),
+		(5,8),
+		(5,9);

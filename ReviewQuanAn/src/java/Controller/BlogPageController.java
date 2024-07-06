@@ -55,6 +55,10 @@ public class BlogPageController extends HttpServlet {
 
         if (curUser != null) {
             bl = daoBlogLikes.getBlogLikes(curUser.getId(), blogId);
+            boolean isBookmarked;
+            DAOBookmark daoBookmark = new DAOBookmark();
+            isBookmarked = daoBookmark.getOne(curUser.getId(), blogId) != null;
+            request.setAttribute( "isBookmarked", isBookmarked);
         }
 
         if (service.equals("handlePostLikes")) {
@@ -83,7 +87,7 @@ public class BlogPageController extends HttpServlet {
 
         request.setAttribute("type_list", daoType.getAll());
 
-        request.setAttribute("username", u.getUsername());       
+        request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
         request.setAttribute("profPic", "img/" + u.getAvatar());
         request.setAttribute("userId", u.getId());
