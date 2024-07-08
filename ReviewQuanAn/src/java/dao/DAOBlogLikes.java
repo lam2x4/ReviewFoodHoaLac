@@ -29,7 +29,8 @@ public class DAOBlogLikes extends DBContext {
                 + "WHERE user_id = ? AND blog_id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-
+            Mapper.setRowUpdateBlogLikes(bl, pre);
+            
             return pre.executeUpdate();
         }
     }

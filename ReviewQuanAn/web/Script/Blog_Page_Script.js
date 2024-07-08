@@ -8,7 +8,7 @@ document.getElementById('comment-input').addEventListener('input', function () {
     const commentValue = document.getElementById('comment-input').value.trim();
     const addButton = document.getElementById('add-comment-button');
 
-    addButton.disabled = commentValue === '' ? true : false;
+    addButton.disabled = commentValue === '';
 });
 
 document.getElementById('cancel-button').addEventListener('click', function () {
@@ -78,6 +78,7 @@ function postComment(username, profPic, commentId) {
                             </p>
                             <p style="word-wrap: break-word;">${commentValue}</p>
                             <div class="comment-actions">
+                                <input type="hidden" id="commentLikes-${commentId}" value="0">
                                 <button class="rating" id="like-button-${commentId}" onclick="toggleCommentLike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
                                 <span id="likeCommentCount-${commentId}">0 likes</span>
                                 <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
@@ -136,30 +137,60 @@ function updateCommentCount() {
     const commentCount = comments.length;
 
     // Update the span with the new comment count
-    document.getElementById('commentCount').textContent = `Comments: ${commentCount}`;
+    document.getElementById('commentCount').textContent = `Comments: ${formatNumber(commentCount)}`;
 }
+
+function formatNumber(count) {
+    if (count >= 1000000) {
+        return (Math.floor(count / 100000) / 10).toFixed(1) + 'M';
+    } else if (count >= 1000) {
+        return (Math.floor(count / 100) / 10).toFixed(1) + 'K';
+    } else {
+        return count.toString();
+    }
+}
+//format likes count of the blog
+document.addEventListener("DOMContentLoaded", function () {
+    const blogLikeCount = document.getElementById('likeCount');
+    const likes = document.getElementById('blogLikes').value;
+    const formattedLikes = formatNumber(likes);
+    blogLikeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${formattedLikes}`;
+});
+//format likes count of the comments
+document.addEventListener("DOMContentLoaded", function () {
+    let allCommentLikes = document.querySelectorAll('[id^="commentLikes-"]');
+    let allLikeCommentCount = document.querySelectorAll('[id^="likeCommentCount-"]');
+    
+    for(let i = 0; i < allCommentLikes.length; i++){
+        const likes = allCommentLikes[i].value;
+        allLikeCommentCount[i].innerHTML = `${formatNumber(likes)} likes`;
+    }
+});
 
 function toggleLike() {
     let likeBtn = document.getElementById("like-button");
     let dislikeBtn = document.getElementById("dislike-button");
     let likeCount = document.getElementById("likeCount");
 
-    let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+    let blogLikes = document.getElementById("blogLikes");
+    let likes = blogLikes.value;
 
     const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
     likeBtn.setAttribute('aria-pressed', !isPressed);
 
     let interactionType = likeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'like';
 
+
     if (!isPressed && dislikeBtn.getAttribute('aria-pressed') === 'true') {
         dislikeBtn.setAttribute('aria-pressed', 'false');
-        bloglikes++;
+        likes++;
     }
 
-    isPressed ? bloglikes-- : bloglikes++;
-    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+    isPressed ? likes-- : likes++;
+    blogLikes.setAttribute("value", likes);
+    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${formatNumber(likes)}`;
 
-    sendLikeUpdate(interactionType, bloglikes);
+    sendLikeUpdate(interactionType, likes);
 }
 
 function toggleDislike() {
@@ -167,7 +198,8 @@ function toggleDislike() {
     let dislikeBtn = document.getElementById("dislike-button");
     let likeCount = document.getElementById("likeCount");
 
-    let bloglikes = parseInt(likeCount.innerText.split(': ')[1]);
+    let blogLikes = document.getElementById("blogLikes");
+    let likes = blogLikes.value;
 
     const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
     dislikeBtn.setAttribute('aria-pressed', !isPressed);
@@ -176,13 +208,14 @@ function toggleDislike() {
 
     if (!isPressed && likeBtn.getAttribute('aria-pressed') === 'true') {
         likeBtn.setAttribute('aria-pressed', 'false');
-        bloglikes--;
+        likes--;
     }
 
-    isPressed ? bloglikes++ : bloglikes--;
-    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${bloglikes}`;
+    isPressed ? likes++ : likes--;
+    blogLikes.setAttribute("value", likes);
+    likeCount.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> Likes: ${formatNumber(likes)}`;
 
-    sendLikeUpdate(interactionType, bloglikes);
+    sendLikeUpdate(interactionType, likes);
 }
 
 function sendLikeUpdate(interactionType, blogLikes) {
@@ -208,7 +241,8 @@ function toggleCommentLike(commentId) {
     let dislikeBtn = document.getElementById(`dislike-button-${commentId}`);
     let likeCount = document.getElementById(`likeCommentCount-${commentId}`);
 
-    let likes = parseInt(likeCount.innerText.split(' ')[0]);
+    let commentLikes = document.getElementById(`commentLikes-${commentId}`);
+    let likes = commentLikes.value;
 
     const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
     likeBtn.setAttribute('aria-pressed', !isPressed);
@@ -228,8 +262,8 @@ function toggleCommentLike(commentId) {
         likes++;
         likeBtn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
     }
-
-    likeCount.innerText = `${likes} likes`;
+    commentLikes.setAttribute("value", likes);
+    likeCount.innerText = `${formatNumber(likes)} likes`;
 
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
@@ -239,7 +273,8 @@ function toggleCommentDislike(commentId) {
     let dislikeBtn = document.getElementById(`dislike-button-${commentId}`);
     let likeCount = document.getElementById(`likeCommentCount-${commentId}`);
 
-    let likes = parseInt(likeCount.innerText.split(' ')[0]);
+    let commentLikes = document.getElementById(`commentLikes-${commentId}`);
+    let likes = commentLikes.value;
 
     const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
     dislikeBtn.setAttribute('aria-pressed', !isPressed);
@@ -259,8 +294,8 @@ function toggleCommentDislike(commentId) {
         likes--;
         dislikeBtn.innerHTML = `<i class="fa-solid fa-thumbs-down"></i>`;
     }
-
-    likeCount.innerText = `${likes} likes`;
+    commentLikes.setAttribute("value", likes);
+    likeCount.innerText = `${formatNumber(likes)} likes`;
 
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
@@ -292,7 +327,7 @@ function autoResize() {
 }
 
 //date for blog
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const blogDate = document.getElementById('blogPublishDate');
     const dateString = blogDate.innerHTML;
     const date = new Date(dateString);
@@ -300,11 +335,11 @@ document.addEventListener("DOMContentLoaded", function() {
     blogDate.innerHTML = relativeTime;
 });
 //date for comments
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Get all elements with the class "comment-date"
     const commentDates = document.querySelectorAll('.comment-date');
 
-    commentDates.forEach(function(span) {
+    commentDates.forEach(function (span) {
         // Get the original date string from the span's innerHTML
         const dateString = span.innerHTML;
 

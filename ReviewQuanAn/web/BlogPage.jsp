@@ -52,6 +52,7 @@
             </div>
             <hr>
             <div class="post-sub-info">
+                <input type="hidden" id="blogLikes" value="<%=(int)request.getAttribute("blogLikes")%>">
                 <span id="likeCount" class="count"><i class="fa-solid fa-thumbs-up"></i> Likes: <%=(int)request.getAttribute("blogLikes")%></span>
                 <span id="commentCount" class="count">Comments: 0</span>
             </div>
@@ -99,6 +100,7 @@
                             <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
                             <div class="comment-actions">
                                 <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
+                                <input type="hidden" id="commentLikes-<%=comments.get(i).getId()%>" value="<%=comments.get(i).getLikes()%>">
                                 <button class="rating" id="like-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
                                 <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes</span>
                                 <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
