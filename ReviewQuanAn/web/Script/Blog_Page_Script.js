@@ -76,15 +76,28 @@ function postComment(username, profPic, commentId) {
                                 <a href="" class="profile-link">${username}</a>
                                 <span class="comment-date">just now</span>
                             </p>
-                            <p style="word-wrap: break-word;">${commentValue}</p>
+                            <p style="word-wrap: break-word;">
+                                <span id="commentContent-${commentId}">${commentValue}</span>
+                                <textarea class="editCommentInput" id="editCommentInput-${commentId}" style="display: none;"></textarea>
+                            </p>
+                            <div id="editCommentControls-${commentId}" style="display: none;">
+                                <button class="save-button button" onclick="saveEditedComment(${commentId})">Save</button>
+                                <button class="cancel-button button" onclick="cancelEditComment(${commentId})">Cancel</button>
+                            </div>
                             <div class="comment-actions">
                                 <input type="hidden" id="commentLikes-${commentId}" value="0">
                                 <button class="rating" id="like-button-${commentId}" onclick="toggleCommentLike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
                                 <span id="likeCommentCount-${commentId}">0 likes</span>
                                 <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
+                            <div>
+                                <button class="menu-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <ul class="menu-options" id="editOptions-${commentId}" style="display: none;">
+                                    <li onclick="toggleEditComment(${commentId}, '${commentValue}')"><i class="fa-regular fa-pen-to-square"></i>Edit</li>
+                                    <li onclick="deleteComment(${commentId})"><i class="fa-solid fa-trash"></i>Delete</li>
+                                </ul>
+                            </div>
                         </div>`;
-
 
 
         // Append the new comment to the comment list
@@ -160,8 +173,8 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     let allCommentLikes = document.querySelectorAll('[id^="commentLikes-"]');
     let allLikeCommentCount = document.querySelectorAll('[id^="likeCommentCount-"]');
-    
-    for(let i = 0; i < allCommentLikes.length; i++){
+
+    for (let i = 0; i < allCommentLikes.length; i++) {
         const likes = allCommentLikes[i].value;
         allLikeCommentCount[i].innerHTML = `${formatNumber(likes)} likes`;
     }
@@ -321,6 +334,7 @@ function sendCommentLikeUpdate(interactionType, commentId, commentLikes) {
 textarea = document.querySelector("#comment-input");
 textarea.addEventListener('input', autoResize, false);
 
+
 function autoResize() {
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
@@ -333,25 +347,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const date = new Date(dateString);
     const relativeTime = timeAgo(date);
     blogDate.innerHTML = relativeTime;
-});
-//date for comments
-document.addEventListener("DOMContentLoaded", function () {
-    // Get all elements with the class "comment-date"
-    const commentDates = document.querySelectorAll('.comment-date');
-
-    commentDates.forEach(function (span) {
-        // Get the original date string from the span's innerHTML
-        const dateString = span.innerHTML;
-
-        // Convert the date string to a Date object
-        const date = new Date(dateString);
-
-        // Get the relative time string using the timeAgo function
-        const relativeTime = timeAgo(date);
-
-        // Update the span's innerHTML with the relative time string
-        span.innerHTML = relativeTime;
-    });
 });
 
 function timeAgo(date) {
@@ -388,6 +383,169 @@ function timeAgo(date) {
     return `${years} year${years === 1 ? '' : 's'} ago`;
 }
 
+function sortComments() {
+    var sortOption = document.getElementById("sort-comments").value;
+    var blogId = document.getElementById("BlogId").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Update the comment list with the new sorted comments
+                document.getElementById('comment-list').innerHTML = xhr.responseText;
+            } else {
+                console.error("Failed to switch the comment option. Status: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(`sortOption=${sortOption}&blogId=${encodeURIComponent(blogId)}`);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.addEventListener('click', function (event) {
+        // Toggle menu options
+        if (event.target.closest('.menu-btn')) {
+            event.stopPropagation();
+            const button = event.target.closest('.menu-btn');
+            const options = button.nextElementSibling;
+
+            // Close all other open menus
+            document.querySelectorAll('.menu-options').forEach(menu => {
+                if (menu !== options) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            // Toggle current menu
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+
+            // Check if the menu is within the viewport
+            const rect = options.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight) {
+                options.classList.add('above');
+            } else {
+                options.classList.remove('above');
+            }
+        } else {
+            // Close all menus when clicking anywhere else on the page
+            document.querySelectorAll('.menu-options').forEach(menu => {
+                menu.style.display = 'none';
+            });
+        }
+
+        const textareas = document.querySelectorAll('.editCommentInput');
+
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', autoResize, false);
+        });
+    });
+
+    // Prevent menu options click from closing the menu
+    document.body.addEventListener('click', function (event) {
+        if (event.target.closest('.menu-options')) {
+            event.stopPropagation();
+        }
+    });
+});
+
+function toggleEditComment(commentId, currentContent) {
+    var commentContentSpan = document.getElementById('commentContent-' + commentId);
+    var editCommentInput = document.getElementById('editCommentInput-' + commentId);
+    var editCommentControls = document.getElementById('editCommentControls-' + commentId);
+    var editOptionsDiv = document.getElementById('editOptionsDiv-' + commentId);
+
+    // Toggle display of content and input
+    commentContentSpan.style.display = 'none';
+    editCommentInput.style.display = 'inline-block';
+    editCommentInput.value = currentContent;
+
+    // Hide edit options and show edit controls (textarea, save, cancel)
+    editOptionsDiv.style.display = 'none';
+    editCommentControls.style.display = 'block';
+}
+
+function saveEditedComment(commentId) {
+    var blogId = document.getElementById("BlogId").value;
+    var newContent = document.getElementById('editCommentInput-' + commentId).value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Update the comment content on successful edit
+                document.getElementById('commentContent-' + commentId).innerText = newContent;
+                // Hide edit controls after saving
+                hideEditControls(commentId);
+                var editOptionsDiv = document.getElementById('editOptionsDiv-' + commentId);
+                editOptionsDiv.style.display = 'block';
+            } else {
+                console.error("Failed to edit comment. Status: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(`service=editComment&commentId=${encodeURIComponent(commentId)}&newContent=${encodeURIComponent(newContent)}`);
+}
+
+function deleteComment(commentId) {
+    var blogId = document.getElementById("BlogId").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var commentElement = document.getElementById('comment-' + commentId);
+                commentElement.parentNode.removeChild(commentElement);
+            } else
+                console.error("Failed to delete comment. Status: " + xhr.status);
+        }
+    };
+
+    xhr.send(`service=deleteComment&commentId=${encodeURIComponent(commentId)}`);
+}
+
+function hideEditOptions(commentId) {
+    var editOptions = document.getElementById('editOptions-' + commentId);
+    editOptions.style.display = 'none';
+}
+
+function cancelEditComment(commentId) {
+    var commentContentSpan = document.getElementById('commentContent-' + commentId);
+    var editCommentInput = document.getElementById('editCommentInput-' + commentId);
+    var editCommentControls = document.getElementById('editCommentControls-' + commentId);
+    var editOptionsDiv = document.getElementById('editOptionsDiv-' + commentId);
+
+    // Toggle display of content and input
+    commentContentSpan.style.display = 'inline-block';
+    editCommentInput.style.display = 'none';
+    editOptionsDiv.style.display = 'block';
+
+    // Hide edit controls
+    editCommentControls.style.display = 'none';
+}
+
+function hideEditControls(commentId) {
+    var editCommentControls = document.getElementById('editCommentControls-' + commentId);
+    editCommentControls.style.display = 'none';
+
+    var editCommentInput = document.getElementById('editCommentInput-' + commentId);
+    editCommentInput.style.display = 'none';
+
+    // Display the comment content again
+    var commentContentSpan = document.getElementById('commentContent-' + commentId);
+    commentContentSpan.style.display = 'inline-block';
+}
 //Light box
 //------------------------------------------------------------------------------
 function openModal() {

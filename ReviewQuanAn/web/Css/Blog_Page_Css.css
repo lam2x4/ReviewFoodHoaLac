@@ -161,17 +161,17 @@ body{
 }
 
 .likeBtn[aria-pressed="true"]{
-  background-color: #27ae60;
-  color: #27ae60;
-  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
-  transition: all .3s;
+    background-color: #27ae60;
+    color: #27ae60;
+    box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+    transition: all .3s;
 }
 
 .dislikeBtn[aria-pressed="true"]{
-  background-color: #27ae60;
-  color: #EE4B2B;
-  box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
-  transition: all .3s;
+    background-color: #27ae60;
+    color: #EE4B2B;
+    box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+    transition: all .3s;
 }
 
 .profile-link{
@@ -207,6 +207,45 @@ body{
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sort-options {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+.sort-options label {
+    margin: 0 10px 0 30px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sort-options select {
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.sort-options select:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.sort-options select option {
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sort-options select option:hover {
+    background-color: #000;
+    color: #fff;
 }
 
 .comment-list {
@@ -255,7 +294,8 @@ body{
     flex: 1;
 }
 
-.comment-box textarea{
+.comment-box textarea,
+.editCommentInput{
     height: 30px;
     width: 100%;
     padding: 0 10px;
@@ -321,6 +361,48 @@ body{
     position: relative;
     display: flex;
     flex-direction: row;
+}
+
+.menu-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+}
+
+.menu-options {
+    display: none;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    list-style-type: none;
+    padding: 5px 0;
+    margin-top: 10px;
+}
+
+.menu-options li {
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.menu-options li:hover {
+    background-color: #f0f0f0;
+}
+
+.menu-options li i {
+    margin-right: 10px;
+}
+
+.menu-options.above {
+    top: auto;
+    bottom: 120px;
 }
 
 /* The Modal (background) */
