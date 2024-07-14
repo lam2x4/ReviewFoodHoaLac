@@ -100,8 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     reader.onload = (e) => {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.maxWidth = '200px'; // Limit the width to avoid stretching
-                        img.style.margin = '5px'; // Add margin around each image
+                        img.classList.add('preview'); // Add 'preview' class to the image
                         previewContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);

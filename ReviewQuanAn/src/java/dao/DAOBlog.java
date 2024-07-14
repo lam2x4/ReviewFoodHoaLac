@@ -58,23 +58,26 @@ public class DAOBlog extends DBConnect {
 
     public int editBlog(Blog b) throws SQLException {
         String sql = "UPDATE [dbo].[Blog] "
-                + "SET [title] = ?, "
-                + "[content] = ? "
-                + "[create_date] = ? "
-                + "[likes] = ? "
-                + "[is_approved] = ? "
-                + "[is_banned] = ? "
+                + "SET [user_id] = ?, "
+                + "[title] = ?, "
+                + "[content] = ?, "
+                + "[create_date] = ?, "
+                + "[likes] = ?, "
+                + "[is_approved] = ?, "
+                + "[is_banned] = ?, "
                 + "[author_id] = ? "
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, b.getTitle());
-            pre.setString(2, b.getContent());
-            pre.setString(3, b.getCreate_date());
-            pre.setInt(4, b.getLikes());
-            pre.setInt(5, b.getIs_approved());
-            pre.setInt(6, b.getIs_banned());
-            pre.setInt(6, b.getAuthor_id());
+            pre.setInt(1, b.getUser_id());
+            pre.setString(2, b.getTitle());
+            pre.setString(3, b.getContent());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getLikes());
+            pre.setInt(6, b.getIs_approved());
+            pre.setInt(7, b.getIs_banned());
+            pre.setInt(8, b.getAuthor_id());
+            pre.setInt(9, b.getId());
 
             return pre.executeUpdate();
         }

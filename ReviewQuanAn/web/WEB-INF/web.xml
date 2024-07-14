@@ -137,6 +137,10 @@
         <servlet-name>BookmarkController</servlet-name>
         <servlet-class>Controller.BookmarkController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogEdit</servlet-name>
+        <servlet-class>Controller.BlogEdit</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/UserController</url-pattern>
@@ -264,5 +268,9 @@
     <servlet-mapping>
         <servlet-name>BookmarkController</servlet-name>
         <url-pattern>/BookmarkController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogEdit</servlet-name>
+        <url-pattern>/BlogEdit</url-pattern>
     </servlet-mapping>
 </web-app>

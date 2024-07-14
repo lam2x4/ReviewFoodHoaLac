@@ -177,6 +177,7 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
+                                                        <a class="dropdown-item" href="BlogEdit?blogId=${i.id}">Reapply Blog</a>
                                                         <c:if test="${i.is_approved==4}">
                                                              <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>
