@@ -31,7 +31,7 @@ document.getElementById('commentForm').addEventListener('submit', function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 var commentId = xhr.responseText.trim();
-
+                
                 console.log(xhr.status);
                 postComment(username, profPic, commentId);
                 updateCommentCount();
@@ -73,8 +73,8 @@ function postComment(username, profPic, commentId) {
                                 <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
                         </div>`;
-
-
+        
+        
 
         // Append the new comment to the comment list
         const commentList = document.querySelector('.comment-list');
@@ -202,7 +202,7 @@ function toggleCommentLike(commentId) {
 
     const isPressed = likeBtn.getAttribute('aria-pressed') === 'true';
     likeBtn.setAttribute('aria-pressed', !isPressed);
-
+    
     let interactionType = likeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'like';
 
     if (!isPressed && dislikeBtn.getAttribute('aria-pressed') === 'true') {
@@ -220,7 +220,7 @@ function toggleCommentLike(commentId) {
     }
 
     likeCount.innerText = `${likes} likes`;
-
+    
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
 
@@ -233,7 +233,7 @@ function toggleCommentDislike(commentId) {
 
     const isPressed = dislikeBtn.getAttribute('aria-pressed') === 'true';
     dislikeBtn.setAttribute('aria-pressed', !isPressed);
-
+    
     let interactionType = dislikeBtn.getAttribute('aria-pressed') === 'false' ? 'nothing' : 'dislike';
 
     if (!isPressed && likeBtn.getAttribute('aria-pressed') === 'true') {
@@ -251,7 +251,7 @@ function toggleCommentDislike(commentId) {
     }
 
     likeCount.innerText = `${likes} likes`;
-
+    
     sendCommentLikeUpdate(interactionType, commentId, likes);
 }
 
@@ -325,50 +325,3 @@ function showSlides(n) {
     captionText.innerHTML = dots[slideIndex - 1].alt;
 }
 //------------------------------------------------------------------------------
-
-
-
-                                    
-// Bookmark toggling                     
-//------------------------------------------------------------------------------
-function toggleBookmark() {
-    var blogId = document.getElementById("BlogId").value;
-    var xhr = new XMLHttpRequest();
-    var serviceType; // Declare serviceType variable
-
-    xhr.open('POST', 'BookmarkController?blogId=' + blogId, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    // Check and set serviceType based on current state
-    var bookmarkButtonIcon = document.getElementById('bookmarkButtonIcon');
-    var bookmarkButtonText = document.getElementById('bookmarkButtonText');
-
-    if (bookmarkButtonIcon.classList.contains('fas')) {
-        // Currently bookmarked, change to unbookmarked
-        bookmarkButtonIcon.classList.remove('fas');
-        bookmarkButtonIcon.classList.add('far');
-        bookmarkButtonText.innerText = 'Bookmark';
-        serviceType = "removeBookmark";
-    } else {
-        // Currently unbookmarked, change to bookmarked
-        bookmarkButtonIcon.classList.remove('far');
-        bookmarkButtonIcon.classList.add('fas');
-        bookmarkButtonText.innerText = 'Unbookmark';
-        serviceType = "addBookmark";
-    }
-
-    // Send AJAX request with serviceType
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log('Bookmark operation successful');
-                // Optionally update UI or handle success
-            } else {
-                console.error("Bookmark toggle failed. Status: " + xhr.status);
-                // Optionally handle error case
-            }
-        }
-    };
-    xhr.send('service=' + serviceType);
-}
-//------------------------------------------------------------------------------      

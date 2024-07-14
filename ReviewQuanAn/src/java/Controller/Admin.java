@@ -6,12 +6,8 @@ package Controller;
 
 import dao.DAOBlog;
 import dao.DAOComment;
-import dao.DAOReport;
-import dao.DAOReportType;
 import dao.DAOUser;
 import entity.Blog;
-import entity.Report;
-import entity.ReportType;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -69,15 +65,11 @@ public class Admin extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            
             HashMap<Integer, String> blog_User = new HashMap<>();
-            HashMap<Integer, String> report_User = new HashMap<>();
-            HashMap<Integer, String> report_ReportType = new HashMap<>();
             DAOUser daouser = new DAOUser();
             DAOBlog daoblog = new DAOBlog();
             DAOComment daocomment = new DAOComment();
-            DAOReport daoreport = new DAOReport();
-            DAOReportType daoReportType = new DAOReportType();
             int blogNumber = daoblog.getAll().size();
             int commentNumber = daocomment.viewAll().size();
             int userNumber = daouser.getAll().size();
@@ -88,24 +80,6 @@ public class Admin extends HttpServlet {
                     }
                 }
             }
-            for (Report report : daoreport.getAll()) {
-                for (User user : daouser.getAll()) {
-                    if (report.getUser_id() == user.getId()) {
-                        report_User.put(report.getUser_id(), user.getUsername());
-                    }
-                }
-            }
-            for (Report report : daoreport.getAll()) {
-                for (ReportType reportType : daoReportType.getAll()) {
-                    if (report.getType_id() == reportType.getId()) {
-                        report_ReportType.put(report.getType_id(), reportType.getName());
-                    }
-                }
-            }
-
-            request.setAttribute("report_ReportType", report_ReportType);
-            request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAll());
             request.setAttribute("Blog_User", blog_User);
             request.setAttribute("userNumber", userNumber);
             request.setAttribute("blogNumber", blogNumber);

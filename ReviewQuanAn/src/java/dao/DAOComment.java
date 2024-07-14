@@ -17,7 +17,7 @@ public class DAOComment extends DBConnect {
                 + "([user_id], [blog_id], [content], [create_date], [likes], [is_banned]) "
                 + "VALUES (?,?,?,?,?,?)";
         
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+        try(PreparedStatement pre = conn.prepareStatement(sql)){
             pre.setInt(1, comm.getUser_id());
             pre.setInt(2, comm.getBlog_id());
             pre.setString(3, comm.getContent());
@@ -42,7 +42,7 @@ public class DAOComment extends DBConnect {
         }
     }
     
-    public int updateLikes(int comment_id, int likes) throws SQLException {
+    public int updateLikes(int comment_id, int likes) throws SQLException{
         String sql = "UPDATE Comment "
                 + "SET likes = ? "
                 + "WHERE id = ?";
@@ -151,12 +151,12 @@ public class DAOComment extends DBConnect {
         return null;
     }
     
-    public String findAvatarByUser_id(int user_id) throws SQLException {
+    public String findAvatarByUser_id(int user_id) throws SQLException{
         String sql = "SELECT avatar FROM [User] WHERE id = (SELECT TOP 1 user_id FROM Comment WHERE user_id = ?)";
-        
+
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
-            
+
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
                     return "img/" + rs.getString(1);
@@ -168,11 +168,11 @@ public class DAOComment extends DBConnect {
         return null;
     }
     
-    public int getLastestId() {
+    public int getLastestId(){
         String sql = "SELECT TOP 1 id FROM Comment ORDER BY id DESC;";
         
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            
+
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -183,29 +183,4 @@ public class DAOComment extends DBConnect {
         }
         return -1;
     }
-    
-    public Vector<Comment> GetAllById(int user_id) throws SQLException {
-        Vector<Comment> vector = new Vector<>();
-        String sql = "SELECT * FROM Comment WHERE [user_id]=?";
-        
-        try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, user_id);
-            ResultSet rs = pre.executeQuery();
-            
-            while (rs.next()) {
-                Comment b = new Comment();
-                
-                b.setId(rs.getInt(1));
-                b.setUser_id(rs.getInt(2));
-                b.setBlog_id(rs.getInt(3));
-                b.setContent(rs.getString(4));
-                b.setCreate_date(rs.getString(5));
-                b.setLikes(rs.getInt(6));
-                b.setIs_banned(rs.getInt(7));
-                vector.add(b);
-            }
-        }
-        return vector;
-    }
-   
 }

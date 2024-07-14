@@ -4,8 +4,6 @@
     Author     : lam1
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,8 +21,7 @@
 
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>       
-     
-
+        <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
         <title>Home Page </title>
         <style>
             .nav-justified {
@@ -54,7 +51,6 @@
 
                 width:350px;
             }
-
         </style>
 
     </head>
@@ -94,71 +90,41 @@
                         </select>
                     </div>
                 </div>
-
-
                 <div class="row">
                     <c:forEach items="${requestScope.list}" var="i">
                         <div class="col-md-4">
                             <div class="card mb-4">
                                 <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 <div class="card-body">
-                                    <h4 class="card-title">${i.title}</h4>
-                                   
-                                    <div class="d-flex justify-content-between align-items-center mt-2">
-                                        <div class="text-muted" >${i.create_date}</div>
-                                        <c:choose>
-                                            <c:when test="${i.id != null}">
-                                                <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <a href="BlogPageController" class="btn btn-primary">See Detail</a>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
+
+                                    <h4 class="card-title" >${i.title}</h4>
+                                    <p class="card-text" >${i.content}</p>
+
+                                    <c:choose>
+                                        <c:when test="${i.id != null}">
+                                            <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="BlogPageController" class="btn btn-primary">See Detail</a>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>
+
                     </c:forEach>
+
                 </div>
-
-
                 <!-- Pagination -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <c:set var="page" value="${requestScope.page}"/>
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <c:if test="${page > 1}">
-                                    <li class="page-item">
-                                        <a class="page-link" href="home?page=${page - 1}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                                <c:forEach begin="1" end="${requestScope.num}" var="i">
-                                    <li class="page-item ${i == page ? 'active' : ''}">
-                                        <a class="page-link" href="home?page=${i}">${i}</a>
-                                    </li>
-                                </c:forEach>
-                                <c:if test="${page < requestScope.num}">
-                                    <li class="page-item">
-                                        <a class="page-link" href="home?page=${page + 1}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-
 
             </div>
         </section>
 
 
- 
+        <!-- Bootstrap and FontAwesome scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 
     <%@include file="./Footer.jsp" %>

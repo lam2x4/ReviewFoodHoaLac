@@ -7,7 +7,7 @@ package entity;
 public class User {
 
     private int id;
-    private String username;  
+    private String username;
     private String password;
     private String email;
     private String phone;
@@ -17,8 +17,7 @@ public class User {
     private String create_date;
     private int verify_status;
     private int role_id;
-    private String author_id;
-    
+
     public User(int id, String username, String password, String email, String phone, String avatar, int gender, String description, String create_date, int verify_status, int role_id) {
         this.id = id;
         this.username = username;
@@ -54,16 +53,7 @@ public class User {
         this.phone = phone;
     }
 
-    public String getAuthor_id() {
-        return author_id;
-    }
 
-    public void setAuthor_id(String author_id) {
-        this.author_id = author_id;
-    }
-
-
-    
     public String getCreate_date() {
         return create_date;
     }

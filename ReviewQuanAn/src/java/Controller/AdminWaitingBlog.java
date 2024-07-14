@@ -61,11 +61,10 @@ public class AdminWaitingBlog extends HttpServlet {
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         int status = Integer.parseInt(request.getParameter("status"));
-        String reason = request.getParameter("reason");
+
         DAOBlog dao = new DAOBlog();
         try {
             dao.editBlogApproved(id, status);
-            dao.addReason(id, reason);
         } catch (SQLException ex) {
             Logger.getLogger(AdminBanBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,17 +82,7 @@ public class AdminWaitingBlog extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            int status = Integer.parseInt(request.getParameter("status"));
-            String reason = request.getParameter("reason");
-            DAOBlog dao = new DAOBlog();
-            dao.addReason(id, reason);
-            dao.editBlogApproved(id, status);
-            response.sendRedirect("Admin");
-        } catch (SQLException ex) {
-            Logger.getLogger(AdminWaitingBlog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

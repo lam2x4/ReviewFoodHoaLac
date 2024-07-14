@@ -62,7 +62,7 @@ public class AdminBanBlog extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         int status = 1;
         if (Integer.parseInt(request.getParameter("status")) == 1) {
-            status = 3;
+            status = 2;
         } else {
             status = 1;
         }

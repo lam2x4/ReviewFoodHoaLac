@@ -23,7 +23,6 @@ import entity.User;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -55,18 +54,17 @@ public class PostUpload extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(true);
         String service = request.getParameter("service");
-        String uploadPath = getServletContext().getRealPath("/img") + File.separator;
-
-        //Uploaded to: ReviewQuanAn\build\web\img\
-        DAOImages daoImg = new DAOImages();
-        DAOBlog daoBlog = new DAOBlog();
-
         if (service == null) {
             String postTitle = request.getParameter("postTitle");
             String postDescription = request.getParameter("postDescription");
 //        response.getWriter().println("Post Title: " + postTitle);
 //        response.getWriter().println("Post Description: " + postDescription);
 
+            //Uploaded to: ReviewQuanAn\build\web\img\
+            String uploadPath = getServletContext().getRealPath("/img") + File.separator;
+            DAOImages daoImg = new DAOImages();
+            DAOBlog daoBlog = new DAOBlog();
+            
             try {
                 LocalDate date = LocalDate.now();
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -78,127 +76,49 @@ public class PostUpload extends HttpServlet {
                 daoBlog.addBlog(blogTemp);
                 for (Part part : request.getParts()) {
                     String contentType = part.getContentType();
-
+                    
                     if (contentType != null && contentType.startsWith("image")) {
-                        String fileName = part.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
+                        String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                         Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                         daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
 //                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                     }
                 }
-                String message = "Blog successfully applied!";
-                response.sendRedirect("ApplyPostPage.jsp" + "?message=" + message);
             } catch (ServletException | IOException | NumberFormatException | SQLException e) {
                 response.getWriter().println("Error: " + e.getMessage());
                 //response.sendRedirect("HomePage.jsp");
             }
-
+        response.sendRedirect("ApplyPostPage.jsp");
         } else if (service.equals("repost")) {
             try {
-                User currentUser = (User) session.getAttribute("User");
+                User currentUser = (User)session.getAttribute("User");
                 DAOBlog daoB = new DAOBlog();
                 Blog current = daoB.getBlog(Integer.parseInt(request.getParameter("bid")));
                 Blog repost = current;
                 repost.setUser_id(currentUser.getId());
                 repost.setTitle(repost.getTitle() + " (Repost)");
-
+                
                 LocalDate date = LocalDate.now();
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 String create_date = date.format(dateFormat);
-
+                
                 repost.setCreate_date(create_date);
-
+                
                 repost.setCreate_date(service);
                 daoB.addBlog(repost);
                 daoB.getLastInsertedBlog();
-
+                
                 DAOImages daoI = new DAOImages();
                 int lastBId = daoB.getLastInsertedBlog();
                 Vector<Images> vector = daoI.findImagesByBlog_id(current.getId());
-                for (Images image : vector) {
+                for(Images image: vector){
                     image.setBlog_id(lastBId);
-                    image.setLink(image.getLink().substring(0, 10) + "_" + UUID.randomUUID().toString());
+                    image.setLink(image.getLink().substring(4));
                     daoI.addImages(image);
                 }
                 response.sendRedirect("home");
             } catch (Exception e) {
                 response.sendRedirect("LoginPage.jsp");
-            }
-        } else if (service.equals("edit")) {
-            try {
-                String postTitle = request.getParameter("postTitle");
-                String postDescription = request.getParameter("postDescription");
-                Blog blog = daoBlog.getBlog(Integer.parseInt(request.getParameter("blogId")));
-                //Blog repost = current;
-                //repost.setUser_id(currentUser.getId());
-                //repost.setTitle(repost.getTitle() + " (Repost)");
-
-                LocalDate date = LocalDate.now();
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                blog.setCreate_date(date.format(dateFormat));
-                blog.setIs_approved(0);
-                blog.setTitle(postTitle);
-                blog.setContent(postDescription);
-
-                try {
-                    Vector<Images> pastImg = daoImg.findImagesByBlog_id(blog.getId());
-
-                    //Delete one prior bill
-                    boolean billUpload = false;
-                    Part billPart = request.getPart("billUpload");
-                    if (billPart != null && billPart.getSize() > 0) {
-                        Images billOld = pastImg.firstElement();
-                        Path billPathOld = Paths.get(uploadPath, billOld.getLink());
-                        try {
-                            Files.deleteIfExists(billPathOld);
-                        } catch (IOException e) {
-                            response.getWriter().println("Bill Delete Error: " + e.getMessage());
-                        }
-
-                        String fileName = billPart.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
-                        Files.copy(billPart.getInputStream(), Paths.get(uploadPath, fileName));
-
-                        billOld.setLink(fileName);
-                        daoImg.updateImages(billOld);
-                        billUpload = true;
-                    }
-
-                    //Delete any prior images
-                    Part imagePart = request.getPart("imageUpload");
-                    if (imagePart != null && imagePart.getSize() > 0) {
-                        for (int i = 1; i < pastImg.size(); i++) {
-                            daoImg.removeImages(pastImg.get(i).getId());
-                        }
-                    }
-
-                    //Add the new images
-                    for (Part part : request.getParts()) {
-                        String contentType = part.getContentType();
-
-                        if (contentType != null && contentType.startsWith("image")) {
-                            if (billUpload == true) {
-                                billUpload = false;
-                                continue;
-                            }
-
-                            String fileName = part.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
-                            Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
-                            daoImg.addImages(new Images(blog.getId(), fileName));
-//                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
-                        }
-                    }
-                    daoBlog.editBlog(blog);
-                } catch (ServletException | IOException | NumberFormatException | SQLException e) {
-                    response.getWriter().println("Error: " + e.getMessage());
-                    //response.sendRedirect("HomePage.jsp");
-                }
-
-                String message = "Blog successfully updated";
-                response.sendRedirect("BlogEdit?blogId=" + blog.getId() + "&message=" + message);
-            } catch (Exception e) {
-                response.getWriter().println("Outer Post Upload Error: " + e.getMessage());
-                //response.sendRedirect("LoginPage.jsp");
             }
         }
     }

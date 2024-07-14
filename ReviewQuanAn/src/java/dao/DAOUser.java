@@ -156,7 +156,7 @@ public class DAOUser extends DBContext {
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
 
-        System.out.println(dao.getUser(5));
+        dao.deleteUserIgnoreConstraint(9);
 
     }
 

@@ -120,16 +120,6 @@
                 width: 100%;
                 z-index: 1030;
             }
-
-            .nav-item .dropdown-menu {
-                min-width: auto; /* Adjust dropdown menu width */
-            }
-
-            .nav-item .dropdown-toggle img {
-                width: 40px;
-                height: 40px;
-                object-fit: cover;
-            }
         </style>
 
     </head>
@@ -156,21 +146,12 @@
                         </li>
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <img src="img/${sessionScope.User.getAvatar()}" class="rounded-circle" alt="User Profile">
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="UserBlogManagement?user_id=${sessionScope.User.id}"><i class="fas fa-user-circle"></i> profile</a>
-                                        <a class="dropdown-item" href="ChangeInformation.jsp"><i class="fas fa-user-edit"></i> update</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="UserController?service=logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                                    </div>
-                                </li>
+                                <a class="nav-link" href="change-information"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="UserController?service=logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:when test="${sessionScope.Admin!=null}">
-                                <a class="nav-link" href="Admin"><i class="fas fa-user-circle"></i> AdminPage</a>
-                                <a class="nav-link" href="UserController?service=logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                                <a class="nav-link" href="change-information"><i class="fas fa-user-circle"></i></i> Profile</a>
+                                <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </c:when>
                             <c:otherwise>
                                 <li class="nav-item">
