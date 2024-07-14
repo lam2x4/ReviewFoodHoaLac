@@ -19,6 +19,7 @@ import dao.DAOImages;
 import entity.Images;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -69,29 +70,49 @@ public class Home extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
-        HashMap<Blog, ArrayList<Images>> Blog_Image = new HashMap<>();
-        ArrayList<Images> listFake;
+        HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
+        Vector<Images> listFake;
         try {
 
             Vector<Blog> list = dao.getAllApproved();
+            Vector<Images> imageList = daoImage.getAll();
             for (Blog blog : list) {
-                System.out.println(blog.toString());
-                Vector<Images> imgs = daoImage.findImagesByBlog_id(blog.getId());
-                listFake = new ArrayList();
 
-                for (Images images : imgs) {
-                    listFake.add(images);
+                listFake = new Vector();
+
+                for (Images images : imageList) {
+
+                    if (images.getBlog_id() == blog.getId()) {
+                        listFake.add(images);
+                    }
                 }
                 Blog_Image.put(blog, listFake);
 
             }
+            //Pagination
+            int page, numberpage = 6;
+            int size = list.size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
+            }
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
+
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
             request.setAttribute("blog_image", Blog_Image);
-            request.setAttribute("list", list);
+            request.setAttribute("list", list1);
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         } catch (Exception e) {
 
         }
-
+        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
     }
 
     /**

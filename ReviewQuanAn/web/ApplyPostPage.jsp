@@ -33,14 +33,19 @@
                 <div class="col-md-15 col-lg-10">
                     <div class="form-container">
                         <h2 class="text-center mb-4">Apply for Post</h2>
-                        <%--<div class="text-center mb-3">
-                            <a href="ViewPosts.jsp" class="text-decoration-none">View available posts</a>
-                        </div>--%>
+                        <% String message = (String) request.getParameter("message"); %>
+                        <% if (message != null && !message.isEmpty()) { %>
+                        <div class="alert alert-success">
+                            <%= message %>
+                        </div>
+                        <% } %>
                         <form id="apply-post-form" action="upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
+                                <label for="postTitle">Post Title</label>
                                 <textarea id="postTitle" name="postTitle" placeholder="Post Title" required></textarea>
                             </div>
                             <div class="form-group">
+                                <label for="postDescription">Post Description</label>
                                 <textarea id="postDescription" name="postDescription" placeholder="Post Description" required></textarea>
                             </div>
                             <div class="form-group">

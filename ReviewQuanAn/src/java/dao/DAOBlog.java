@@ -2,6 +2,7 @@ package dao;
 
 import dal.DBContext;
 import entity.Blog;
+import java.awt.BorderLayout;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,23 +58,26 @@ public class DAOBlog extends DBConnect {
 
     public int editBlog(Blog b) throws SQLException {
         String sql = "UPDATE [dbo].[Blog] "
-                + "SET [title] = ?, "
-                + "[content] = ? "
-                + "[create_date] = ? "
-                + "[likes] = ? "
-                + "[is_approved] = ? "
-                + "[is_banned] = ? "
+                + "SET [user_id] = ?, "
+                + "[title] = ?, "
+                + "[content] = ?, "
+                + "[create_date] = ?, "
+                + "[likes] = ?, "
+                + "[is_approved] = ?, "
+                + "[is_banned] = ?, "
                 + "[author_id] = ? "
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setString(1, b.getTitle());
-            pre.setString(2, b.getContent());
-            pre.setString(3, b.getCreate_date());
-            pre.setInt(4, b.getLikes());
-            pre.setInt(5, b.getIs_approved());
-            pre.setInt(6, b.getIs_banned());
-            pre.setInt(6, b.getAuthor_id());
+            pre.setInt(1, b.getUser_id());
+            pre.setString(2, b.getTitle());
+            pre.setString(3, b.getContent());
+            pre.setString(4, b.getCreate_date());
+            pre.setInt(5, b.getLikes());
+            pre.setInt(6, b.getIs_approved());
+            pre.setInt(7, b.getIs_banned());
+            pre.setInt(8, b.getAuthor_id());
+            pre.setInt(9, b.getId());
 
             return pre.executeUpdate();
         }
@@ -126,7 +130,7 @@ public class DAOBlog extends DBConnect {
                 b.setIs_approved(rs.getInt(7));
                 b.setIs_banned(rs.getInt(8));
                 b.setAuthor_id(rs.getInt(9));
-
+                b.setReason_reject(rs.getString(10));
                 vector.add(b);
             }
         }
@@ -187,6 +191,18 @@ public class DAOBlog extends DBConnect {
         }
     }
 
+    public void addReason(int id, String reason) throws SQLException {
+        String sql = "UPDATE [dbo].[Blog] "
+                + "SET [reason_reject] = ? "
+                + " WHERE id = ?";
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, reason);
+            pre.setInt(2, id);
+            pre.executeUpdate();
+
+        }
+    }
+
     public Blog getBlog(int id) throws SQLException {
         String sql = """
                      SELECT 
@@ -224,6 +240,74 @@ public class DAOBlog extends DBConnect {
         }
     }
 
+   
+
+    public Vector<Blog> getAllById(int user_id) throws SQLException {
+        Vector<Blog> vector = new Vector<>();
+        String sql = "SELECT * FROM Blog WHERE [user_id]=?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Blog b = new Blog();
+
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setTitle(rs.getString(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setLikes(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+                b.setIs_banned(rs.getInt(8));
+                b.setAuthor_id(rs.getInt(9));
+                b.setReason_reject(rs.getString(10));
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
+    
+        public Vector<Blog> getAllByIdApproved(int user_id) throws SQLException {
+        Vector<Blog> vector = new Vector<>();
+        String sql = "SELECT * FROM Blog WHERE [user_id]=? AND is_approved=1";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Blog b = new Blog();
+
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setTitle(rs.getString(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setLikes(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+                b.setIs_banned(rs.getInt(8));
+                b.setAuthor_id(rs.getInt(9));
+                b.setReason_reject(rs.getString(10));
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
+
+    public int editBlogRemove(int id) throws SQLException {
+        String sql = "UPDATE [dbo].[Blog] "
+                + "SET [is_approved] = 4 "
+                + "WHERE id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, id);
+
+            return pre.executeUpdate();
+        }
+    }
+
     public int getLastInsertedBlog() throws SQLException {
         String sql = "SELECT MAX(ID) AS LastInsertedBlogID FROM Blog";
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
@@ -238,14 +322,23 @@ public class DAOBlog extends DBConnect {
         }
     }
 
+    public Vector<Blog> getListBlogByPage(Vector<Blog> list, int start, int end) {
+        Vector<Blog> blog = new Vector<>();
+        if (list == null) {
+            return null;
+        }
+        for (int i = start; i < end; i++) {
+            blog.add(list.get(i));
+        }
+        return blog;
+    }
+
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
         Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0, 1);
         try {
-            for (Blog blog : dao.getAllApproved()) {
-                blog.customToString();
-            }
+            System.out.println(dao.getAllByIdApproved(5));
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

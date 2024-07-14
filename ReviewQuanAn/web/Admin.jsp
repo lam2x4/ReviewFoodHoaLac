@@ -9,12 +9,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
         <!-- jQuery library -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-
         <!-- Popper JS -->
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-
         <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>       
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
         <title>Admin DashBoard</title>
         <style>
@@ -60,7 +58,6 @@
                 background-color: #007bff;
                 color: #ffffff;
             }
-
 
             .card {
                 border-radius: 10px;
@@ -118,10 +115,9 @@
                 border-radius: 10px;
             }
 
-            .border-right{
-                height:742px;
+            .border-right {
+                height: 742px;
             }
-
         </style>
     </head>
     <body>
@@ -131,15 +127,12 @@
             <!-- /#sidebar-wrapper -->
 
             <!-- Page Content -->
-
-
             <div class="container-fluid mt-4">
                 <h1 class="mb-4">Dashboard</h1>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
-                            <div class="card-header"><i class="fas fa-users"></i><a href="#" style="color:#343A40">Users</a> </div>
-
+                            <div class="card-header"><i class="fas fa-users"></i><a href="#" style="color:#343A40">Users</a></div>
                             <div class="card-body">
                                 <h5 class="card-title">${requestScope.userNumber}</h5>
                                 <p class="card-text">Total registered users.</p>
@@ -165,7 +158,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- Waiting Blog -->   
+
+                <!-- Waiting Blog -->
                 <div class="card mt-4 shadow-sm">
                     <div class="card-header"><i class="fas fa-history"></i> Waiting Blog</div>
                     <div class="table-responsive">
@@ -175,37 +169,37 @@
                                     <th>ID</th>
                                     <th>Title</th>
                                     <th>Author</th>
-                                    <th>Content</th>
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach items="${requestScope.BlogList}" var="i" >
-                                    <c:if test="${i.getIs_approved()==0}" > 
+                                <c:forEach items="${requestScope.BlogList}" var="i">
+                                    <c:if test="${i.getIs_approved() == 0}">
                                         <tr>
                                             <td>${i.id}</td>
-                                            <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title} </td>
+                                            <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
                                             <td>${requestScope.Blog_User.get(i.user_id)}</td>
-                                            <td>${i.content}</td>
                                             <td>${i.create_date}</td>
                                             <td id="status-${i.id}">Waiting</td>
                                             <td>
-
-                                                <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="2"><i class="fas fa-ban"></i> Reject</button>
-                                                <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="1"><i class="fas fa-check"></i> Approved</button>
-
+                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                        data-target="#rejectModal" data-id="${i.id}" data-status="2"><i class="fas fa-ban"></i> Reject
+                                                </button>
+                                                <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
+                                                        data-target="#statusModal" data-id="${i.id}" data-status="1"><i class="fas fa-check"></i> Approve
+                                                </button>
                                             </td>
-
                                         </tr>
-                                    </c:if> 
+                                    </c:if>
                                 </c:forEach>
                                 <!-- Add more post rows as needed -->
                             </tbody>
                         </table>
                         <!-- Status Modal -->
-                        <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
+                             aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -215,7 +209,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p id="statusModalMessage">Do you want to ban this blog?</p>
+                                        <p id="statusModalMessage">Do you want to approve this blog?</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -224,15 +218,134 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        <!-- Reject Modal -->
+                        <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rejectModalLabel">Reason for Rejection</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form id="rejectForm" action="AdminWaitingBlog" >
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="rejectReason">Reason:</label>
+
+                                                <input type="text" class="form-control" id="blogId" name="id" hidden="true">
+                                                <input type="text" class="form-control" id="status" name="status"  hidden="true">
+                                                <textarea class="form-control" id="rejectReason" name="reason" rows="3"
+                                                          required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Waiting Report -->
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header"><i class="fas fa-flag"></i> Waiting Report</div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Reported By</th>
+                                    <th>Blog</th>
+                                    <th>Reason</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${requestScope.reportList}" var="r">
+                                    <c:if test="${r.is_approved == 0}">
+                                        <tr>
+                                            <td>${r.id}</td>
+                                            <td>${requestScope.report_User.get(r.user_id)}</td>
+                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td>${requestScope.report_ReportType.get(r.type_id)}</td>
+                                            <td>${r.content}</td>                                       
+                                            <td>${r.create_date}</td>
+                                            <td id="status-${r.id}">Waiting</td>
+                                            <td>
+                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                        data-target="#rejectReportModal" data-id="${r.id}" data-status="2"><i class="fas fa-ban"></i> Reject
+                                                </button>
+                                                <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
+                                                        data-target="#statusReportModal" data-id="${r.id}" data-status="1"><i class="fas fa-check"></i> Approve
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                <!-- Add more report rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <!-- Status Report Modal -->
+                        <div class="modal fade" id="statusReportModal" tabindex="-1" role="dialog" aria-labelledby="statusReportModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="statusReportModalLabel">Confirm Action</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="statusReportModalMessage">Do you want to approve this report?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="confirmStatusReportBtn">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reject Report Modal -->
+                        <div class="modal fade" id="rejectReportModal" tabindex="-1" role="dialog" aria-labelledby="rejectReportModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rejectReportModalLabel">Confirm Action</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                           
+                                    <div class="modal-body">
+                                        <p id="statusReportModalMessage">Do you want to reject this report?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="confirmRejectReportBtn">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- /#page-content-wrapper -->
         </div>
         <!-- /#wrapper -->
-
-
 
     </body>
     <script>
@@ -242,7 +355,7 @@
             const status = $(this).data('status');
             $('#confirmStatusBtn').data('id', id);
             $('#confirmStatusBtn').data('status', status);
-            $('#statusModalMessage').text(`Do you want to ${status.toLowerCase()} this blog?`);
+            $('#statusModalMessage').text(`Do you want to approve this blog?`);
         });
 
         // Handle confirm status button click
@@ -251,8 +364,51 @@
             const status = $(this).data('status');
             $('#statusModal').modal('hide');
 
-            // Redirect to haha servlet with post id
+            // Redirect to AdminWaitingBlog servlet with post id
             window.location.href = `AdminWaitingBlog?id=` + id + "&status=" + status;
         });
+
+        // Handle reject button click
+        $('.reject-btn').click(function () {
+            const id = $(this).data('id');
+            const status = $(this).data('status');
+            $('#blogId').val(id);
+            $('#status').val(status);
+        });
+
+    // Handle status report button click
+    $('.status-btn').click(function () {
+        const id = $(this).data('id');
+        const status = $(this).data('status');
+        $('#confirmStatusReportBtn').data('id', id);
+        $('#confirmStatusReportBtn').data('status', status);
+        $('#statusReportModalMessage').text(`Do you want to approve this report?`);
+    });
+
+    // Handle confirm status report button click
+    $('#confirmStatusReportBtn').click(function () {
+        const id = $(this).data('id');
+        const status = $(this).data('status');
+        $('#statusReportModal').modal('hide');
+
+        // Redirect to AdminWaitingReport servlet with report id
+        window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
+    });
+
+     // Handle reject report button click
+    $('.reject-btn').click(function () {
+        const id = $(this).data('id');
+        $('#confirmRejectReportBtn').data('id', id);
+    });
+
+    // Handle confirm reject report button click
+    $('#confirmRejectReportBtn').click(function () {
+        const id = $(this).data('id');
+        const status = 2;  // Status for rejection
+        $('#rejectReportModal').modal('hide');
+
+        // Redirect to AdminWaitingReport servlet with report id and rejection status
+        window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
+    });
     </script>
 </html>
