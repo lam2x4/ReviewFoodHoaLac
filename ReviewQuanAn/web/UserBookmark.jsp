@@ -14,7 +14,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
-        <title>Blog Management</title>
+        <title>User Bookmark</title>
         <style>
             .bookmark-button {
                 background-color: #d4edda;
