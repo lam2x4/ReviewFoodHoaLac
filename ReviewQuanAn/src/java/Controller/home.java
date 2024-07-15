@@ -17,15 +17,19 @@ import java.util.Vector;
 import dao.DAOBlog;
 import dao.DAOImages;
 import entity.Images;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author lam1
  */
-public class home extends HttpServlet {
+
+public class Home extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,10 +74,10 @@ public class home extends HttpServlet {
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
         HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
+        Vector<Images> imageList;
+        Vector<Images> listFake;
         try {
-            List<Images> imageList = daoImage.getAll();
-            Vector<Images> listFake;
-
+            imageList = daoImage.getAll();
             Vector<Blog> list = dao.getAllApproved();
             for (Blog blog : list) {
 
@@ -111,7 +115,6 @@ public class home extends HttpServlet {
         } catch (Exception e) {
 
         }
-
     }
 
     /**

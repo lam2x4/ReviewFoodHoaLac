@@ -81,7 +81,7 @@ public class Blog {
     public void setAuthor_name(String author_name) {
         this.author_name = author_name;
     }
-    
+
     public String getUsername() {
         return username;
     }
@@ -104,9 +104,6 @@ public class Blog {
         this.is_banned = is_banned;
         this.author_id = author_id;
     }
-
-   
-    
 
     public int getId() {
         return id;

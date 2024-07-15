@@ -69,14 +69,15 @@ public class Mapper {
     }
 
     public static void setRowEditBlog(Blog b, PreparedStatement pre) throws SQLException {
-        pre.setString(1, b.getTitle());
-        pre.setString(2, b.getContent());
-        pre.setString(3, b.getCreate_date());
-        pre.setInt(4, b.getLikes());
-        pre.setInt(5, b.getIs_approved());
-        pre.setInt(6, b.getIs_banned());
-        pre.setInt(7, b.getAuthor_id());
-        pre.setInt(8, b.getId());
+        pre.setInt(1, b.getUser_id());
+        pre.setString(2, b.getTitle());
+        pre.setString(3, b.getContent());
+        pre.setString(4, b.getCreate_date());
+        pre.setInt(5, b.getLikes());
+        pre.setInt(6, b.getIs_approved());
+        pre.setInt(7, b.getIs_banned());
+        pre.setInt(8, b.getAuthor_id());
+        pre.setInt(9, b.getId());
     }
 
     public static Blog mapRowBlog(ResultSet rs) throws SQLException {

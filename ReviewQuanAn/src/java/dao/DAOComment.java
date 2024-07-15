@@ -200,18 +200,6 @@ public class DAOComment extends DBContext {
             }
         }
     }
-
-    public static void main(String[] args) {
-        DAOComment dao = new DAOComment();
-        try {
-            Vector<Comment> vector = dao.getCommentsSortedByLikes(8);
-            for (Comment c : vector) {
-                System.out.println(c.toString());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DAOComment.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     public Vector<Comment> GetAllById(int user_id) throws SQLException {
         Vector<Comment> vector = new Vector<>();
@@ -236,5 +224,16 @@ public class DAOComment extends DBContext {
         }
         return vector;
     }
-   
+
+    public static void main(String[] args) {
+        DAOComment dao = new DAOComment();
+        try {
+            Vector<Comment> vector = dao.getCommentsSortedByLikes(8);
+            for (Comment c : vector) {
+                System.out.println(c.toString());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOComment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

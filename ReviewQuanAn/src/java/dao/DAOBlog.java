@@ -52,13 +52,14 @@ public class DAOBlog extends DBContext {
 
     public int editBlog(Blog b) throws SQLException {
         String sql = "UPDATE [dbo].[Blog] "
-                + "SET [title] = ?, "
-                + "[content] = ? "
-                + "[create_date] = ? "
-                + "[likes] = ? "
-                + "[is_approved] = ? "
-                + "[is_banned] = ? "
-                + "[author_id] = ?"
+                + "SET [user_id] = ?, "
+                + "[title] = ?, "
+                + "[content] = ?, "
+                + "[create_date] = ?, "
+                + "[likes] = ?, "
+                + "[is_approved] = ?, "
+                + "[is_banned] = ?, "
+                + "[author_id] = ? "
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
