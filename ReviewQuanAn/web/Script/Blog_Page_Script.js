@@ -589,3 +589,50 @@ function showSlides(n) {
     captionText.innerHTML = dots[slideIndex - 1].alt;
 }
 //------------------------------------------------------------------------------
+
+
+
+                                    
+// Bookmark toggling                     
+//------------------------------------------------------------------------------
+function toggleBookmark() {
+    var blogId = document.getElementById("BlogId").value;
+    var xhr = new XMLHttpRequest();
+    var serviceType; // Declare serviceType variable
+
+    xhr.open('POST', 'BookmarkController?blogId=' + blogId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Check and set serviceType based on current state
+    var bookmarkButtonIcon = document.getElementById('bookmarkButtonIcon');
+    var bookmarkButtonText = document.getElementById('bookmarkButtonText');
+
+    if (bookmarkButtonIcon.classList.contains('fas')) {
+        // Currently bookmarked, change to unbookmarked
+        bookmarkButtonIcon.classList.remove('fas');
+        bookmarkButtonIcon.classList.add('far');
+        bookmarkButtonText.innerText = 'Bookmark';
+        serviceType = "removeBookmark";
+    } else {
+        // Currently unbookmarked, change to bookmarked
+        bookmarkButtonIcon.classList.remove('far');
+        bookmarkButtonIcon.classList.add('fas');
+        bookmarkButtonText.innerText = 'Unbookmark';
+        serviceType = "addBookmark";
+    }
+
+    // Send AJAX request with serviceType
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log('Bookmark operation successful');
+                // Optionally update UI or handle success
+            } else {
+                console.error("Bookmark toggle failed. Status: " + xhr.status);
+                // Optionally handle error case
+            }
+        }
+    };
+    xhr.send('service=' + serviceType);
+}
+//------------------------------------------------------------------------------      

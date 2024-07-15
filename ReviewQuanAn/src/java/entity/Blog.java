@@ -10,6 +10,24 @@ public class Blog {
     private int likes;
     private int is_approved;
     private int is_banned;
+    
+    private String reason_reject;
+
+    public String getReason_reject() {
+        return reason_reject;
+    }
+
+    public void setReason_reject(String reason_reject) {
+        this.reason_reject = reason_reject;
+    }
+
+    public int getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(int author_id) {
+        this.author_id = author_id;
+    }
 
     //ADDED BY TUAN ANH ---- FOR SEARCH FUNCTION
     private String username;
@@ -87,13 +105,8 @@ public class Blog {
         this.author_id = author_id;
     }
 
-    public int getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
-    }
+   
+    
 
     public int getId() {
         return id;

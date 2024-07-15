@@ -2,7 +2,6 @@ package Controller;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +18,6 @@ import java.util.logging.Logger;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
-@WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +32,7 @@ public class BlogPageController extends HttpServlet {
         DAOBlog daoBlog = new DAOBlog();
         DAOImages daoImages = new DAOImages();
         DAOComment daoComment = new DAOComment();
+        DAOReportType daoType = new DAOReportType();
         DAOUser daoUser = new DAOUser();
         DAOBlogLikes daoBlogLikes = new DAOBlogLikes();
         DAOCommentLikes daoCommentLikes = new DAOCommentLikes();
@@ -55,6 +54,10 @@ public class BlogPageController extends HttpServlet {
 
         if (curUser != null) {
             bl = daoBlogLikes.getBlogLikes(curUser.getId(), blogId);
+            boolean isBookmarked;
+            DAOBookmark daoBookmark = new DAOBookmark();
+            isBookmarked = daoBookmark.getOne(curUser.getId(), blogId) != null;
+            request.setAttribute( "isBookmarked", isBookmarked);
         }
 
         if (service.equals("handlePostLikes")) {
@@ -110,8 +113,12 @@ public class BlogPageController extends HttpServlet {
 
         }
 
+        request.setAttribute("type_list", daoType.getAll());
+
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
+        request.setAttribute("profPic", "img/" + u.getAvatar());
+        request.setAttribute("userId", u.getId());
         request.setAttribute("profPic", u.getAvatar());
 
         request.setAttribute("blogId", request.getParameter("id"));

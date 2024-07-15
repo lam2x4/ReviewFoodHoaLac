@@ -142,7 +142,8 @@
                                     <th>Phone</th>                                   
                                     <th>Gender</th>
                                     <th>Role</th> 
-                                    <th>Action</th> 
+                                    <th>Status</th> 
+                                    
                                 </tr>
                             </thead>
 
@@ -161,18 +162,24 @@
                                         <c:if test="${i.gender==0}">
                                             <td>Female</td>
                                         </c:if>
+                                            
                                             <c:if test="${i.role_id==1}">
                                             <td>Admin</td>
                                         </c:if>
                                         <c:if test="${i.role_id==2}">
                                             <td>User</td>
                                         </c:if>
+                                            
+                                             <c:if test="${i.verify_status==1}">
+                                            <td>Verified</td>
+                                        </c:if>
+                                        <c:if test="${i.verify_status==0}">
+                                            <td>Not Verified</td>
+                                        </c:if>
                                                 
                                                 
                                             </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-email="${i.email}" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
-                                        </td>
+                                        
                                     </tr>
                                 </c:forEach>
                                 <!-- Add more user rows as needed -->

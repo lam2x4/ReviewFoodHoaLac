@@ -64,7 +64,7 @@ public class PostUpload extends HttpServlet {
             String uploadPath = getServletContext().getRealPath("/img") + File.separator;
             DAOImages daoImg = new DAOImages();
             DAOBlog daoBlog = new DAOBlog();
-            
+
             try {
                 LocalDate date = LocalDate.now();
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -76,7 +76,7 @@ public class PostUpload extends HttpServlet {
                 daoBlog.addBlog(blogTemp);
                 for (Part part : request.getParts()) {
                     String contentType = part.getContentType();
-                    
+
                     if (contentType != null && contentType.startsWith("image")) {
                         String fileName = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
                         Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
@@ -88,30 +88,30 @@ public class PostUpload extends HttpServlet {
                 response.getWriter().println("Error: " + e.getMessage());
                 //response.sendRedirect("HomePage.jsp");
             }
-        response.sendRedirect("ApplyPostPage.jsp");
+            response.sendRedirect("ApplyPostPage.jsp");
         } else if (service.equals("repost")) {
             try {
-                User currentUser = (User)session.getAttribute("User");
+                User currentUser = (User) session.getAttribute("User");
                 DAOBlog daoB = new DAOBlog();
                 Blog current = daoB.getBlog(Integer.parseInt(request.getParameter("bid")));
                 Blog repost = current;
                 repost.setUser_id(currentUser.getId());
                 repost.setTitle(repost.getTitle() + " (Repost)");
-                
+
                 LocalDate date = LocalDate.now();
                 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 String create_date = date.format(dateFormat);
-                
+
                 repost.setCreate_date(create_date);
-                
+
                 repost.setCreate_date(service);
                 daoB.addBlog(repost);
                 daoB.getLastInsertedBlog();
-                
+
                 DAOImages daoI = new DAOImages();
                 int lastBId = daoB.getLastInsertedBlog();
                 Vector<Images> vector = daoI.findImagesByBlog_id(current.getId());
-                for(Images image: vector){
+                for (Images image : vector) {
                     image.setBlog_id(lastBId);
                     image.setLink(image.getLink().substring(4));
                     daoI.addImages(image);

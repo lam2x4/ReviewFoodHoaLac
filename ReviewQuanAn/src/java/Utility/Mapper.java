@@ -65,6 +65,7 @@ public class Mapper {
         pre.setInt(6, b.getIs_approved());
         pre.setInt(7, b.getIs_banned());
         pre.setInt(8, b.getAuthor_id());
+        pre.setString(9, b.getReason_reject());
     }
 
     public static void setRowEditBlog(Blog b, PreparedStatement pre) throws SQLException {

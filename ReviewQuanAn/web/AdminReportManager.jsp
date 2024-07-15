@@ -14,7 +14,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
-        <title>Blog Management</title>
+        <title>Report Management</title>
         <style>
             body {
                 background-color: #f8f9fa;
@@ -131,53 +131,52 @@
 
 
             <div class="container-fluid mt-4">
-                <h1 class="mb-4">Blog Management</h1>
+                <h1 class="mb-4">Report Management</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
                             <tr>
                                 <th>ID</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Content</th>
+                                <th>Reported By</th>
+                                <th>Blog</th>
+                                <th>Reason</th>
+                                <th>Description</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr>
+
                         </thead>
                         <tbody>
-                            <c:forEach items="${requestScope.BlogList}" var="i" >
-                                <c:if test="${i.getIs_approved()!=0}" > 
-                                    <tr>
-                                        <td>   ${i.id} </td>
-                                        <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
-                                        <c:if test="${requestScope.Blog_User.get(i.user_id)==null}">
-                                            <td>Author is deleted</td>
-                                        </c:if>
-
-                                        <c:if test="${requestScope.Blog_User.get(i.user_id)!=null}">
-                                            <td>${requestScope.Blog_User.get(i.user_id)}</td>
-                                        </c:if>                                                                              
-                                        <td>${i.content}</td>
-                                        <td>${i.create_date}</td>
-                                        <td id="status-${i.id}">${requestScope.blog_Approved.get(i.id)}</td>
-                                        <td>
+                                <c:forEach items="${requestScope.reportList}" var="r">
+                                    <c:if test="${r.is_approved != 0}">
+                                        <tr>
+                                            <td>${r.id}</td>
+                                            <td>${requestScope.report_User.get(r.user_id)}</td>
+                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td>${requestScope.report_ReportType.get(r.type_id)}</td>
+                                            <td>${r.content}</td>                                       
+                                            <td>${r.create_date}</td>
                                             <c:choose>
-                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Approved'}">
-                                                    <button class="btn btn-warning btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-ban"></i> Reject</button>
-                                                </c:when>
-                                                <c:when test="${requestScope.blog_Approved.get(i.id) == 'Reject'}">
-                                                    <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-check"></i> Approved</button>
-                                                </c:when>
-                                            </c:choose>
-                                            <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
-                                        </td>
 
-                                    </tr>
-                                </c:if> 
-                            </c:forEach>
-                            <!-- Add more post rows as needed -->
-                        </tbody>
+                                            <c:when test = "${r.is_approved==0}">
+                                             <td>Waiting </td>
+                                            </c:when>
+
+                                            <c:when test = "${r.is_approved==1}">
+                                               <td>Approved </td>
+                                            </c:when>
+                                                <c:when test = "${r.is_approved==2}">
+                                               <td>Rejected </td>
+                                            </c:when>
+
+                                          
+                                        </c:choose>
+                                            
+                                        </tr>
+                                    </c:if>
+                                </c:forEach>
+                                <!-- Add more report rows as needed -->
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -229,7 +228,7 @@
     </div>
 
     <script>
-        function form(id){
+        function form(id) {
             window.location.href = 'haha.jsp';
         }
         // Handle status button click

@@ -5,8 +5,10 @@
 package Controller;
 
 import dao.DAOBlog;
+import dao.DAOImages;
 import dao.DAOUser;
 import entity.Blog;
+import entity.Images;
 import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,16 +16,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.tomcat.jni.SSLContext;
 
 /**
  *
  * @author lam1
  */
-public class AdminBlogManagement extends HttpServlet {
+public class UserBlogManagement extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +47,10 @@ public class AdminBlogManagement extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminBlogManagement</title>");
+            out.println("<title>Servlet UserBlogManagement</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminBlogManagement at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UserBlogManagement at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,40 +68,63 @@ public class AdminBlogManagement extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+        DAOUser daoUser = new DAOUser();
+
+        User user = daoUser.getUser(Integer.parseInt(request.getParameter("user_id")));
+        User account = (User) session.getAttribute("User");
+        DAOBlog dao = new DAOBlog();
+        DAOImages daoImage = new DAOImages();
+        HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
+        Vector<Images> listFake;
+        Vector<Blog> list;
         try {
-            DAOBlog daoBlog = new DAOBlog();
-            DAOUser daoUser = new DAOUser();
-            HashMap<Integer, String> blog_User = new HashMap<>();
-            HashMap<Integer, String> blog_Approved = new HashMap<>();
-            
-            for (Blog blog : daoBlog.getAll()) {
-                for (User user : daoUser.getAll()) {
-                    if (blog.getUser_id() == user.getId()) {
-                        blog_User.put(blog.getUser_id(), user.getUsername());
+            if (account != null && user.getId() == account.getId()) {
+                list = dao.getAllById(user.getId());
+            } else {
+                list = dao.getAllByIdApproved(user.getId());
+            }
+
+           
+            Vector<Images> imageList = daoImage.getAll();
+            for (Blog blog : list) {
+
+                listFake = new Vector();
+
+                for (Images images : imageList) {
+
+                    if (images.getBlog_id() == blog.getId()) {
+                        listFake.add(images);
                     }
                 }
+                Blog_Image.put(blog, listFake);
+
             }
-            for (Blog blog : daoBlog.getAll()) {
-                if (blog.getIs_approved() == 1) {
-                    blog_Approved.put(blog.getId(), "Approved");
-                   
-                } else if (blog.getIs_approved() == 3) {
-                    blog_Approved.put(blog.getId(), "Banned");
-                     
-                } else if (blog.getIs_approved() == 2) {
-                    blog_Approved.put(blog.getId(), "Reject");
-                     
-                }
-                
+            //Pagination
+            int page, numberpage = 6;
+            int size = list.size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
             }
-            
-            
-            request.setAttribute("blog_Approved", blog_Approved);
-            request.setAttribute("BlogList", daoBlog.getAll());
-            request.setAttribute("Blog_User", blog_User);
-            request.getRequestDispatcher("AdminBlogManagerPage.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(AdminBlogManagement.class.getName()).log(Level.SEVERE, null, ex);
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
+
+            request.setAttribute("user", user);
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
+            request.setAttribute("blog_image", Blog_Image);
+            request.setAttribute("list", list1);
+            request.getRequestDispatcher("UserBlogManager.jsp").forward(request, response);
+        } catch (Exception e) {
+
         }
     }
 

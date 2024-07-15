@@ -38,9 +38,11 @@
                         </div>--%>
                         <form id="apply-post-form" action="upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
+                                <label for="postTitle">Post Title</label>
                                 <textarea id="postTitle" name="postTitle" placeholder="Post Title" required></textarea>
                             </div>
                             <div class="form-group">
+                                <label for="postDescription">Post Description</label>
                                 <textarea id="postDescription" name="postDescription" placeholder="Post Description" required></textarea>
                             </div>
                             <div class="form-group">

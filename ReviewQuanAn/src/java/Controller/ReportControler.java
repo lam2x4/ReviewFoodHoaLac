@@ -4,28 +4,25 @@
  */
 package Controller;
 
-import entity.Blog;
+import dao.DAOReport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Vector;
-
-import dao.DAOBlog;
-import dao.DAOImages;
-import entity.Images;
-import java.util.ArrayList;
-import java.util.HashMap;
+import entity.Report;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author lam1
  */
-@WebServlet(name = "Home", urlPatterns = {"/home"})
-public class Home extends HttpServlet {
+public class ReportControler extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +41,10 @@ public class Home extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Home</title>");
+            out.println("<title>Servlet Report</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Home at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Report at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,33 +62,7 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        DAOBlog dao = new DAOBlog();
-        DAOImages daoImage = new DAOImages();
-        HashMap<Blog, ArrayList<Images>> Blog_Image = new HashMap<>();
-        ArrayList<Images> listFake;
-        try {
-
-            Vector<Blog> list = dao.getAllApproved();
-            for (Blog blog : list) {
-                System.out.println(blog.toString());
-                Vector<Images> imgs = daoImage.findImagesByBlog_id(blog.getId());
-                listFake = new ArrayList();
-
-                for (Images images : imgs) {
-                    listFake.add(images);
-                }
-                Blog_Image.put(blog, listFake);
-
-            }
-            request.setAttribute("blog_image", Blog_Image);
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-        } catch (Exception e) {
-
-        }
-
+        
     }
 
     /**
@@ -105,16 +76,23 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        DAOBlog dao = new DAOBlog();
         try {
-            Vector<Blog> list = dao.getAll();
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-        } catch (Exception e) {
-
+            int typeId = Integer.parseInt(request.getParameter("typeId"));
+            int blogId = Integer.parseInt(request.getParameter("blogId"));
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            String reportDescription = request.getParameter("reportDescription");
+            DAOReport dao = new DAOReport();
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String create_date = date.format(dateFormat);
+            Report report = new Report(userId, blogId, reportDescription, create_date, typeId, 0);
+            dao.addReport(report);
+            response.sendRedirect("BlogPageController?id="+blogId);
+        } catch (SQLException ex) {
+            Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
     }
 
     /**
