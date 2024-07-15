@@ -128,10 +128,17 @@
                 <c:forEach items="${requestScope.list}" var="i">
                     <div class="col-md-4">
                         <div class="card mb-4">
-                            <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                            <c:choose>
+                                <c:when test="${requestScope.blog_image.size() > 1}">
+                                    <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                </c:when>
+                                <c:otherwise>
+                                    <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
+                                </c:otherwise>
+                            </c:choose>
                             <div class="card-body">
                                 <h4 class="card-title">${i.title}</h4>
-                                
+
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <div class="text-muted">${i.create_date}</div>
                                     <c:if test="${requestScope.user.id==sessionScope.User.id}"> 
@@ -179,13 +186,13 @@
                                                         <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
                                                         <a class="dropdown-item" href="BlogEdit?blogId=${i.id}">Reapply Blog</a>
                                                         <c:if test="${i.is_approved==4}">
-                                                             <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
+                                                            <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>
-                                                       <c:if test="${i.is_approved!=4}">
-                                                             <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
-                                                       </c:if>
-                                                       
-                                                       
+                                                        <c:if test="${i.is_approved!=4}">
+                                                            <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
+                                                        </c:if>
+
+
                                                     </div>
                                                 </div>
                                             </c:when>

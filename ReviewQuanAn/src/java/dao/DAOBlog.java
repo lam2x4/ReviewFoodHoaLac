@@ -4,6 +4,7 @@ import Utility.Mapper;
 import dal.DBContext;
 import entity.Blog;
 import java.awt.BorderLayout;
+import java.io.Console;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -312,9 +313,11 @@ public class DAOBlog extends DBContext {
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
-        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0, 1);
         try {
-            System.out.println(dao.getAllByIdApproved(5));
+            for (Blog blog : dao.getAllById(5)) {
+                System.out.println(blog.getContent());
+            }
+            System.out.println(dao.getAllById(5));
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

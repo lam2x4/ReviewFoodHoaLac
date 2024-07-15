@@ -160,7 +160,7 @@ public class DAOComment extends DBContext {
             
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
-                    return "img/" + rs.getString(1);
+                    return rs.getString(1);
                 }
             }
         } catch (SQLException ex) {

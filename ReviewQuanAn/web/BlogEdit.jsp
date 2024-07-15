@@ -65,7 +65,7 @@
                                 <input type="file" id="billUpload" name="billUpload" class="form-control-file" accept="image/*">
                                 <div class ="preview" id="billPreview">
                                     <% if (imgs != null && !imgs.isEmpty()) { %>
-                                    <img class ="preview" src="<%= imgs.get(0).getLink()%>">
+                                    <img class ="preview" src="img/<%= imgs.get(0).getLink()%>">
                                     <% } %>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                 <div class ="preview" id="imagePreview">
                                     <% if (imgs != null && imgs.size() > 1) { 
                                         for (int i = 1; i < imgs.size(); i++) { %>
-                                    <img class ="preview" src="<%= imgs.get(i).getLink() %>">
+                                    <img class ="preview" src="img/<%= imgs.get(i).getLink() %>">
                                     <% } } %>
                                 </div>
                             </div>

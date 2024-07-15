@@ -66,6 +66,7 @@ function postComment(username, profPic, commentId) {
     if (commentValue) {
         const newComment = document.createElement('div');
         newComment.classList.add('comment');
+        newComment.id = `comment-${commentId}`;
         newComment.innerHTML = `<div class="thumbnail">
                             <a class="toProfile">
                                 <img src="${profPic}" alt="Profile Picture" class="profile-pic">
@@ -90,14 +91,14 @@ function postComment(username, profPic, commentId) {
                                 <span id="likeCommentCount-${commentId}">0 likes</span>
                                 <button class="rating" id="dislike-button-${commentId}" onclick="toggleCommentDislike(${commentId})" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
-                            <div>
+                            <div id="editOptionsDiv-${commentId}">
                                 <button class="menu-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                 <ul class="menu-options" id="editOptions-${commentId}" style="display: none;">
                                     <li onclick="toggleEditComment(${commentId}, '${commentValue}')"><i class="fa-regular fa-pen-to-square"></i>Edit</li>
                                     <li onclick="deleteComment(${commentId})"><i class="fa-solid fa-trash"></i>Delete</li>
                                 </ul>
                             </div>
-                        </div>`;
+</div>`;
 
 
         // Append the new comment to the comment list
@@ -110,6 +111,7 @@ function postComment(username, profPic, commentId) {
         document.getElementById('add-comment-button').style.display = 'none';
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const postImagesContainer = document.getElementById('post-images');
@@ -592,7 +594,7 @@ function showSlides(n) {
 
 
 
-                                    
+
 // Bookmark toggling                     
 //------------------------------------------------------------------------------
 function toggleBookmark() {

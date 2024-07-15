@@ -23,7 +23,7 @@
 
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>       
-     
+
 
         <title>Home Page </title>
         <style>
@@ -100,10 +100,17 @@
                     <c:forEach items="${requestScope.list}" var="i">
                         <div class="col-md-4">
                             <div class="card mb-4">
-                                <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                <c:choose>
+                                    <c:when test="${requestScope.blog_image.size() > 1}">
+                                        <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
+                                    </c:otherwise>
+                                </c:choose>
                                 <div class="card-body">
                                     <h4 class="card-title">${i.title}</h4>
-                                   
+
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <div class="text-muted" >${i.create_date}</div>
                                         <c:choose>
@@ -158,7 +165,7 @@
         </section>
 
 
- 
+
     </body>
 
     <%@include file="./Footer.jsp" %>

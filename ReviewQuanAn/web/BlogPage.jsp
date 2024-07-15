@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.*, java.util.Vector"%>
 
+
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -72,7 +73,7 @@
           String loggedInUsername = (String)request.getAttribute("commentUsername");%>
         <div class="post-container">
             <div class="post-header" style="position: relative;">
-                <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
+                <img src="img/<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
                     <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
@@ -89,7 +90,7 @@
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
             <div class="post-images" id="post-images">
                 <%for(int i = 0; i < imgs.size(); i++){%>
-                <img src="<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
+                <img src="img/<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
                 <%}%>
             </div>
 
@@ -99,7 +100,7 @@
                     <%for(int i = 0; i < imgs.size(); i++){ %>
                     <div class="mySlides">
                         <div class="numbertext"><%=i+1%> / <%=imgs.size()%></div>
-                        <img src="<%=imgs.get(i).getLink()%>" style="width:100%">
+                        <img src="img/<%=imgs.get(i).getLink()%>" style="width:100%">
                     </div>
                     <%}%>
                     <a class="prev" onclick="plusSlides(-1)"><i class="fa-solid fa-chevron-left"></i></a>
@@ -134,7 +135,7 @@
                     </select>
                 </div>
                 <div class="comment-box" id="comment-box">
-                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <img src="img/<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
                     <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
                     <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
                     <form id="commentForm">
@@ -152,7 +153,7 @@
                     <div class="comment" id="comment-<%=comments.get(i).getId()%>">
                         <div class="thumbnail">
                             <a class="toProfile">
-                                <img src="<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
+                                <img src="img/<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
                             </a>
                         </div>
                         <div class="comment-body">

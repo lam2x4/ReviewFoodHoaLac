@@ -126,10 +126,7 @@
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
-
-
-
-
+            
             <div class="container-fluid mt-4">
                 <h1 class="mb-4">Blog Management</h1>
                 <div class="table-responsive">
