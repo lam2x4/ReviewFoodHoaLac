@@ -1,9 +1,3 @@
-<%-- 
-    Document   : BlogPage
-    Created on : May 21, 2024, 6:03:04 PM
-    Author     : ADMIN
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.*, java.util.Vector"%>
 
@@ -73,14 +67,15 @@
         <%@ include file="./Header.jsp" %>
         <%Vector<Comment> comments = (Vector<Comment>)request.getAttribute("blogComments");
           Vector<Images> imgs = (Vector<Images>)request.getAttribute("blogPictures");
-          Vector<String> avatars = (Vector<String>)request.getAttribute("commentAvatars");%>
+          Vector<String> avatars = (Vector<String>)request.getAttribute("commentAvatars");
+          Vector<String> convertedDates = (Vector<String>)request.getAttribute("commentsDates");
+          String loggedInUsername = (String)request.getAttribute("commentUsername");%>
         <div class="post-container">
             <div class="post-header" style="position: relative;">
                 <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
-                    <h2><a href="" class="profile-link">Original Author: <%=(String)request.getAttribute("authorname")%></a></h2>
-                    <p><%=(String)request.getAttribute("publishDate")%></p>
+                    <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
                 <c:if test="${sessionScope.User!=null}">
                     <button class="report-button" data-toggle="modal" data-target="#reportModal">Report</button>
@@ -94,7 +89,7 @@
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
             <div class="post-images" id="post-images">
                 <%for(int i = 0; i < imgs.size(); i++){%>
-                <img src="<%=imgs.get(i).getLink()%>" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
+                <img src="<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
                 <%}%>
             </div>
 
@@ -113,15 +108,16 @@
             </div>
             <hr>
             <div class="post-sub-info">
+                <input type="hidden" id="blogLikes" value="<%=(int)request.getAttribute("blogLikes")%>">
                 <span id="likeCount" class="count"><i class="fa-solid fa-thumbs-up"></i> Likes: <%=(int)request.getAttribute("blogLikes")%></span>
-                <span id="commentCount" class="count">Comments: 0</span>
+                <span id="commentCount" class="count"><i class="fa-solid fa-comment"></i> Comments: 0</span>
             </div>
             <hr>
             <div class="rate-share">
                 <div class="rating">
                     <%String post_interaction_type = (String)request.getAttribute("postLikeInteractionType") != null ? (String)request.getAttribute("postLikeInteractionType") : "nothing";%>
-                    <button class="button likeBtn" role="button" id="like-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleLike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("like")%><%} else{%>false<%}%>">Like</button>
-                    <button class="button dislikeBtn" role="button" id="dislike-button" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleDislike()"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=post_interaction_type.equals("dislike")%><%} else{%>false<%}%>">Dislike</button>
+                    <button class="button likeBtn" role="button" id="like-button" aria-pressed="false">Like</button>
+                    <button class="button dislikeBtn" role="button" id="dislike-button" aria-pressed="false">Dislike</button>
                 </div>
                 <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
                     <input type="submit" class="button" role="button" value="Share">
@@ -130,6 +126,13 @@
             </div>
             <hr>
             <div class="comment-section">
+                <div class="sort-options">
+                    <label for="sort-comments"><i class="fa-solid fa-sort"></i> Sort by: </label>
+                    <select id="sort-comments" name="sort-comments" onchange="sortComments()">
+                        <option value="date">Date</option>
+                        <option value="popular">Popular</option>
+                    </select>
+                </div>
                 <div class="comment-box" id="comment-box">
                     <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
                     <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
@@ -137,30 +140,50 @@
                     <form id="commentForm">
                         <textarea type="text" name="comment-input" id="comment-input" class="glowing-input" placeholder="Add a comment..."></textarea>
                         <div class="buttons">
-                            <button class="button" id="cancel-button">Cancel</button>
+                            <button class="button" type="button" id="cancel-button">Cancel</button>
                             <button class="button" type="submit" name="btnsubmit" value="add-comment" id="add-comment-button">Add Comment</button>
                         </div>
                         <input type="hidden" name="service" value="addComment">
                     </form>
                 </div>
                 <div class="comment-list" id="comment-list">
-                    <%for(int i = 0; i < comments.size() && i < avatars.size(); i++){%>
+                    <%for(int i = 0; i < comments.size(); i++){%>
                     <input type="hidden" id="commentId-<%=comments.get(i).getId()%>" value="<%=comments.get(i).getId()%>">
-                    <div class="comment">
+                    <div class="comment" id="comment-<%=comments.get(i).getId()%>">
                         <div class="thumbnail">
                             <a class="toProfile">
                                 <img src="<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
                             </a>
                         </div>
                         <div class="comment-body">
-                            <p><a href="UserBlogManagement?user_id=<%=comments.get(i).getUser_id()%>" class="profile-link"><%=comments.get(i).getUsername()%></a> <%=comments.get(i).getCreate_date()%></p>
-                            <p style="word-wrap: break-word;"><%=comments.get(i).getContent()%></p>
+                            <p>
+                                <a href="" class="profile-link"><%=comments.get(i).getUsername()%></a>
+                                <span class="comment-date"><%=convertedDates.get(i)%></span>
+                            </p>
+                            <p style="word-wrap: break-word;">
+                                <span id="commentContent-<%=comments.get(i).getId()%>"><%=comments.get(i).getContent()%></span>
+                                <textarea class="editCommentInput" id="editCommentInput-<%=comments.get(i).getId()%>" style="display: none;"></textarea>
+                            </p>
+                            <div id="editCommentControls-<%=comments.get(i).getId()%>" style="display: none;">
+                                <button class="save-button button" onclick="saveEditedComment(<%=comments.get(i).getId()%>)">Save</button>
+                                <button class="cancel-button button" onclick="cancelEditComment(<%=comments.get(i).getId()%>)">Cancel</button>
+                            </div>
                             <div class="comment-actions">
                                 <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
-                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentLike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("like")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-up"></i></button>
+                                <input type="hidden" id="commentLikes-<%=comments.get(i).getId()%>" value="<%=comments.get(i).getLikes()%>">
+                                <button class="rating" id="like-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-up"></i></button>
                                 <span id="likeCommentCount-<%=comments.get(i).getId()%>"><%=comments.get(i).getLikes()%> likes</span>
-                                <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" <%if(request.getAttribute("commentProfPic") != null){%>onclick="toggleCommentDislike(<%=comments.get(i).getId()%>)"<%}%> aria-pressed="<%if(request.getAttribute("commentProfPic") != null){%><%=comm_inter_type.get(i).equals("dislike")%><%} else{%>false<%}%>"><i class="fa-regular fa-thumbs-down"></i></button>
+                                <button class="rating" id="dislike-button-<%=comments.get(i).getId()%>" aria-pressed="false"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
+                            <%if(loggedInUsername != null && loggedInUsername.equals(comments.get(i).getUsername())){%>
+                            <div id="editOptionsDiv-<%=comments.get(i).getId()%>">
+                                <button class="menu-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <ul class="menu-options" id="editOptions-<%=comments.get(i).getId()%>" style="display: none;">
+                                    <li onclick="toggleEditComment(<%=comments.get(i).getId()%>, '<%=comments.get(i).getContent()%>')"><i class="fa-regular fa-pen-to-square"></i>Edit</li>
+                                    <li onclick="deleteComment(<%=comments.get(i).getId()%>)"><i class="fa-solid fa-trash"></i>Delete</li>
+                                </ul>
+                            </div>
+                            <%}%>
                         </div>
                     </div>
                     <%}%>
@@ -205,10 +228,46 @@
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-                                    updateCommentCount();
-            <%if(request.getAttribute("commentProfPic") == null){%>
-                                    const commentBox = document.getElementById('comment-box');
-                                    commentBox.style.display = "none";
+                                        updateCommentCount();
+            <%if(loggedInUsername == null){%>
+                                        const commentBox = document.getElementById('comment-box');
+                                        commentBox.style.display = "none";
+            <%}else{%>
+                                        const likeBtn = document.getElementById('like-button');
+                                        likeBtn.onclick = toggleLike;
+                                        likeBtn.setAttribute('aria-pressed', <%=post_interaction_type.equals("like")%>);
+
+                                        const dislikeBtn = document.getElementById('dislike-button');
+                                        dislikeBtn.onclick = toggleDislike;
+                                        dislikeBtn.setAttribute('aria-pressed', <%=post_interaction_type.equals("dislike")%>);
+
+            <%Vector<String> comm_inter_type = (Vector<String>)request.getAttribute("commentsLikeInteractionType");%>
+            <%for(int i = 0; i < comments.size(); i++){%>
+                                        //toggle comment like btn
+                                        var commentLikeBtn = document.getElementById('like-button-<%=comments.get(i).getId()%>');
+                                        commentLikeBtn.onclick = function () {
+                                            toggleCommentLike(<%=comments.get(i).getId()%>);
+                                        };
+                                        commentLikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("like")%>);
+
+            <%if(comm_inter_type.get(i).equals("like")){%>
+                                        commentLikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+            <%}else{%>
+                                        commentLikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-up"></i>';
+            <%}%>
+                                        //toggle comment dislike btn
+                                        var commentDisikeBtn = document.getElementById('dislike-button-<%=comments.get(i).getId()%>');
+                                        commentDisikeBtn.onclick = function () {
+                                            toggleCommentDislike(<%=comments.get(i).getId()%>);
+                                        };
+                                        commentDisikeBtn.setAttribute('aria-pressed', <%=comm_inter_type.get(i).equals("dislike")%>);
+
+            <%if(comm_inter_type.get(i).equals("dislike")){%>
+                                        commentDisikeBtn.innerHTML = '<i class="fa-solid fa-thumbs-down"></i>';
+            <%}else{%>
+                                        commentDisikeBtn.innerHTML = '<i class="fa-regular fa-thumbs-down"></i>';
+            <%}%>
+            <%}%>
             <%}%>
 
                                     function showSuccessAlert() {

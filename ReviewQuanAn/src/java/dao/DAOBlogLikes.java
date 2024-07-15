@@ -1,5 +1,6 @@
 package dao;
 
+import Utility.Mapper;
 import dal.DBContext;
 import entity.BlogLikes;
 import java.sql.PreparedStatement;
@@ -15,25 +16,21 @@ public class DAOBlogLikes extends DBContext {
                 + "([user_id], [blog_id], [interaction_type]) "
                 + "VALUES (?, ?, ?)";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
-            pre.setInt(1, bl.getUser_id());
-            pre.setInt(2, bl.getBlog_id());
-            pre.setString(3, bl.getInteraction_type());
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            Mapper.setRowAddBlogLikes(bl, pre);
 
             return pre.executeUpdate();
         }
     }
-    
-    public int updateBlogLikes(BlogLikes bl) throws SQLException{
-        String sql = "UPDATE BlogLikes " +
-                    "SET interaction_type = ? " +
-                    "WHERE user_id = ? AND blog_id = ?";
-        
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
-            pre.setString(1, bl.getInteraction_type());
-            pre.setInt(2, bl.getUser_id());
-            pre.setInt(3, bl.getBlog_id());
 
+    public int updateBlogLikes(BlogLikes bl) throws SQLException {
+        String sql = "UPDATE BlogLikes "
+                + "SET interaction_type = ? "
+                + "WHERE user_id = ? AND blog_id = ?";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            Mapper.setRowUpdateBlogLikes(bl, pre);
+            
             return pre.executeUpdate();
         }
     }
@@ -41,32 +38,27 @@ public class DAOBlogLikes extends DBContext {
     public int deleteBlogLikes(int user_id, int blog_id) throws SQLException {
         String sql = "DELETE FROM BlogLikes WHERE user_id = ? AND blog_id = ?";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
             pre.setInt(2, blog_id);
 
             return pre.executeUpdate();
         }
     }
-    
-    public BlogLikes getBlogLikes(int user_id, int blog_id) throws SQLException{
+
+    public BlogLikes getBlogLikes(int user_id, int blog_id) throws SQLException {
         String sql = "SELECT * FROM BlogLikes WHERE user_id = ? AND blog_id = ?";
-        
-        try(PreparedStatement pre = connection.prepareStatement(sql)){
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
             pre.setInt(2, blog_id);
-            
-            try(ResultSet rs = pre.executeQuery()){
-                if(rs.next()){
-                    BlogLikes bl = new BlogLikes();
-                    
-                    bl.setUser_id(rs.getInt(1));
-                    bl.setBlog_id(rs.getInt(2));
-                    bl.setInteraction_type(rs.getString(3));
-                    
+
+            try (ResultSet rs = pre.executeQuery()) {
+                if (rs.next()) {
+                    BlogLikes bl = Mapper.mapRowBlogLikes(rs);
+
                     return bl;
-                }
-                else{
+                } else {
                     return null;
                 }
             }

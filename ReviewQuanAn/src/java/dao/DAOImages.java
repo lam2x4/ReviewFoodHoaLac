@@ -1,5 +1,7 @@
 package dao;
 
+import Utility.Mapper;
+import dal.DBContext;
 import entity.Images;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +10,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DAOImages extends DBConnect {
+public class DAOImages extends DBContext {
 
     public int addImages(Images img) throws SQLException {
         String sql = "INSERT INTO [dbo].[Images] "
@@ -16,8 +18,7 @@ public class DAOImages extends DBConnect {
                 + "VALUES (?,?)";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, img.getBlog_id());
-            pre.setString(2, img.getLink());
+            Mapper.setRowAddImages(img, pre);
 
             return pre.executeUpdate();
         }
@@ -30,9 +31,7 @@ public class DAOImages extends DBConnect {
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, img.getBlog_id());
-            pre.setString(2, img.getLink());
-            pre.setInt(3, img.getId());
+            Mapper.setRowUpdateImages(img, pre);
 
             return pre.executeUpdate();
         }
@@ -56,11 +55,7 @@ public class DAOImages extends DBConnect {
             ResultSet rs = pre.executeQuery();
 
             while (rs.next()) {
-                Images img = new Images();
-
-                img.setId(rs.getInt(1));
-                img.setBlog_id(rs.getInt(2));
-                img.setLink("img/" + rs.getString(3));
+                Images img = Mapper.mapRowImages(rs);
 
                 vector.add(img);
             }
@@ -76,11 +71,7 @@ public class DAOImages extends DBConnect {
 
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
-                    Images img = new Images();
-
-                    img.setId(rs.getInt(1));
-                    img.setBlog_id(rs.getInt(2));
-                    img.setLink("img/" + rs.getString(3));
+                    Images img = Mapper.mapRowImages(rs);
 
                     return img;
                 } else {
@@ -99,11 +90,7 @@ public class DAOImages extends DBConnect {
             ResultSet rs = pre.executeQuery();
 
             while (rs.next()) {
-                Images img = new Images();
-
-                img.setId(rs.getInt(1));
-                img.setBlog_id(rs.getInt(2));
-                img.setLink("img/" + rs.getString(3));
+                Images img = Mapper.mapRowImages(rs);
 
                 vector.add(img);
             }
@@ -116,9 +103,8 @@ public class DAOImages extends DBConnect {
         Images img = new Images(1, "New Link");
 
         try {
-   
-                dao.addImages(img);
 
+            System.out.println(dao.getAll());
         } catch (SQLException ex) {
             Logger.getLogger(DAOImages.class.getName()).log(Level.SEVERE, null, ex);
         }

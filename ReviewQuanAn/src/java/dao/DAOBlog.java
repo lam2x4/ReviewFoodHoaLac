@@ -1,5 +1,6 @@
 package dao;
 
+import Utility.Mapper;
 import dal.DBContext;
 import entity.Blog;
 import java.awt.BorderLayout;
@@ -10,7 +11,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DAOBlog extends DBConnect {
+public class DAOBlog extends DBContext {
 
     public int addBlog(Blog b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Blog] "
@@ -18,14 +19,7 @@ public class DAOBlog extends DBConnect {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, b.getUser_id());
-            pre.setString(2, b.getTitle());
-            pre.setString(3, b.getContent());
-            pre.setString(4, b.getCreate_date());
-            pre.setInt(5, b.getLikes());
-            pre.setInt(6, b.getIs_approved());
-            pre.setInt(7, b.getIs_banned());
-            pre.setInt(8, b.getAuthor_id());
+            Mapper.setRowAddBlog(b, pre);
 
             return pre.executeUpdate();
         }
@@ -69,15 +63,7 @@ public class DAOBlog extends DBConnect {
                 + "WHERE id = ?";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
-            pre.setInt(1, b.getUser_id());
-            pre.setString(2, b.getTitle());
-            pre.setString(3, b.getContent());
-            pre.setString(4, b.getCreate_date());
-            pre.setInt(5, b.getLikes());
-            pre.setInt(6, b.getIs_approved());
-            pre.setInt(7, b.getIs_banned());
-            pre.setInt(8, b.getAuthor_id());
-            pre.setInt(9, b.getId());
+            Mapper.setRowEditBlog(b, pre);
 
             return pre.executeUpdate();
         }
@@ -119,18 +105,8 @@ public class DAOBlog extends DBConnect {
             ResultSet rs = pre.executeQuery();
 
             while (rs.next()) {
-                Blog b = new Blog();
+                Blog b = Mapper.mapRowBlog(rs);
 
-                b.setId(rs.getInt(1));
-                b.setUser_id(rs.getInt(2));
-                b.setTitle(rs.getString(3));
-                b.setContent(rs.getString(4));
-                b.setCreate_date(rs.getString(5));
-                b.setLikes(rs.getInt(6));
-                b.setIs_approved(rs.getInt(7));
-                b.setIs_banned(rs.getInt(8));
-                b.setAuthor_id(rs.getInt(9));
-                b.setReason_reject(rs.getString(10));
                 vector.add(b);
             }
         }

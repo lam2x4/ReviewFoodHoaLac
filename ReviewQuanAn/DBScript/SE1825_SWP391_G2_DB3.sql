@@ -34,7 +34,7 @@ CREATE TABLE [User](
 	avatar nvarchar(255),
 	gender int,
 	[description] nvarchar(750),
-	create_date nvarchar(20) not null,
+	create_date datetime not null,
 	verify_status int not null,
 	role_id int foreign key references [role](role_id),
 	is_banned int foreign key references Ban_Name(id)
@@ -50,7 +50,7 @@ CREATE TABLE Blog(
 	[user_id] int foreign key references [user](id), 
     title nvarchar(max) not null,
 	content nvarchar(max) not null,
-	create_date nvarchar(20) not null,
+	create_date datetime not null,
 	likes int,
 	is_approved int foreign key references Approve_Name(id),
 	is_banned int foreign key references Ban_Name(id),
@@ -69,7 +69,7 @@ CREATE TABLE Comment(
 	[user_id] int foreign key references [User](id),
 	blog_id int foreign key references Blog(id),
 	content nvarchar(750),
-	create_date nvarchar(20),
+	create_date datetime,
 	likes int,
 	is_banned int not null
 )

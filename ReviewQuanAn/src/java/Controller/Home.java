@@ -75,7 +75,6 @@ public class Home extends HttpServlet {
         try {
 
             Vector<Blog> list = dao.getAllApproved();
-            Vector<Images> imageList = daoImage.getAll();
             for (Blog blog : list) {
 
                 listFake = new Vector();
