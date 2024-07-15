@@ -55,7 +55,6 @@ CREATE TABLE Blog(
 	is_approved int foreign key references Approve_Name(id),
 	is_banned int foreign key references Ban_Name(id),
 	[author_id] int foreign key references [user](id),
-	reason_reject nvarchar(100),
 )
 
 CREATE TABLE Images(
@@ -95,8 +94,7 @@ CREATE TABLE CommentLikes(
 )
 CREATE TABLE Report_Type(
 	id int identity(1,1) primary key ,
-	[type_name] nvarchar(30),
-	[description] nvarchar(150),
+	[type_name] int,
 	
 )
 
@@ -105,34 +103,17 @@ CREATE TABLE Report(
 	[user_id] int foreign key references [User](id),
 	[blog_id] int foreign key references Blog(id),
 	[content] nvarchar(100),
-	create_date nvarchar(20) not null,
 	[type_id] int foreign key references Report_Type(id),
-	[is_approved] int foreign key references Approve_Name(id),
 	
 )
 
-create table Bookmark(
-	id int identity(1,1) primary key,
-	[user_id] int foreign key references [User](id),
-	blog_id int foreign key references Blog(id),
+create table BookMark(
+id int Identity(1,1) primary key,
+[user_id] int foreign key references [user](id),
+[blog_id] int foreign key references Blog(id),
 )
 
 -- Insert data into the Role table
-
-
-INSERT INTO Report_Type([type_name],[description])  VALUES
-('Harassment', 'Reports related to harassment or abusive behavior'),
-('Spam', 'Reports regarding unsolicited or irrelevant messages'),
-('Violence', 'Reports of violent content or threatening behavior'),
-('Hate Speech', 'Reports involving discriminatory or hateful speech'),
-('Misinformation', 'Reports about false or misleading information'),
-('Impersonation', 'Reports about accounts impersonating other individuals or entities'),
-('Child Exploitation', 'Reports related to child exploitation or abuse'),
-('Scams', 'Reports regarding fraudulent schemes or deceptive practices'),
-('Privacy Violation', 'Reports about unauthorized use of personal information'),
-('Self-Harm', 'Reports related to content promoting self-harm or suicide'),
-('Other', 'Reports that do not fit into any other predefined categories');
-
 INSERT INTO [Role] (role_id, role_name)
 VALUES (1, 'admin'),
        (2, 'user');
@@ -143,14 +124,11 @@ VALUES (0, 'Active'),
 
 -- Insert data into the User table
 INSERT INTO [User] (username, [password], email, phone, avatar, gender, [description], create_date, verify_status, role_id, is_banned)
-VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', 'photo_7_2024-06-06_11-09-40.jpg', 1, 'Tuan Anh', '15/6/2024', 1, 1, 0),
-       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', 'photo_5_2024-06-06_11-09-40.jpg', 1, 'Hoang Anh','15/6/2024', 1, 2, 0),
-       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', 'photo_6_2024-06-06_11-09-40.jpg', 1, 'Kien', '15/6/2024', 1, 2, 0),
-	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', 'photo_1_2024-06-06_11-09-40.jpg', 1, 'Viet', '15/6/2024', 1, 2, 0),
-       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0),
-	    ('lam', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'haha@fpt.edu.vn', '123', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '15/6/2024', 1, 2, 0);
-
-
+VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.SDys2DO', 'anhtthe182190@fpt.edu.vn', '0123456789', 'photo_7_2024-06-06_11-09-40.jpg', 1, 'Tuan Anh', '2024-06-15 18:45:30', 1, 1, 0),
+       ('anhlhhe186102', '$2a$10$iLg.r2pLXmkHhAPWObgbVuSujjYz5KV1qA4vDOonrVfRnVCKniAQi', 'anhlhhe186102@fpt.edu.vn', '0223456789', 'photo_5_2024-06-06_11-09-40.jpg', 1, 'Hoang Anh','2024-06-15 18:45:30', 1, 2, 0),
+       ('kienvthe186151', '$2a$10$3CiZMivn3fu0mx6WaOuNZ.ieW4B1nP7eQuiZ8yjMp2u7AFK18vAK2', 'kienvthe186151@fpt.edu.vn', '0323456789', 'photo_6_2024-06-06_11-09-40.jpg', 1, 'Kien', '2024-06-15 18:45:30', 1, 2, 0),
+	   ('vietthhe186188', '$2a$10$9mczDJvMzyaFZ0Bf1i5e8.7gYZb/j6ROTUxJaEfUq48zgR8D1ub7.', 'vietthhe186188@fpt.edu.vn', '0423456789', 'photo_1_2024-06-06_11-09-40.jpg', 1, 'Viet', '2024-06-15 18:45:30', 1, 2, 0),
+       ('lamtbhe186252', '$2a$10$ET0PtpYZn/nsX.XiBqdHueBJsZdAGAy5U6kqqRONk.zr00u0d4uCu', 'lamtbhe186252@fpt.edu.vn', '0523456789', 'photo_3_2024-06-06_11-09-40.jpg', 1, 'Lam', '2024-06-15 18:45:30', 1, 2, 0);
 
 INSERT INTO Approve_Name(id, [name])
 VALUES (0, 'Waiting'),
@@ -161,20 +139,15 @@ VALUES (0, 'Waiting'),
 
 	   SET IDENTITY_INSERT [dbo].[Blog] ON 
 -- Insert data into the Blog table
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (7, 5, N'Review Quán Ăn Bún Đậu Đồng Mô', N'Đây là một quán rất ngon và tuyệt vời, nhân viên nhiệt tình nhanh nhạy, bún đậu ngon, nhiều topping ', N'11/06/2024', 0, 2, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (8, 5, N'Review Quán Kem Mixue Cây Xăng 39', N'Kem ngon,rẻ , nhưng nước uống hơi ngọt, không hợp với tôi ', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (9, 5, N'Review Quán Ăn Bún Bò Huế Thái Anh', N'Nước dùng đậm đà, mỗi tội không có điều hòa', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (10, 5, N'Review Quán Ăn Gà Ri Phú Bình', N'Rất ngon, đậm đà, gà rất dai và ngon', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (11, 5, N'Review Nhà Hàng Huy Cường', N'Cực sang trọng, rất nên thử, thức ăn đa dạng phong phú, món ăn đậm đà, đặc biệt món bò xào hành tây cực cuốn', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject)VALUES (12, 5, N'Review Quán Ăn 1988 BBQ', N'Thịt hơi động lạnh tí, ăn không ngon, thịt rất mỏng , thái nhỏ xíu, nhân viên thái độ không tốt ', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (13,5 ,N'Review Nhà Hãng Nguyễn Gia', N'Rất ngon , trông sang trọng , giá trung bình từ 200-300k một món, rất vừa túi với người giàu ', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject)VALUES (14, 5, N'Review Quán Nước Cà Phê Bao Cấp', N'Khá ổn, giá nước tầm 30-35k khá vừa giá, đặc biệt cà phê rất ngon', N'11/06/2024', 0, 1, 0,5,null)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id],reason_reject) VALUES (17, 5, N'Review Quán Bún bò đồng đậu', N'Quán ăn rất ngon
-
-Nhưng hơi đắt
-
-
-Ủng hộ', N'12/06/2024', 0, 1, 0,5,null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (7, 5, N'Review Quán Ăn Bún Đậu Đồng Mô', N'Đây là một quán rất ngon và tuyệt vời, nhân viên nhiệt tình nhanh nhạy, bún đậu ngon, nhiều topping ','2024-06-15 11:45:30', 0, 2, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (8, 5, N'Review Quán Kem Mixue Cây Xăng 39', N'Kem ngon,rẻ , nhưng nước uống hơi ngọt, không hợp với tôi ', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (9, 5, N'Review Quán Ăn Bún Bò Huế Thái Anh', N'Nước dùng đậm đà, mỗi tội không có điều hòa', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (10, 5, N'Review Quán Ăn Gà Ri Phú Bình', N'Rất ngon, đậm đà, gà rất dai và ngon', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (11, 5, N'Review Nhà Hàng Huy Cường', N'Cực sang trọng, rất nên thử, thức ăn đa dạng phong phú, món ăn đậm đà, đặc biệt món bò xào hành tây cực cuốn', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id])VALUES (12, 5, N'Review Quán Ăn 1988 BBQ', N'Thịt hơi động lạnh tí, ăn không ngon, thịt rất mỏng , thái nhỏ xíu, nhân viên thái độ không tốt ', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (13,5 ,N'Review Nhà Hãng Nguyễn Gia', N'Rất ngon , trông sang trọng , giá trung bình từ 200-300k một món, rất vừa túi với người giàu ', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id])VALUES (14, 5, N'Review Quán Nước Cà Phê Bao Cấp', N'Khá ổn, giá nước tầm 30-35k khá vừa giá, đặc biệt cà phê rất ngon', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (17, 5, N'Review Quán Bún bò đồng đậu', N'Quán ăn rất ngon Nhưng hơi đắt Ủng hộ', '2024-06-15 11:45:30', 0, 1, 0,5)
    SET IDENTITY_INSERT [dbo].[Blog] off 
 
 SET IDENTITY_INSERT [dbo].[Images] ON 
@@ -210,11 +183,11 @@ INSERT [dbo].[Images] ([id], [blog_id], [link]) VALUES (43, 17, N'ff26210e-44bb-
 SET IDENTITY_INSERT [dbo].[Images] off 
 -- Insert data into the Comment table
 INSERT INTO Comment ([user_id], blog_id, content, create_date, likes, is_banned)
-VALUES (1, 7, 'Tuan Anh comment', '15/06/2024', 5, 0),
-       (2, 8, 'Hoang Anh comment', '15/06/2024', 3, 0),
-       (3, 9, 'Kien comment', '15/06/2024', 7, 0),
-       (4, 9, 'Viet comment', '15/06/2024', 12, 0),
-       (5, 9, 'Lam comment', '15/06/2024', 6, 0);
+VALUES (1, 7, 'Tuan Anh comment', '2024-06-15 18:45:30', 5, 0),
+       (2, 8, 'Hoang Anh comment', '2024-06-15 18:45:30', 3, 0),
+       (3, 9, 'Kien comment', '2024-06-15 18:45:30', 7, 0),
+       (4, 9, 'Viet comment', '2024-06-15 18:45:30', 12, 0),
+       (5, 9, 'Lam comment', '2024-06-15 18:45:30', 6, 0);
 
 INSERT INTO Bookmark([user_id], blog_id) 
 VALUES (2,7),
