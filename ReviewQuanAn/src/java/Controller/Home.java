@@ -112,7 +112,6 @@ public class Home extends HttpServlet {
         } catch (Exception e) {
 
         }
-        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
     }
 
     /**
