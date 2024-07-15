@@ -80,6 +80,9 @@ public class AdminBlogManagement extends HttpServlet {
                 if (blog.getIs_approved() == 1) {
                     blog_Approved.put(blog.getId(), "Approved");
                    
+                } else if (blog.getIs_approved() == 3) {
+                    blog_Approved.put(blog.getId(), "Banned");
+                     
                 } else if (blog.getIs_approved() == 2) {
                     blog_Approved.put(blog.getId(), "Reject");
                      
@@ -91,7 +94,7 @@ public class AdminBlogManagement extends HttpServlet {
             request.setAttribute("blog_Approved", blog_Approved);
             request.setAttribute("BlogList", daoBlog.getAll());
             request.setAttribute("Blog_User", blog_User);
-            request.getRequestDispatcher("BlogManagerPage.jsp").forward(request, response);
+            request.getRequestDispatcher("AdminBlogManagerPage.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(AdminBlogManagement.class.getName()).log(Level.SEVERE, null, ex);
         }

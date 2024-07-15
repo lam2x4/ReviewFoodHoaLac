@@ -22,10 +22,10 @@ public class DAOUser extends DBContext {
         String sql = "Select * from [user]";
         Vector<User> vector = new Vector<>();
         try (Statement state
-                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
                 = state.executeQuery(sql)) {
             while (rs.next()) {
-                User user = Mapper.mapRow(rs);
+                User user = Mapper.mapRowUser(rs);
                 vector.add(user);
             }
         } catch (SQLException ex) {
@@ -39,8 +39,8 @@ public class DAOUser extends DBContext {
                 = "INSERT INTO [User] "
                 + "(username,[password],email,phone,avatar,gender,[description],create_date,verify_status,role_id)VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            Mapper.setRowAdd(user, pstmt);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            Mapper.setRowAddUser(user, pstmt);
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -52,8 +52,8 @@ public class DAOUser extends DBContext {
     public int updateUser(User user) {
         String sql = "UPDATE [dbo].[User] SET [username] = ?, [password] = ?, [email] = ?, [phone] = ?, [avatar] = ?, [gender] = ?, "
                 + "[description] = ?, [create_date] = ?, [verify_status] = ?, [role_id] = ? WHERE [id] = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            Mapper.setRowUpdate(user, pstmt);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            Mapper.setRowUpdateUser(user, pstmt);
             pstmt.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -66,11 +66,11 @@ public class DAOUser extends DBContext {
     public User getUser(String email) {
         String sql = "SELECT * FROM [user] WHERE email = ?";
         User user = null;
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    user = Mapper.mapRow(rs);
+                    user = Mapper.mapRowUser(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -83,12 +83,12 @@ public class DAOUser extends DBContext {
     public User getUser(int id) {
         String sql = "SELECT * FROM [User] WHERE id = ?";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, id);
 
             try (ResultSet rs = pre.executeQuery()) {
                 if (rs.next()) {
-                    User user = Mapper.mapRow(rs);
+                    User user = Mapper.mapRowUser(rs);
                     return user;
                 }
             }
@@ -101,7 +101,7 @@ public class DAOUser extends DBContext {
     public int getUser_id(String username) {
         String sql = "SELECT id FROM [User] WHERE username = ?";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setString(1, username);
 
             try (ResultSet rs = pre.executeQuery()) {
@@ -124,7 +124,7 @@ public class DAOUser extends DBContext {
                  AND id NOT IN (SELECT [user_id] FROM Comment)
                  AND id NOT IN (SELECT [user_id] FROM Draft);""";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
             int rowsAffected = pre.executeUpdate();
             return rowsAffected; // return the number of rows affected
@@ -141,7 +141,7 @@ public class DAOUser extends DBContext {
                 + "delete [user] where id = ? "
                 + "ALTER TABLE blog CHECK CONSTRAINT FK__Blog__user_id__440B1D61 ";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
             pre.setInt(1, user_id);
             pre.setInt(2, user_id);
             pre.setInt(3, user_id);
@@ -156,7 +156,7 @@ public class DAOUser extends DBContext {
     public static void main(String[] args) {
         DAOUser dao = new DAOUser();
 
-        dao.deleteUserIgnoreConstraint(9);
+        System.out.println(dao.getUser(5));
 
     }
 
@@ -166,13 +166,35 @@ public class DAOUser extends DBContext {
         }
         return false;
     }
-    
+
+    public Vector<String> search(String search) {
+        String sql = """
+                     select u.username, b.title, b.content, b.create_date from blog b left join [user] u on b.user_id = u.id
+                     """;
+        Vector<String> vector = new Vector<>();
+        try (Statement state
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                String searchContent = "";
+                searchContent += rs.getString(1);
+                searchContent += rs.getString(2);
+                searchContent += rs.getString(3);
+                searchContent += rs.getString(4);
+                vector.add(searchContent);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return vector;
+    }
+
     public Vector<Blog> search1 (String search){
         String sql = "select u.username, b.* from blog b left join [user] u on b.user_id = u.id";
 
         Vector<Blog> vector = new Vector<>();
         try (Statement state
-                = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
                 = state.executeQuery(sql)) {
             while (rs.next()) {
                 String username = rs.getString(1);
