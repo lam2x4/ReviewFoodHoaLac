@@ -129,7 +129,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4">
                             <c:choose>
-                                <c:when test="${requestScope.blog_image.size() > 1}">
+                                <c:when test="${requestScope.blog_image.get(i).size() > 1}">
                                     <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 </c:when>
                                 <c:otherwise>
@@ -143,14 +143,14 @@
                                     <div class="text-muted">${i.create_date}</div>
                                     <c:if test="${requestScope.user.id==sessionScope.User.id}"> 
                                         <c:choose>
-                                            <c:when test="${i.reason_reject != null}">
+                                            <c:when test="${i.is_approved ==2}">
                                                 <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='This blog is rejected by admin.Reason:${i.reason_reject}'>
 
                                                     Rejected
                                                 </button>
                                             </c:when>
                                             <c:when test="${i.is_approved ==0}">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
+                                                <button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
 
                                                     Waiting
                                                 </button>

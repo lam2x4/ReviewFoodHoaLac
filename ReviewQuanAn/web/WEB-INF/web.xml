@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet-mapping>
+        <servlet-name>BlogEdit</servlet-name>
+        <url-pattern>/BlogEdit</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>60</session-timeout>
         <!-- Session timeout in minutes -->
@@ -275,9 +275,5 @@
     <servlet-mapping>
         <servlet-name>BookmarkController</servlet-name>
         <url-pattern>/BookmarkController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BlogEdit</servlet-name>
-        <url-pattern>/BlogEdit</url-pattern>
     </servlet-mapping>
 </web-app>

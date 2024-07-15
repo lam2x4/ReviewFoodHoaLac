@@ -86,6 +86,10 @@ public class UserBlogManagement extends HttpServlet {
             } else {
                 list = dao.getAllByIdApproved(user.getId());
             }
+//            listBookmark = daoBookmark.getAllByUserId(pageUser.getId());
+//            for (Bookmark bookmark : listBookmark) {
+//                listBlog.add(daoBlog.getBlog(bookmark.getBlogID()));
+//            }
 
            
             Vector<Images> imageList = daoImage.getAll();

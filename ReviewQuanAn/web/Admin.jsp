@@ -184,7 +184,7 @@
                                             <td>${i.create_date}</td>
                                             <td id="status-${i.id}">Waiting</td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectModal" data-id="${i.id}" data-status="2"><i class="fas fa-ban"></i> Reject
                                                 </button>
                                                 <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
