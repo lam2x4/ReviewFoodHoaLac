@@ -116,7 +116,6 @@ public class PostUpload extends HttpServlet {
                     image.setLink(image.getLink().substring(4));
                     daoI.addImages(image);
                 }
-                System.out.println("Hello");
                 response.sendRedirect("home");
             } catch (Exception e) {
                 response.sendRedirect("LoginPage.jsp");
