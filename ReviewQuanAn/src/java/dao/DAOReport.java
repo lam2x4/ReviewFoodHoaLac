@@ -4,6 +4,7 @@
  */
 package dao;
 
+import dal.DBContext;
 import entity.Report;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class DAOReport extends DBConnect {
+public class DAOReport extends DBContext {
 
     public int addReport(Report b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Report] "

@@ -4,6 +4,7 @@
  */
 package dao;
 
+import dal.DBContext;
 import entity.ReportType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class DAOReportType extends DBConnect {
+public class DAOReportType extends DBContext {
 
     public Vector<ReportType> getAll() throws SQLException {
         String sql = "select * from report_type";

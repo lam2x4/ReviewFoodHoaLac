@@ -4,6 +4,7 @@
  */
 package dao;
 
+import dal.DBContext;
 import entity.Bookmark;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-public class DAOBookmark extends DBConnect {
+public class DAOBookmark extends DBContext {
 
     public int addBookmark(Bookmark b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Bookmark] "

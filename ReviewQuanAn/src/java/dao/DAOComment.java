@@ -200,6 +200,30 @@ public class DAOComment extends DBContext {
             }
         }
     }
+    
+    public Vector<Comment> GetAllById(int user_id) throws SQLException {
+        Vector<Comment> vector = new Vector<>();
+        String sql = "SELECT * FROM Comment WHERE [user_id]=?";
+        
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setInt(1, user_id);
+            ResultSet rs = pre.executeQuery();
+            
+            while (rs.next()) {
+                Comment b = new Comment();
+                
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setBlog_id(rs.getInt(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setLikes(rs.getInt(6));
+                b.setIs_banned(rs.getInt(7));
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
 
     public static void main(String[] args) {
         DAOComment dao = new DAOComment();
