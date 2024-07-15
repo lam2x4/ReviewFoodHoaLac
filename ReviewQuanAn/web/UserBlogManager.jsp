@@ -130,7 +130,7 @@
                         <div class="card mb-4">
                             <c:choose>
                                 <c:when test="${requestScope.blog_image.size() > 1}">
-                                    <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                    <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                 </c:when>
                                 <c:otherwise>
                                     <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
