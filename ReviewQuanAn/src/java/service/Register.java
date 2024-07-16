@@ -39,7 +39,7 @@ public class Register extends HttpServlet {
             return;
         }
 
-        String avatar = "";
+        String avatar = "6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png";
         int gender = Integer.parseInt(request.getParameter("gender"));
         String description = request.getParameter("description");
         

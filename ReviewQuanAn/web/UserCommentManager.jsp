@@ -167,7 +167,7 @@
                 <p>${requestScope.user.username} hasn't comment yet</p>
             </div>
         </c:if>
-<div class="container">
+     <div class="container" style="height:400px">
     <c:forEach items="${requestScope.commentList}" var="i">
         <div class="comment-section">
             <div class="comment-header">  

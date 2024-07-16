@@ -314,10 +314,8 @@ public class DAOBlog extends DBContext {
         DAOBlog dao = new DAOBlog();
 
         try {
-            for (Blog blog : dao.getAllById(5)) {
-                System.out.println(blog.getContent());
-            }
-            System.out.println(dao.getAllById(5));
+            dao.deleteBlogIgnoreConstraint(22);
+            
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

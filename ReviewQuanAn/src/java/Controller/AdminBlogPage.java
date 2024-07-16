@@ -21,11 +21,16 @@ import java.time.LocalDateTime;
 
 @WebServlet(name = "AdminBlogPage", urlPatterns = {"/AdminBlogPage"})
 public class AdminBlogPage extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
+        User admin = (User) session.getAttribute("Admin");
+        if (admin == null) {
+            response.sendRedirect("home");
+            return;
+        }
         String service = request.getParameter("service");
         if (service == null) {
             service = "viewPage";
@@ -59,7 +64,7 @@ public class AdminBlogPage extends HttpServlet {
             boolean isBookmarked;
             DAOBookmark daoBookmark = new DAOBookmark();
             isBookmarked = daoBookmark.getOne(curUser.getId(), blogId) != null;
-            request.setAttribute( "isBookmarked", isBookmarked);
+            request.setAttribute("isBookmarked", isBookmarked);
         }
 
         if (service.equals("handlePostLikes")) {

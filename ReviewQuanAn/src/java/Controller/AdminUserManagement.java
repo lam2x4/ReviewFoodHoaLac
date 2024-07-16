@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
 import dao.DAOUser;
@@ -13,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.Vector;
 
 /**
@@ -20,25 +20,28 @@ import java.util.Vector;
  * @author lam1
  */
 public class AdminUserManagement extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -46,15 +49,39 @@ public class AdminUserManagement extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User admin = (User) session.getAttribute("Admin");
+        if (admin == null) {
+            response.sendRedirect("home");
+            return;
+        }
         DAOUser daouser = new DAOUser();
         Vector<User> list = daouser.getAll();
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("AdminUserManagerPage.jsp").forward(request, response);
-    } 
 
-    /** 
+        //Pagination
+        int page, numberpage = 3;
+        int size = list.size();
+        int num = (size % 3 == 0 ? (size / 3) : ((size / 3) + 1)); //so trang
+        String xpage = request.getParameter("page");
+        if (xpage == null) {
+            page = 1;
+        } else {
+            page = Integer.parseInt(xpage);
+        }
+        int start, end;
+        start = (page - 1) * numberpage;
+        end = Math.min(page * numberpage, size);
+        Vector<User> list1 = daouser.getListUserByPage(list, start, end);
+        request.setAttribute("page", page);
+        request.setAttribute("num", num);
+        request.setAttribute("list", list1);
+        request.getRequestDispatcher("AdminUserManagerPage.jsp").forward(request, response);
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -62,12 +89,13 @@ public class AdminUserManagement extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
+            throws ServletException, IOException {
+
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

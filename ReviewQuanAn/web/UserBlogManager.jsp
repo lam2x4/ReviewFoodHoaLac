@@ -101,9 +101,20 @@
             .create-post-btn button:hover {
                 background-color: #005bb5;
             }
-            .tooltip-inner {
-                white-space: pre-wrap; /* Allows for multiline tooltips */
+
+            .cute-button {
+
+                border: none;
+                color: white; /* White text */
+                padding: 6.45px 9px; /* Smaller padding */
+                font-size: 16px; /* Smaller font size */
+               
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Slight shadow */
+
             }
+
+
+
         </style>
         <script>
             $(document).ready(function () {
@@ -144,28 +155,18 @@
                                     <c:if test="${requestScope.user.id==sessionScope.User.id}"> 
                                         <c:choose>
                                             <c:when test="${i.is_approved ==2}">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='This blog is rejected by admin.Reason:${i.reason_reject}'>
-
-                                                    Rejected
-                                                </button>
+                                                <a  class="cute-button bg-danger" title="Reason" data-toggle="popover" data-trigger="hover" data-content="${i.reason_reject}" >Rejected</a>
                                             </c:when>
                                             <c:when test="${i.is_approved ==0}">
-                                                <button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                    Waiting
-                                                </button>
+                                                <a  class="cute-button bg-warning" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
                                             </c:when>
 
                                             <c:when test="${i.is_approved ==4}">
-                                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                    Hidden
-                                                </button>
+                                                <a  class="cute-button bg-secondary" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is hidden from homepage" >Hidden</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="This blog is approved by admin">
-                                                    Approved
-                                                </button>
+                                                <a class="cute-button bg-success" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is approved by admin" >Approved</a>
+
                                             </c:otherwise>
                                         </c:choose>
                                     </c:if>
@@ -188,7 +189,7 @@
                                                         <c:if test="${i.is_approved==4}">
                                                             <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>
-                                                        <c:if test="${i.is_approved!=4}">
+                                                        <c:if test="${i.is_approved!=4&&i.is_approved!=0&&i.is_approved!=2}">
                                                             <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
                                                         </c:if>
 
@@ -240,5 +241,10 @@
 
         <!-- Footer -->
         <%@include file="./Footer.jsp" %>
+        <script>
+            $(document).ready(function () {
+                $('[data-toggle="popover"]').popover();
+            });
+        </script>
     </body>
 </html>

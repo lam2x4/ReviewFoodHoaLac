@@ -120,7 +120,7 @@
             }
         </style>
     </head>
-    <body>
+    <body> 
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
@@ -276,13 +276,13 @@
                                         <tr>
                                             <td>${r.id}</td>
                                             <td>${requestScope.report_User.get(r.user_id)}</td>
-                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.blog_id)}</a></td>
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
                                             <td>${r.create_date}</td>
                                             <td id="status-${r.id}">Waiting</td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectReportModal" data-id="${r.id}" data-status="2"><i class="fas fa-ban"></i> Reject
                                                 </button>
                                                 <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
