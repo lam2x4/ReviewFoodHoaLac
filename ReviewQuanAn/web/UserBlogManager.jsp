@@ -108,12 +108,21 @@
                 color: white; /* White text */
                 padding: 6.45px 9px; /* Smaller padding */
                 font-size: 16px; /* Smaller font size */
-               
+
                 box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Slight shadow */
 
             }
 
-
+            .card-title {
+                word-wrap: break-word;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
 
         </style>
         <script>

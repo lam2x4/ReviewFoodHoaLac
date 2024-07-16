@@ -89,6 +89,7 @@ public class Admin extends HttpServlet {
             int blogNumber = daoblog.getAll().size();
             int commentNumber = daocomment.viewAll().size();
             int userNumber = daouser.getAll().size();
+            int reportNumber = daoreport.getAll().size();
             for (Blog blog : daoblog.getAll()) {
                 for (User user : daouser.getAll()) {
                     if (blog.getUser_id() == user.getId()) {
@@ -127,6 +128,7 @@ public class Admin extends HttpServlet {
             request.setAttribute("userNumber", userNumber);
             request.setAttribute("blogNumber", blogNumber);
             request.setAttribute("commentNumber", commentNumber);
+             request.setAttribute("reportNumber", reportNumber);
             request.setAttribute("BlogList", daoblog.getAll());
             request.getRequestDispatcher("Admin.jsp").forward(request, response);
         } catch (SQLException ex) {

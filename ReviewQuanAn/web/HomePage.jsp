@@ -54,7 +54,16 @@
 
                 width:350px;
             }
-
+            .card-title {
+                word-wrap: break-word;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
         </style>
 
     </head>
