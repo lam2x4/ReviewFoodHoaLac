@@ -120,6 +120,7 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
         request.setAttribute("profPic", u.getAvatar());
+        request.setAttribute("id", u.getId());
 
         request.setAttribute("blogId", request.getParameter("id"));
         request.setAttribute("blogTitle", b.getTitle());
