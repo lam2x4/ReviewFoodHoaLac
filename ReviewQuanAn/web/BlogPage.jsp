@@ -75,7 +75,7 @@
             <div class="post-header" style="position: relative;">
                 <img src="img/<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
-                    <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
+                    <h2><a href="UserBlogManagement?user_id=${requestScope.id}" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
                     <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
                 <c:if test="${sessionScope.User!=null}">
@@ -158,7 +158,7 @@
                         </div>
                         <div class="comment-body">
                             <p>
-                                <a href="" class="profile-link"><%=comments.get(i).getUsername()%></a>
+                                <a href="UserBlogManagement?user_id=${requestScope.id}" class="profile-link"><%=comments.get(i).getUsername()%></a>
                                 <span class="comment-date"><%=convertedDates.get(i)%></span>
                             </p>
                             <p style="word-wrap: break-word;">
