@@ -120,10 +120,6 @@
                     <button class="button likeBtn" role="button" id="like-button" aria-pressed="false">Like</button>
                     <button class="button dislikeBtn" role="button" id="dislike-button" aria-pressed="false">Dislike</button>
                 </div>
-                <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
-                    <input type="submit" class="button" role="button" value="Share">
-                    <input type="hidden" name="service" value="repost">
-                </form>
             </div>
             <hr>
             <div class="comment-section">
