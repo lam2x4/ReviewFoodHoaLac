@@ -110,7 +110,7 @@
                         <div class="col-md-4">
                             <div class="card mb-4">
                                 <c:choose>
-                                    <c:when test="${requestScope.blog_image.size() > 1}">
+                                    <c:when test="${requestScope.blog_image.get(i).size() > 1}">
                                         <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
                                     </c:when>
                                     <c:otherwise>
@@ -122,6 +122,7 @@
 
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <div class="text-muted" >${i.create_date}</div>
+                                        <div class="text-muted" >${i.likes}</div>
                                         <c:choose>
                                             <c:when test="${i.id != null}">
                                                 <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
