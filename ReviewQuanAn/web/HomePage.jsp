@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +79,7 @@
             <div class="container">
                 <h1 class="display-3">Welcome to Review Food Store in Hoa Lac</h1>
                 <p class="lead">Your source for the latest reviews and blog posts</p>
-                <a href="#" class="btn btn-primary btn-lg">Learn More</a>
+
             </div>
         </div>
 
@@ -88,19 +88,23 @@
             <div class="container">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <form action="Search" method="post">
-                            <input name="search" type="text" class="form-control" placeholder="Search for articles...">
+                        <form id="seachForm" action="Search" method="post">
+                            <input name="search1" type="text" class="form-control" placeholder="Search for articles...">
                             <input type="submit" name="search" value="Search">
                             <input type="hidden" name="submit" value="search">
                         </form>
                     </div>
-                    <div class="col-md-6 text-right">
-                        <select class="form-control w-50 d-inline">
-                            <option value="">Filter by category</option>
-                            <option value="food">Food</option>
-                            <option value="travel">Travel</option>
-                            <option value="lifestyle">Lifestyle</option>
-                        </select>
+                    <div class="col-md-6 text-right">                       
+                        <form id="filterForm" action="home" method="get">
+                            <label for="filterq" class="mr-2">Filter:</label>
+                            <select id="filterq" name="filter" class="form-control w-50 d-inline" onchange="this.form.submit()">
+                                <option value="none">None</option>
+                                <option value="fdate">By Date</option>
+                                <option value="fpop">By Popularity</option>
+                            </select>
+                            <input type="hidden" name="applyFilter" value="applyFilter">
+                        </form>
+
                     </div>
                 </div>
 
@@ -121,8 +125,11 @@
                                     <h4 class="card-title">${i.title}</h4>
 
                                     <div class="d-flex justify-content-between align-items-center mt-2">
-                                        <div class="text-muted" >${i.create_date}</div>
-                                        <div class="text-muted" >${i.likes}</div>
+                                        <div class="text-muted" >
+                                            <fmt:parseDate value="${i.create_date}" pattern="yyyy-MM-dd HH:mm:ss.S" var="parsedDate" />
+                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                                        </div>
+                                        <div class="text-muted" > <i class="fas fa-thumbs-up"></i> ${i.likes}</div>
                                         <c:choose>
                                             <c:when test="${i.id != null}">
                                                 <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
@@ -182,5 +189,20 @@
 
 
 </body>
+<script>
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Set the selected option based on the query parameter
+    window.onload = function () {
+        const filterValue = getQueryParam('filter');
+        if (filterValue) {
+            document.getElementById('filterq').value = filterValue;
+        }
+    };
+</script>
 
 </html>

@@ -171,11 +171,11 @@
                                         <td>${i.create_date}</td>
                                         <c:choose>
                                             <c:when test="${i.is_approved == 1}">
-                                                <td id="status-${i.id}" class="approved">Approved</td>
+                                                <td id="status-${i.id}" class="approved"><i class="fas fa-circle text-success"></i> Approved</td>
                                             </c:when>
                                       
                                             <c:when test="${i.is_approved == 2}">
-                                                <td id="status-${i.id}" class="rejected">Rejected</td>
+                                                <td id="status-${i.id}" class="rejected" > <i class="fas fa-circle text-danger"></i> Rejected</td>
                                             </c:when>
                                          
                                         </c:choose>

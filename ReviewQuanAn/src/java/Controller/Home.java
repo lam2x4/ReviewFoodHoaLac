@@ -28,7 +28,6 @@ import java.util.logging.Logger;
  *
  * @author lam1
  */
-
 public class Home extends HttpServlet {
 
     /**
@@ -71,14 +70,29 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
+        
         HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
         Vector<Images> imageList;
         Vector<Images> listFake;
+
+        String filter = request.getParameter("applyFilter");
+        
+        //request.setAttribute("filt", filter);
         try {
             imageList = daoImage.getAll();
             Vector<Blog> list = dao.getAllApproved();
+            if(filter != null){
+                String val = request.getParameter("filter");
+                if(val.equals("fpop")){
+                    list = dao.filterPop();
+                }
+                else if(val.equals("fdate")){
+                    list = dao.filterDate();
+                }
+            }
             for (Blog blog : list) {
 
                 listFake = new Vector();
@@ -111,6 +125,7 @@ public class Home extends HttpServlet {
             request.setAttribute("num", num);
             request.setAttribute("blog_image", Blog_Image);
             request.setAttribute("list", list1);
+            request.setAttribute("afterSearch", "111");
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         } catch (Exception e) {
 
