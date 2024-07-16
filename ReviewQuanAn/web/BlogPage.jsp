@@ -158,7 +158,7 @@
                         </div>
                         <div class="comment-body">
                             <p>
-                                <a href="UserBlogManagement?user_id=${requestScope.id}" class="profile-link"><%=comments.get(i).getUsername()%></a>
+                                <a href="UserBlogManagement?user_id=<%=comments.get(i).getUser_id()%>" class="profile-link"><%=comments.get(i).getUsername()%></a>
                                 <span class="comment-date"><%=convertedDates.get(i)%></span>
                             </p>
                             <p style="word-wrap: break-word;">
