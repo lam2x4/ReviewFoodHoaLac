@@ -133,7 +133,7 @@
                 background-color: #f8d7da; /* Light red background */
                 color: #721c24; /* Dark red text */
             }
-            
+
             .banned {
                 background-color: #ffca28; /* Light red background */
                 color: #721c24; /* Dark red text */
@@ -178,11 +178,11 @@
                                             <c:when test="${i.is_approved == 1}">
                                                 <td id="status-${i.id}" class="approved"><i class="fas fa-circle text-success"></i> Approved</td>
                                             </c:when>
-                                      
+
                                             <c:when test="${i.is_approved == 2}">
                                                 <td id="status-${i.id}" class="rejected" > <i class="fas fa-circle text-danger"></i> Rejected</td>
                                             </c:when>
-                                         <c:when test="${i.is_approved == 3}">
+                                            <c:when test="${i.is_approved == 3}">
                                                 <td id="status-${i.id}" class="banned" > <i class="fas fa-circle text-warning"></i> Banned</td>
                                             </c:when>
                                         </c:choose>
@@ -205,38 +205,39 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+                <!-- Pagination -->
 
-            <!-- Pagination -->
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <c:set var="page" value="${requestScope.page}"/>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <c:if test="${page > 1}">
-                                <li class="page-item">
-                                    <a class="page-link" href="AdminBlogManagement?page=${page - 1}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                            </c:if>
-                            <c:forEach begin="1" end="${requestScope.num}" var="i">
-                                <li class="page-item ${i == page ? 'active' : ''}">
-                                    <a class="page-link" href="AdminBlogManagement?page=${i}">${i}</a>
-                                </li>
-                            </c:forEach>
-                            <c:if test="${page < requestScope.num}">
-                                <li class="page-item">
-                                    <a class="page-link" href="AdminBlogManagement?page=${page + 1}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </c:if>
-                        </ul>
-                    </nav>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${requestScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="AdminBlogManagement?page=${page - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="AdminBlogManagement?page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < requestScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="AdminBlogManagement?page=${page + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
+
+
         </div>
         <!-- /#page-content-wrapper -->
     </div>

@@ -137,6 +137,11 @@
                 white-space: normal; /* Ensure the text wraps properly */
                 text-overflow: ellipsis; /* Add ellipsis for overflow text */
             }
+            
+            .pending {
+                background-color: #fff3cd; /* Light yellow background */
+                color: #856404; /* Dark yellow text */
+            }
         </style>
     </head>
     <body> 
@@ -179,7 +184,7 @@
 
                     <div class="col-md-3">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
-                            <div class="card-header"><i class="fas fa-comments"></i><a href="#" style="color:#343A40">Reports</a></div>
+                            <div class="card-header"><i class="fa-solid fa-flag"></i><a href="#" style="color:#343A40">Reports</a></div>
                             <div class="card-body">
                                 <h5 class="card-title">${requestScope.reportNumber}</h5>
                                 <p class="card-text">Total reports made.</p>
@@ -211,7 +216,7 @@
                                             <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
                                             <td>${requestScope.Blog_User.get(i.user_id)}</td>
                                             <td>${i.create_date}</td>
-                                            <td id="status-${i.id}">Waiting</td>
+                                            <td id="status-${i.id}" class="pending"> <i class="fas fa-circle text-warning"></i> Waiting</td>
                                             <td>
                                                 <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectModal" data-id="${i.id}" data-status="2"><i class="fas fa-ban"></i> Reject
@@ -309,7 +314,7 @@
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
                                             <td>${r.create_date}</td>
-                                            <td id="status-${r.id}">Waiting</td>
+                                              <td id="status-${r.id}" class="pending"> <i class="fas fa-circle text-warning"></i> Waiting</td>
                                             <td>
                                                 <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectReportModal" data-id="${r.id}" data-status="2"><i class="fas fa-ban"></i> Reject

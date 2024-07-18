@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-       
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Latest compiled and minified CSS -->
@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0e60f78292.js" crossorigin="anonymous"></script>
         <title>User Management</title>
-           <style>
+        <style>
             body {
                 background-color: #f8f9fa;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -121,75 +121,93 @@
                 height:742px;
             }
 
+            .approved {
+                background-color: #d4edda; /* Light green background */
+                color: #155724; /* Dark green text */
+            }
+
+            .pending {
+                background-color: #fff3cd; /* Light yellow background */
+                color: #856404; /* Dark yellow text */
+            }
+
+            .rejected {
+                background-color: #f8d7da; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
+
+            .banned {
+                background-color: #ffca28; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
+
         </style>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
-            
-           
 
-                <div class="container-fluid mt-4">
-                    <h1 class="mb-4">User Management</h1>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-dark">
+
+
+            <div class="container-fluid mt-4">
+                <h1 class="mb-4">User Management</h1>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>UserName</th>                                   
+                                <th>Email</th>
+                                <th>Phone</th>                                   
+                                <th>Gender</th>
+                                <th>Role</th> 
+                                <th>Status</th> 
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- Example user row -->
+                            <c:forEach items="${requestScope.list}" var="i">
                                 <tr>
-                                    <th>#</th>
-                                    <th>UserName</th>                                   
-                                    <th>Email</th>
-                                    <th>Phone</th>                                   
-                                    <th>Gender</th>
-                                    <th>Role</th> 
-                                    <th>Status</th> 
-                                    
-                                </tr>
-                            </thead>
+                                    <td>${i.id}</td>                                       
+                                    <td>${i.username}</td>
 
-                            <tbody>
-                                <!-- Example user row -->
-                                <c:forEach items="${requestScope.list}" var="i">
-                                    <tr>
-                                        <td>${i.id}</td>                                       
-                                        <td>${i.username}</td>
-                                        
-                                        <td>${i.email}</td>
-                                        <td>${i.phone}</td>
-                                        <c:if test="${i.gender==1}">
-                                            <td>Male</td>
-                                        </c:if>
-                                        <c:if test="${i.gender==0}">
-                                            <td>Female</td>
-                                        </c:if>
-                                            
-                                            <c:if test="${i.role_id==1}">
-                                            <td>Admin</td>
-                                        </c:if>
-                                        <c:if test="${i.role_id==2}">
-                                            <td>User</td>
-                                        </c:if>
-                                            
-                                             <c:if test="${i.verify_status==1}">
-                                            <td>Verified</td>
-                                        </c:if>
-                                        <c:if test="${i.verify_status==0}">
-                                            <td>Not Verified</td>
-                                        </c:if>
-                                                
-                                                
-                                            </td>
-                                        
-                                    </tr>
-                                </c:forEach>
-                                <!-- Add more user rows as needed -->
-                            </tbody>
-                            
-                        </table>
-                    </div>
+                                    <td>${i.email}</td>
+                                    <td>${i.phone}</td>
+                                    <c:if test="${i.gender==1}">
+                                        <td>Male</td>
+                                    </c:if>
+                                    <c:if test="${i.gender==0}">
+                                        <td>Female</td>
+                                    </c:if>
+
+                                    <c:if test="${i.role_id==1}">
+                                        <td>Admin</td>
+                                    </c:if>
+                                    <c:if test="${i.role_id==2}">
+                                        <td>User</td>
+                                    </c:if>
+
+                                    <c:if test="${i.verify_status==1}">
+                                        <td class ="approved"> <i class="fas fa-circle text-success"></i>Verified</td>
+                                    </c:if>
+                                    <c:if test="${i.verify_status==0}">
+                                        <td class="rejected">  <i class="fas fa-circle text-danger"></i>Not Verified</td>
+                                    </c:if>
+
+
+                                    </td>
+
+                                </tr>
+                            </c:forEach>
+                            <!-- Add more user rows as needed -->
+                        </tbody>
+
+                    </table>
                 </div>
-            
-             <!-- Pagination -->
+                <!-- Pagination -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -220,92 +238,95 @@
                     </div>
                 </div>
             </div>
-            <!-- /#page-content-wrapper -->
+
+
         </div>
-        <!-- /#wrapper -->
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
 
-       
 
-        <!-- Delete User Modal -->
-        <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this user?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this user?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            // Sidebar toggle
-            $("#menu-toggle").click(function (e) {
-                e.preventDefault();
-                $("#wrapper").toggleClass("toggled");
-            });
+    <script>
+        // Sidebar toggle
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
 
-            // Modal population for edit
-            $('.edit-btn').click(function () {
-                const id = $(this).data('id');
-                const username = $(this).data('username');
-                const email = $(this).data('email');
-                const role = $(this).data('role');
-                const status = $(this).data('status');
+        // Modal population for edit
+        $('.edit-btn').click(function () {
+            const id = $(this).data('id');
+            const username = $(this).data('username');
+            const email = $(this).data('email');
+            const role = $(this).data('role');
+            const status = $(this).data('status');
 
-                $("#editUserModal #username").val(username);
-                $("#editUserModal #email").val(email);
-                $("#editUserModal #role").val(role);
-                $("#editUserModal #status").val(status);
-            });
+            $("#editUserModal #username").val(username);
+            $("#editUserModal #email").val(email);
+            $("#editUserModal #role").val(role);
+            $("#editUserModal #status").val(status);
+        });
 
-            // Form validation
-           (function () {
-                'use strict';
-                window.addEventListener('load', function () {
-                    var forms = document.getElementsByClassName('needs-validation');
-                    var validation = Array.prototype.filter.call(forms, function (form) {
-                        form.addEventListener('submit', function (event) {
-                            if (form.checkValidity() === false) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
-                }, false);
-            })();
-
-            // Delete confirmation modal
-            $('.delete-btn').click(function () {
-                const userEmail = $(this).data('email');
-                const id = $(this).data('id');
-                $('#confirmDeleteBtn').data('email', userEmail);
-                $('#confirmDeleteBtn').data('id', id);
-            });
-
-            // Handle delete confirmation
-            $('#confirmDeleteBtn').click(function () {
-                const userEmail = $(this).data('email');
-                const id = $(this).data('id');
-                // Perform the delete action (e.g., AJAX request or form submission)
-                console.log('Deleting user with Email:', userEmail);
-                $('#deleteUserModal').modal('hide');
-
-                // Redirect to homepage.jsp with email parameter after hiding the modal
-                $('#deleteUserModal').on('hidden.bs.modal', function () {
-                    window.location.href = 'AdminDeleteUser?id=' + id;
+        // Form validation
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
                 });
+            }, false);
+        })();
+
+        // Delete confirmation modal
+        $('.delete-btn').click(function () {
+            const userEmail = $(this).data('email');
+            const id = $(this).data('id');
+            $('#confirmDeleteBtn').data('email', userEmail);
+            $('#confirmDeleteBtn').data('id', id);
+        });
+
+        // Handle delete confirmation
+        $('#confirmDeleteBtn').click(function () {
+            const userEmail = $(this).data('email');
+            const id = $(this).data('id');
+            // Perform the delete action (e.g., AJAX request or form submission)
+            console.log('Deleting user with Email:', userEmail);
+            $('#deleteUserModal').modal('hide');
+
+            // Redirect to homepage.jsp with email parameter after hiding the modal
+            $('#deleteUserModal').on('hidden.bs.modal', function () {
+                window.location.href = 'AdminDeleteUser?id=' + id;
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>
