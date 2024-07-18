@@ -65,7 +65,7 @@ public class User {
     public void setAuthor_id(String author_id) {
         this.author_id = author_id;
     }
-    
+
     public String getCreate_date() {
         return create_date;
     }

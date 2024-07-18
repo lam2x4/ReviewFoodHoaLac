@@ -97,6 +97,17 @@
             .tooltip-inner {
                 white-space: pre-wrap; /* Allows for multiline tooltips */
             }
+
+            .card-title {
+                word-wrap: break-word;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
         </style>
         <script>
             $(document).ready(function () {
@@ -111,7 +122,7 @@
 
         <c:if test="${requestScope.list.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
+                <img src="img/hinh-anh-c_ac6fe9c1-2cad-493e-8ab4-1aa7b92bc64a.jpg" alt="Placeholder Image">
                 <p>${requestScope.pageUser.username} hasn't bookmarked yet</p>
             </div>
         </c:if>
@@ -121,16 +132,21 @@
                 <c:forEach items="${requestScope.list}" var="i">
                     <div class="col-md-4">
                         <div class="card mb-4">
-                            <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                            <c:choose>
+                                <c:when test="${requestScope.blog_image.get(i).size() > 1}">
+                                    <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                </c:when>
+                                <c:otherwise>
+                                    <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
+                                </c:otherwise>
+                            </c:choose>
                             <div class="card-body">
                                 <h4 class="card-title">${i.title}</h4>
 
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <div class="text-muted">${i.create_date}</div>
                                     <c:if test="${requestScope.pageUser.id!=sessionScope.User.id}">                         
-
                                         <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
-
                                     </c:if>
                                     <c:if test="${requestScope.pageUser.id==sessionScope.User.id}">                                                          
                                         <c:choose>
@@ -206,5 +222,6 @@
             } else {
                 console.log("Action cancelled by user.");
             }
+        }
     </script>
 </html>

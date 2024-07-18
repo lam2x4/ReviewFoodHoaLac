@@ -5,14 +5,17 @@
 package service;
 
 import dao.DAOBlog;
+import dao.DAOImages;
 import dao.DAOUser;
 import entity.Blog;
+import entity.Images;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -33,21 +36,64 @@ public class Search extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String searchContent = request.getParameter("search");
-        DAOUser dao = new DAOUser();
         
-        Vector<Blog> vector = dao.search1(searchContent);
         
-        request.setAttribute("list", vector);
-        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-    }
-    
-    public String addString(Blog blog){
-        String output = "";
-        if(blog == null){
-            return null;
+        String searchContent = request.getParameter("search1");
+        
+        
+        DAOBlog dao = new DAOBlog();
+        DAOImages daoImage = new DAOImages();
+        HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
+        Vector<Images> imageList;
+        Vector<Images> listFake;
+
+        try {
+            imageList = daoImage.getAll();
+            Vector<Blog> list = dao.search1(searchContent);
+
+            for (Blog blog : list) {
+
+                listFake = new Vector();
+
+                for (Images images : imageList) {
+
+                    if (images.getBlog_id() == blog.getId()) {
+                        listFake.add(images);
+                    }
+                }
+                Blog_Image.put(blog, listFake);
+
+            }
+            //Pagination
+            int page, numberpage = 6;
+            int size = list.size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
+            }
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
+
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
+            request.setAttribute("blog_image", Blog_Image);
+            request.setAttribute("list", list1);
+            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        } catch (Exception e) {
+
         }
-        else{
+    }
+
+    public String addString(Blog blog) {
+        String output = "";
+        if (blog == null) {
+            return null;
+        } else {
             output = blog.getUsername() + blog.getTitle() + blog.getContent() + blog.getCreate_date();
         }
         return output;

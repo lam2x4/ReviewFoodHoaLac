@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
             editor.showNotification('This field is required.', 'warning');
             evt.cancel();
         });
+        
     });
 
     CKEDITOR.editorConfig = function (config) {

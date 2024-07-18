@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entity.*, java.util.Vector"%>
 
+
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -74,7 +75,7 @@
             <div class="post-header" style="position: relative;">
                 <img src="img/<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
-                    <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
+                    <h2><a href="UserBlogManagement?user_id=${requestScope.id}" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
                     <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
                 </div>
                 <c:if test="${sessionScope.User!=null}">
@@ -89,7 +90,7 @@
             <p class="post-content"><%=(String)request.getAttribute("blogContent")%></p>
             <div class="post-images" id="post-images">
                 <%for(int i = 0; i < imgs.size(); i++){%>
-                <img src="<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
+                <img src="img/<%=imgs.get(i).getLink()%>" id="image" class="post-image" onclick="openModal();currentSlide(<%=i + 1%>)">
                 <%}%>
             </div>
 
@@ -99,7 +100,7 @@
                     <%for(int i = 0; i < imgs.size(); i++){ %>
                     <div class="mySlides">
                         <div class="numbertext"><%=i+1%> / <%=imgs.size()%></div>
-                        <img src="<%=imgs.get(i).getLink()%>" style="width:100%">
+                        <img src="img/<%=imgs.get(i).getLink()%>" style="width:100%">
                     </div>
                     <%}%>
                     <a class="prev" onclick="plusSlides(-1)"><i class="fa-solid fa-chevron-left"></i></a>
@@ -119,10 +120,6 @@
                     <button class="button likeBtn" role="button" id="like-button" aria-pressed="false">Like</button>
                     <button class="button dislikeBtn" role="button" id="dislike-button" aria-pressed="false">Dislike</button>
                 </div>
-                <form action="upload?bid=<%=(String)request.getAttribute("blogId")%>" method="post">
-                    <input type="submit" class="button" role="button" value="Share">
-                    <input type="hidden" name="service" value="repost">
-                </form>
             </div>
             <hr>
             <div class="comment-section">
@@ -152,12 +149,12 @@
                     <div class="comment" id="comment-<%=comments.get(i).getId()%>">
                         <div class="thumbnail">
                             <a class="toProfile">
-                                <img src="<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
+                                <img src="img/<%=avatars.get(i)%>" alt="Profile Picture" class="profile-pic">
                             </a>
                         </div>
                         <div class="comment-body">
                             <p>
-                                <a href="" class="profile-link"><%=comments.get(i).getUsername()%></a>
+                                <a href="UserBlogManagement?user_id=<%=comments.get(i).getUser_id()%>" class="profile-link"><%=comments.get(i).getUsername()%></a>
                                 <span class="comment-date"><%=convertedDates.get(i)%></span>
                             </p>
                             <p style="word-wrap: break-word;">
@@ -189,6 +186,36 @@
                     <%}%>
                 </div>
             </div>
+               <!-- Pagination -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${requestScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${page - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < requestScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${page + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
         </div>
 
         <!-- Report Modal -->

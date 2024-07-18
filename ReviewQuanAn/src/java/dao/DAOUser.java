@@ -219,5 +219,16 @@ public class DAOUser extends DBContext {
         return vector;
             
     }
+    
+   public Vector<User> getListUserByPage(Vector<User> list, int start, int end) {
+        Vector<User> blog = new Vector<>();
+        if (list == null) {
+            return null;
+        }
+        for (int i = start; i < end; i++) {
+            blog.add(list.get(i));
+        }
+        return blog;
+    }
 
 }

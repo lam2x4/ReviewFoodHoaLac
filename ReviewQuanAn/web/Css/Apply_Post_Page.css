@@ -6,6 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : Jun 18, 2024, 9:42:53 AM
     Author     : ADMIN
 */
+/* hide CKEditor warning */ .cke_notification.cke_notification_warning { display: none; }
 
 body {
     background-image: url('https://static.vecteezy.com/system/resources/previews/008/877/711/original/food-icons-colored-food-background-doodle-illustration-with-food-icon-free-vector.jpg');

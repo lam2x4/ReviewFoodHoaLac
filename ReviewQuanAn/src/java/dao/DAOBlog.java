@@ -4,6 +4,8 @@ import Utility.Mapper;
 import dal.DBContext;
 import entity.Blog;
 import java.awt.BorderLayout;
+import java.io.Console;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -308,13 +310,130 @@ public class DAOBlog extends DBContext {
         }
         return blog;
     }
+    
+        public Vector<Blog> filterPop() {
+        String sql = """
+                     SELECT * 
+                     FROM Blog b
+                     ORDER BY b.likes DESC, b.create_date DESC;
+                     """;
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+                if (b.getIs_approved() == 1) {
+                    vector.add(b);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return vector;
+    }
+    
+    public Vector<Blog> filterDate() {
+        String sql = """
+                     SELECT * 
+                     FROM Blog b
+                     ORDER BY b.create_date DESC, b.likes DESC;""";
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+                if (b.getIs_approved() == 1) {
+                    vector.add(b);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return vector;
+    }
+    
+    public Vector<Blog> filterDateSearch(String search) {
+        String sql = """
+                     SELECT * 
+                     FROM Blog b
+                     ORDER BY b.create_date DESC, b.likes DESC;""";
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+                if (b.getIs_approved() == 1) {
+                    String a = b.getUsername() + b.getContent() + b.getTitle() + b.getCreate_date();
+                    if (a.contains(search)) {
+                        vector.add(b);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return vector;
+    }
+
+    public Vector<Blog> filterPopSearch(String search) {
+        String sql = """
+                     SELECT * 
+                     FROM Blog b
+                     ORDER BY b.likes DESC, b.create_date DESC;""";
+        Vector<Blog> vector = new Vector<>();
+        try (Statement state
+                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
+                = state.executeQuery(sql)) {
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+                if (b.getIs_approved() == 1) {
+                    String a = b.getUsername() + b.getContent() + b.getTitle() + b.getCreate_date();
+                    if (a.contains(search)) {
+                        vector.add(b);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return vector;
+    }
+
+    public Vector<Blog> search1(String search) {
+        
+        DAOBlog dao = new DAOBlog();
+        try {
+            Vector<Blog> vector = dao.getAllApproved();
+            Vector<Blog> v = new Vector<>();
+            for (Blog b : vector) {
+                if(b.getTitle().toLowerCase().contains(search.toLowerCase())){
+                    v.add(b);
+                } 
+            }
+            return v;
+        } catch (Exception ex) {
+            
+        }
+        
+        return null;
+        
+    }
+
+   
 
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
-        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0, 1);
         try {
-            System.out.println(dao.getAllByIdApproved(5));
+            dao.deleteBlogIgnoreConstraint(22);
+            
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

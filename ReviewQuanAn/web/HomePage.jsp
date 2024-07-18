@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@
 
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>       
-     
+
 
         <title>Home Page </title>
         <style>
@@ -54,7 +54,16 @@
 
                 width:350px;
             }
-
+            .card-title {
+                word-wrap: break-word;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
         </style>
 
     </head>
@@ -70,7 +79,7 @@
             <div class="container">
                 <h1 class="display-3">Welcome to Review Food Store in Hoa Lac</h1>
                 <p class="lead">Your source for the latest reviews and blog posts</p>
-                <a href="#" class="btn btn-primary btn-lg">Learn More</a>
+
             </div>
         </div>
 
@@ -79,19 +88,23 @@
             <div class="container">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <form action="Search" method="post">
-                            <input name="search" type="text" class="form-control" placeholder="Search for articles...">
+                        <form id="seachForm" action="Search" method="post">
+                            <input name="search1" type="text" class="form-control" placeholder="Search for articles...">
                             <input type="submit" name="search" value="Search">
                             <input type="hidden" name="submit" value="search">
                         </form>
                     </div>
-                    <div class="col-md-6 text-right">
-                        <select class="form-control w-50 d-inline">
-                            <option value="">Filter by category</option>
-                            <option value="food">Food</option>
-                            <option value="travel">Travel</option>
-                            <option value="lifestyle">Lifestyle</option>
-                        </select>
+                    <div class="col-md-6 text-right">                       
+                        <form id="filterForm" action="home" method="get">
+                            <label for="filterq" class="mr-2">Filter:</label>
+                            <select id="filterq" name="filter" class="form-control w-50 d-inline" onchange="this.form.submit()">
+                                <option value="none">None</option>
+                                <option value="fdate">By Date</option>
+                                <option value="fpop">By Popularity</option>
+                            </select>
+                            <input type="hidden" name="applyFilter" value="applyFilter">
+                        </form>
+
                     </div>
                 </div>
 
@@ -100,12 +113,23 @@
                     <c:forEach items="${requestScope.list}" var="i">
                         <div class="col-md-4">
                             <div class="card mb-4">
-                                <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                <c:choose>
+                                    <c:when test="${requestScope.blog_image.get(i).size() > 1}">
+                                        <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
+                                    </c:otherwise>
+                                </c:choose>
                                 <div class="card-body">
                                     <h4 class="card-title">${i.title}</h4>
-                                   
+
                                     <div class="d-flex justify-content-between align-items-center mt-2">
-                                        <div class="text-muted" >${i.create_date}</div>
+                                        <div class="text-muted" >
+                                            <fmt:parseDate value="${i.create_date}" pattern="yyyy-MM-dd HH:mm:ss.S" var="parsedDate" />
+                                            <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy" />
+                                        </div>
+                                        <div class="text-muted" > <i class="fas fa-thumbs-up"></i> ${i.likes}</div>
                                         <c:choose>
                                             <c:when test="${i.id != null}">
                                                 <a href="BlogPageController?id=${i.id}" class="btn btn-primary">See Detail</a>
@@ -158,12 +182,27 @@
         </section>
 
 
- 
+
     </body>
 
     <%@include file="./Footer.jsp" %>
 
 
 </body>
+<script>
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Set the selected option based on the query parameter
+    window.onload = function () {
+        const filterValue = getQueryParam('filter');
+        if (filterValue) {
+            document.getElementById('filterq').value = filterValue;
+        }
+    };
+</script>
 
 </html>

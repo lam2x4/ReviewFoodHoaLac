@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -68,8 +69,8 @@ public class PostUpload extends HttpServlet {
 //        response.getWriter().println("Post Description: " + postDescription);
 
             try {
-                LocalDate date = LocalDate.now();
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDateTime date = LocalDateTime.now();
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
                 String create_date = date.format(dateFormat);
                 int userId = Integer.parseInt(request.getParameter("userId"));
                 Blog blogTemp = new Blog(userId, postTitle, postDescription, create_date, 0, 0, 0, userId);
@@ -80,7 +81,8 @@ public class PostUpload extends HttpServlet {
                     String contentType = part.getContentType();
 
                     if (contentType != null && contentType.startsWith("image")) {
-                        String fileName = part.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
+                        String originalFileName = part.getSubmittedFileName();
+                        String fileName = originalFileName.substring(0, 10) + "_" + UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf("."));
                         Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                         daoImg.addImages(new Images(daoBlog.getLastInsertedBlog(), fileName));
 //                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
@@ -103,7 +105,7 @@ public class PostUpload extends HttpServlet {
                 repost.setTitle(repost.getTitle() + " (Repost)");
 
                 LocalDate date = LocalDate.now();
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
                 String create_date = date.format(dateFormat);
 
                 repost.setCreate_date(create_date);
@@ -133,8 +135,8 @@ public class PostUpload extends HttpServlet {
                 //repost.setUser_id(currentUser.getId());
                 //repost.setTitle(repost.getTitle() + " (Repost)");
 
-                LocalDate date = LocalDate.now();
-                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDateTime date = LocalDateTime.now();
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
                 blog.setCreate_date(date.format(dateFormat));
                 blog.setIs_approved(0);
@@ -149,14 +151,15 @@ public class PostUpload extends HttpServlet {
                     Part billPart = request.getPart("billUpload");
                     if (billPart != null && billPart.getSize() > 0) {
                         Images billOld = pastImg.firstElement();
-                        Path billPathOld = Paths.get(uploadPath, billOld.getLink());
+                        Path billPathOld = Paths.get(billOld.getLink());
                         try {
                             Files.deleteIfExists(billPathOld);
                         } catch (IOException e) {
                             response.getWriter().println("Bill Delete Error: " + e.getMessage());
                         }
+                        String originalBillName = billPart.getSubmittedFileName();
+                        String fileName = originalBillName.substring(0, 10) + "_" + UUID.randomUUID().toString() + originalBillName.substring(originalBillName.lastIndexOf("."));
 
-                        String fileName = billPart.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
                         Files.copy(billPart.getInputStream(), Paths.get(uploadPath, fileName));
 
                         billOld.setLink(fileName);
@@ -181,8 +184,9 @@ public class PostUpload extends HttpServlet {
                                 billUpload = false;
                                 continue;
                             }
+                            String originalFileName = part.getSubmittedFileName();
+                            String fileName = originalFileName.substring(0, 10) + "_" + UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf("."));
 
-                            String fileName = part.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
                             Files.copy(part.getInputStream(), Paths.get(uploadPath, fileName));
                             daoImg.addImages(new Images(blog.getId(), fileName));
 //                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);

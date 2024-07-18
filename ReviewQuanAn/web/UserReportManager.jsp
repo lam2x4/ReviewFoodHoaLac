@@ -113,7 +113,7 @@
 
         <c:if test="${requestScope.reportList.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
+                <img src="img/hinh-anh-c_ac6fe9c1-2cad-493e-8ab4-1aa7b92bc64a.jpg" alt="Placeholder Image">
                 <p>${requestScope.user.username} hasn't reported yet</p>
             </div>
         </c:if>
@@ -147,7 +147,7 @@
                                         <tr>
                                             <td>${r.id}</td>
                                             <td>${requestScope.report_User.get(r.user_id)}</td>
-                                            <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.blog_id)}</a></td>
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
                                             <td>${r.create_date} </td>

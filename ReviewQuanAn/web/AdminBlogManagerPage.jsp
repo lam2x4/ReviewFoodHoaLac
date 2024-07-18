@@ -119,16 +119,31 @@
             .border-right{
                 height:742px;
             }
+            .approved {
+                background-color: #d4edda; /* Light green background */
+                color: #155724; /* Dark green text */
+            }
 
+            .pending {
+                background-color: #fff3cd; /* Light yellow background */
+                color: #856404; /* Dark yellow text */
+            }
+
+            .rejected {
+                background-color: #f8d7da; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
+            
+            .banned {
+                background-color: #ffca28; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
         </style>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
-
-
-
 
             <div class="container-fluid mt-4">
                 <h1 class="mb-4">Blog Management</h1>
@@ -139,7 +154,6 @@
                                 <th>ID</th>
                                 <th>Title</th>
                                 <th>Author</th>
-                                
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -151,16 +165,27 @@
                                     <tr>
                                         <td>   ${i.id} </td>
                                         <td><a href="AdminBlogPage?id=${i.id}" class="text-info">${i.title}</a></td>
-                                        <c:if test="${requestScope.Blog_User.get(i.user_id)==null}">
+                                            <c:if test="${requestScope.Blog_User.get(i.user_id)==null}">
                                             <td>Author is deleted</td>
                                         </c:if>
 
                                         <c:if test="${requestScope.Blog_User.get(i.user_id)!=null}">
                                             <td>${requestScope.Blog_User.get(i.user_id)}</td>
                                         </c:if>                                                                              
-                                        
+
                                         <td>${i.create_date}</td>
-                                        <td id="status-${i.id}">${requestScope.blog_Approved.get(i.id)}</td>
+                                        <c:choose>
+                                            <c:when test="${i.is_approved == 1}">
+                                                <td id="status-${i.id}" class="approved"><i class="fas fa-circle text-success"></i> Approved</td>
+                                            </c:when>
+                                      
+                                            <c:when test="${i.is_approved == 2}">
+                                                <td id="status-${i.id}" class="rejected" > <i class="fas fa-circle text-danger"></i> Rejected</td>
+                                            </c:when>
+                                         <c:when test="${i.is_approved == 3}">
+                                                <td id="status-${i.id}" class="banned" > <i class="fas fa-circle text-warning"></i> Banned</td>
+                                            </c:when>
+                                        </c:choose>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${requestScope.blog_Approved.get(i.id) == 'Approved'}">
@@ -170,7 +195,7 @@
                                                     <button class="btn btn-success btn-sm status-btn" data-toggle="modal" data-target="#statusModal" data-id="${i.id}" data-status="${i.is_approved}"><i class="fas fa-check"></i> Approved</button>
                                                 </c:when>
                                             </c:choose>
-                                            <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteUserModal" data-id="${i.id}" ><i class="fas fa-trash"></i> Delete</button>
+
                                         </td>
 
                                     </tr>
@@ -179,6 +204,37 @@
                             <!-- Add more post rows as needed -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <c:set var="page" value="${requestScope.page}"/>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <c:if test="${page > 1}">
+                                <li class="page-item">
+                                    <a class="page-link" href="AdminBlogManagement?page=${page - 1}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                            <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                <li class="page-item ${i == page ? 'active' : ''}">
+                                    <a class="page-link" href="AdminBlogManagement?page=${i}">${i}</a>
+                                </li>
+                            </c:forEach>
+                            <c:if test="${page < requestScope.num}">
+                                <li class="page-item">
+                                    <a class="page-link" href="AdminBlogManagement?page=${page + 1}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </c:if>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -207,29 +263,10 @@
         </div>
     </div>
 
-    <!-- Delete User Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this user?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <script>
-        function form(id){
+        function form(id) {
             window.location.href = 'haha.jsp';
         }
         // Handle status button click

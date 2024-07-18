@@ -55,6 +55,7 @@ CREATE TABLE Blog(
 	is_approved int foreign key references Approve_Name(id),
 	is_banned int foreign key references Ban_Name(id),
 	[author_id] int foreign key references [user](id),
+	reason_reject nvarchar(100),
 )
 
 CREATE TABLE Images(
@@ -155,15 +156,15 @@ VALUES (0, 'Waiting'),
 
 	   SET IDENTITY_INSERT [dbo].[Blog] ON 
 -- Insert data into the Blog table
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (7, 5, N'Review Quán Ăn Bún Đậu Đồng Mô', N'Đây là một quán rất ngon và tuyệt vời, nhân viên nhiệt tình nhanh nhạy, bún đậu ngon, nhiều topping ','2024-06-15 11:45:30', 0, 2, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (8, 5, N'Review Quán Kem Mixue Cây Xăng 39', N'Kem ngon,rẻ , nhưng nước uống hơi ngọt, không hợp với tôi ', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (9, 5, N'Review Quán Ăn Bún Bò Huế Thái Anh', N'Nước dùng đậm đà, mỗi tội không có điều hòa', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (10, 5, N'Review Quán Ăn Gà Ri Phú Bình', N'Rất ngon, đậm đà, gà rất dai và ngon', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (11, 5, N'Review Nhà Hàng Huy Cường', N'Cực sang trọng, rất nên thử, thức ăn đa dạng phong phú, món ăn đậm đà, đặc biệt món bò xào hành tây cực cuốn', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id])VALUES (12, 5, N'Review Quán Ăn 1988 BBQ', N'Thịt hơi động lạnh tí, ăn không ngon, thịt rất mỏng , thái nhỏ xíu, nhân viên thái độ không tốt ', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (13,5 ,N'Review Nhà Hãng Nguyễn Gia', N'Rất ngon , trông sang trọng , giá trung bình từ 200-300k một món, rất vừa túi với người giàu ', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id])VALUES (14, 5, N'Review Quán Nước Cà Phê Bao Cấp', N'Khá ổn, giá nước tầm 30-35k khá vừa giá, đặc biệt cà phê rất ngon', '2024-06-15 11:45:30', 0, 1, 0,5)
-INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id]) VALUES (17, 5, N'Review Quán Bún bò đồng đậu', N'Quán ăn rất ngon Nhưng hơi đắt Ủng hộ', '2024-06-15 11:45:30', 0, 1, 0,5)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (7, 5, N'Review Quán Ăn Bún Đậu Đồng Mô', N'Đây là một quán rất ngon và tuyệt vời, nhân viên nhiệt tình nhanh nhạy, bún đậu ngon, nhiều topping ','2024-06-15 11:45:30', 0, 2, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (8, 5, N'Review Quán Kem Mixue Cây Xăng 39', N'Kem ngon,rẻ , nhưng nước uống hơi ngọt, không hợp với tôi ', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (9, 5, N'Review Quán Ăn Bún Bò Huế Thái Anh', N'Nước dùng đậm đà, mỗi tội không có điều hòa', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (10, 5, N'Review Quán Ăn Gà Ri Phú Bình', N'Rất ngon, đậm đà, gà rất dai và ngon', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (11, 5, N'Review Nhà Hàng Huy Cường', N'Cực sang trọng, rất nên thử, thức ăn đa dạng phong phú, món ăn đậm đà, đặc biệt món bò xào hành tây cực cuốn', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject)VALUES (12, 5, N'Review Quán Ăn 1988 BBQ', N'Thịt hơi động lạnh tí, ăn không ngon, thịt rất mỏng , thái nhỏ xíu, nhân viên thái độ không tốt ', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (13,5 ,N'Review Nhà Hãng Nguyễn Gia', N'Rất ngon , trông sang trọng , giá trung bình từ 200-300k một món, rất vừa túi với người giàu ', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject)VALUES (14, 5, N'Review Quán Nước Cà Phê Bao Cấp', N'Khá ổn, giá nước tầm 30-35k khá vừa giá, đặc biệt cà phê rất ngon', '2024-06-15 11:45:30', 0, 1, 0, 5, null)
+INSERT [dbo].[Blog] ([id], [user_id], [title], [content], [create_date], [likes], [is_approved], [is_banned],[author_id], reason_reject) VALUES (17, 2, N'Review Quán Bún bò đồng đậu', N'Quán ăn rất ngon Nhưng hơi đắt Ủng hộ', '2024-06-15 11:45:30', 0, 1, 0, 2, null)
    SET IDENTITY_INSERT [dbo].[Blog] off 
 
 SET IDENTITY_INSERT [dbo].[Images] ON 

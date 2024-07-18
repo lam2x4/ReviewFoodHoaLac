@@ -119,7 +119,20 @@
             .border-right{
                 height:742px;
             }
+            .approved {
+                background-color: #d4edda; /* Light green background */
+                color: #155724; /* Dark green text */
+            }
 
+            .pending {
+                background-color: #fff3cd; /* Light yellow background */
+                color: #856404; /* Dark yellow text */
+            }
+
+            .rejected {
+                background-color: #f8d7da; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
         </style>
     </head>
     <body>
@@ -147,36 +160,37 @@
 
                         </thead>
                         <tbody>
-                                <c:forEach items="${requestScope.reportList}" var="r">
-                                    <c:if test="${r.is_approved != 0}">
-                                        <tr>
-                                            <td>${r.id}</td>
-                                            <td>${requestScope.report_User.get(r.user_id)}</td>
-                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
-                                            <td>${requestScope.report_ReportType.get(r.type_id)}</td>
-                                            <td>${r.content}</td>                                       
-                                            <td>${r.create_date}</td>
-                                            <c:choose>
+                            <c:forEach items="${requestScope.reportList}" var="r">
+                                <c:if test="${r.is_approved != 0}">
+                                    <tr>
+                                        <td>${r.id}</td>
+                                        <td>${requestScope.report_User.get(r.user_id)}</td>
+                                        <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.getBlog_id())}</a></td>
+                                        <td>${requestScope.report_ReportType.get(r.type_id)}</td>
+                                        <td>${r.content}</td>                                       
+                                        <td>${r.create_date}</td>
+                                        <c:choose>
 
                                             <c:when test = "${r.is_approved==0}">
-                                             <td>Waiting </td>
+                                                <td>Waiting </td>
                                             </c:when>
 
-                                            <c:when test = "${r.is_approved==1}">
-                                               <td>Approved </td>
-                                            </c:when>
-                                                <c:when test = "${r.is_approved==2}">
-                                               <td>Rejected </td>
+                                            <c:when test="${r.is_approved == 1}">
+                                                <td id="status-${i.id}" class="approved">Approved</td>
                                             </c:when>
 
-                                          
+                                            <c:when test="${r.is_approved == 2}">
+                                                <td id="status-${i.id}" class="rejected">Rejected</td>
+                                            </c:when>
+
+
                                         </c:choose>
-                                            
-                                        </tr>
-                                    </c:if>
-                                </c:forEach>
-                                <!-- Add more report rows as needed -->
-                            </tbody>
+
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                            <!-- Add more report rows as needed -->
+                        </tbody>
                     </table>
                 </div>
             </div>

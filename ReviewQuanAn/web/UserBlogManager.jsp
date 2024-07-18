@@ -101,9 +101,29 @@
             .create-post-btn button:hover {
                 background-color: #005bb5;
             }
-            .tooltip-inner {
-                white-space: pre-wrap; /* Allows for multiline tooltips */
+
+            .cute-button {
+
+                border: none;
+                color: white; /* White text */
+                padding: 6.45px 9px; /* Smaller padding */
+                font-size: 16px; /* Smaller font size */
+
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Slight shadow */
+
             }
+
+            .card-title {
+                word-wrap: break-word;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
+
         </style>
         <script>
             $(document).ready(function () {
@@ -118,7 +138,7 @@
 
         <c:if test="${requestScope.list.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
+                <img src="img/hinh-anh-c_ac6fe9c1-2cad-493e-8ab4-1aa7b92bc64a.jpg" alt="Placeholder Image">
                 <p>${requestScope.user.username} hasn't posted yet</p>
             </div>
         </c:if>
@@ -128,37 +148,38 @@
                 <c:forEach items="${requestScope.list}" var="i">
                     <div class="col-md-4">
                         <div class="card mb-4">
-                            <img class="card-img-top" src="${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                            <c:choose>
+                                <c:when test="${requestScope.blog_image.get(i).size() > 1}">
+                                    <img class="card-img-top" src="img/${requestScope.blog_image.get(i).get(1).getLink()}" alt="Card image">
+                                </c:when>
+                                <c:otherwise>
+                                    <img class="card-img-top" src="img/6c58498e-b7b1-4a27-8596-c8ec9bceda2c_png-transparent-default-avatar-thumbnail.png" alt="Default image">
+                                </c:otherwise>
+                            </c:choose>
                             <div class="card-body">
                                 <h4 class="card-title">${i.title}</h4>
-                                
+
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <div class="text-muted">${i.create_date}</div>
                                     <c:if test="${requestScope.user.id==sessionScope.User.id}"> 
                                         <c:choose>
-                                            <c:when test="${i.reason_reject != null}">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='This blog is rejected by admin.Reason:${i.reason_reject}'>
-
-                                                    Rejected
-                                                </button>
+                                            <c:when test="${i.is_approved ==2}">
+                                                <a  class="cute-button bg-danger" title="Reason" data-toggle="popover" data-trigger="hover" data-content="${i.reason_reject}" >Rejected</a>
                                             </c:when>
                                             <c:when test="${i.is_approved ==0}">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                    Waiting
-                                                </button>
+                                                <a  class="cute-button bg-dark" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
                                             </c:when>
 
                                             <c:when test="${i.is_approved ==4}">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title='Waiting for admin approve'>
-
-                                                    Hidden
-                                                </button>
+                                                <a  class="cute-button bg-secondary" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is hidden from homepage" >Hidden</a>
+                                            </c:when>
+                                                
+                                                <c:when test="${i.is_approved ==3}">
+                                                <a  class="cute-button bg-warning" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is banned from admin" >Banned</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="This blog is approved by admin">
-                                                    Approved
-                                                </button>
+                                                <a class="cute-button bg-success" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is approved by admin" >Approved</a>
+
                                             </c:otherwise>
                                         </c:choose>
                                     </c:if>
@@ -179,13 +200,13 @@
                                                         <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
                                                         <a class="dropdown-item" href="BlogEdit?blogId=${i.id}">Reapply Blog</a>
                                                         <c:if test="${i.is_approved==4}">
-                                                             <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
+                                                            <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>
-                                                       <c:if test="${i.is_approved!=4}">
-                                                             <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
-                                                       </c:if>
-                                                       
-                                                       
+                                                        <c:if test="${i.is_approved!=4&&i.is_approved!=0&&i.is_approved!=2&&i.is_approved!=3}">
+                                                            <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
+                                                        </c:if>
+
+
                                                     </div>
                                                 </div>
                                             </c:when>
@@ -233,5 +254,10 @@
 
         <!-- Footer -->
         <%@include file="./Footer.jsp" %>
+        <script>
+            $(document).ready(function () {
+                $('[data-toggle="popover"]').popover();
+            });
+        </script>
     </body>
 </html>

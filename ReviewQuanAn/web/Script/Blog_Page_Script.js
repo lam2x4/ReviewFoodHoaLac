@@ -98,7 +98,7 @@ function postComment(username, profPic, commentId) {
                                     <li onclick="deleteComment(${commentId})"><i class="fa-solid fa-trash"></i>Delete</li>
                                 </ul>
                             </div>
-                        </div>`;
+</div>`;
 
 
         // Append the new comment to the comment list
@@ -111,6 +111,7 @@ function postComment(username, profPic, commentId) {
         document.getElementById('add-comment-button').style.display = 'none';
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const postImagesContainer = document.getElementById('post-images');
@@ -593,7 +594,7 @@ function showSlides(n) {
 
 
 
-                                    
+
 // Bookmark toggling                     
 //------------------------------------------------------------------------------
 function toggleBookmark() {

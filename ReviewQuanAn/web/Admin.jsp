@@ -118,9 +118,28 @@
             .border-right {
                 height: 742px;
             }
+            .text-ellipsis {
+                display: inline-block;
+                max-width: 20ch; /* Set maximum width to 20 characters */
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                vertical-align: bottom; /* Align text vertically within the table cell */
+            }
+            .text-info {
+                word-wrap: break-word;
+                max-width: 300px;
+                --max-lines: 2;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
         </style>
     </head>
-    <body>
+    <body> 
         <div class="d-flex" id="wrapper">
             <!-- Sidebar -->
             <%@include file="./AdminHeader.jsp" %>
@@ -130,7 +149,7 @@
             <div class="container-fluid mt-4">
                 <h1 class="mb-4">Dashboard</h1>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
                             <div class="card-header"><i class="fas fa-users"></i><a href="#" style="color:#343A40">Users</a></div>
                             <div class="card-body">
@@ -139,7 +158,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
                             <div class="card-header"><i class="fas fa-file-alt"></i><a href="#" style="color:#343A40">Posts</a></div>
                             <div class="card-body">
@@ -148,12 +167,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
                             <div class="card-header"><i class="fas fa-comments"></i><a href="#" style="color:#343A40">Comments</a></div>
                             <div class="card-body">
                                 <h5 class="card-title">${requestScope.commentNumber}</h5>
                                 <p class="card-text">Total comments made.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card text-dark bg-light mb-3 shadow-sm">
+                            <div class="card-header"><i class="fas fa-comments"></i><a href="#" style="color:#343A40">Reports</a></div>
+                            <div class="card-body">
+                                <h5 class="card-title">${requestScope.reportNumber}</h5>
+                                <p class="card-text">Total reports made.</p>
                             </div>
                         </div>
                     </div>
@@ -184,7 +213,7 @@
                                             <td>${i.create_date}</td>
                                             <td id="status-${i.id}">Waiting</td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectModal" data-id="${i.id}" data-status="2"><i class="fas fa-ban"></i> Reject
                                                 </button>
                                                 <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
@@ -276,13 +305,13 @@
                                         <tr>
                                             <td>${r.id}</td>
                                             <td>${requestScope.report_User.get(r.user_id)}</td>
-                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td><a href="AdminBlogPage?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.blog_id)}</a></td>
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
                                             <td>${r.create_date}</td>
                                             <td id="status-${r.id}">Waiting</td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm reject-btn" data-toggle="modal"
+                                                <button class="btn btn-danger btn-sm reject-btn" data-toggle="modal"
                                                         data-target="#rejectReportModal" data-id="${r.id}" data-status="2"><i class="fas fa-ban"></i> Reject
                                                 </button>
                                                 <button class="btn btn-success btn-sm status-btn" data-toggle="modal"
@@ -329,7 +358,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                           
+
                                     <div class="modal-body">
                                         <p id="statusReportModalMessage">Do you want to reject this report?</p>
                                     </div>
@@ -376,39 +405,39 @@
             $('#status').val(status);
         });
 
-    // Handle status report button click
-    $('.status-btn').click(function () {
-        const id = $(this).data('id');
-        const status = $(this).data('status');
-        $('#confirmStatusReportBtn').data('id', id);
-        $('#confirmStatusReportBtn').data('status', status);
-        $('#statusReportModalMessage').text(`Do you want to approve this report?`);
-    });
+        // Handle status report button click
+        $('.status-btn').click(function () {
+            const id = $(this).data('id');
+            const status = $(this).data('status');
+            $('#confirmStatusReportBtn').data('id', id);
+            $('#confirmStatusReportBtn').data('status', status);
+            $('#statusReportModalMessage').text(`Do you want to approve this report?`);
+        });
 
-    // Handle confirm status report button click
-    $('#confirmStatusReportBtn').click(function () {
-        const id = $(this).data('id');
-        const status = $(this).data('status');
-        $('#statusReportModal').modal('hide');
+        // Handle confirm status report button click
+        $('#confirmStatusReportBtn').click(function () {
+            const id = $(this).data('id');
+            const status = $(this).data('status');
+            $('#statusReportModal').modal('hide');
 
-        // Redirect to AdminWaitingReport servlet with report id
-        window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
-    });
+            // Redirect to AdminWaitingReport servlet with report id
+            window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
+        });
 
-     // Handle reject report button click
-    $('.reject-btn').click(function () {
-        const id = $(this).data('id');
-        $('#confirmRejectReportBtn').data('id', id);
-    });
+        // Handle reject report button click
+        $('.reject-btn').click(function () {
+            const id = $(this).data('id');
+            $('#confirmRejectReportBtn').data('id', id);
+        });
 
-    // Handle confirm reject report button click
-    $('#confirmRejectReportBtn').click(function () {
-        const id = $(this).data('id');
-        const status = 2;  // Status for rejection
-        $('#rejectReportModal').modal('hide');
+        // Handle confirm reject report button click
+        $('#confirmRejectReportBtn').click(function () {
+            const id = $(this).data('id');
+            const status = 2;  // Status for rejection
+            $('#rejectReportModal').modal('hide');
 
-        // Redirect to AdminWaitingReport servlet with report id and rejection status
-        window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
-    });
+            // Redirect to AdminWaitingReport servlet with report id and rejection status
+            window.location.href = `AdminWaitingReport?id=` + id + "&status=" + status;
+        });
     </script>
 </html>

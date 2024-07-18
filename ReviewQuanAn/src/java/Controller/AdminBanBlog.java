@@ -5,12 +5,14 @@
 package Controller;
 
 import dao.DAOBlog;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +61,12 @@ public class AdminBanBlog extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User admin = (User) session.getAttribute("Admin");
+        if (admin == null) {
+            response.sendRedirect("home");
+            return;
+        }
         int id = Integer.parseInt(request.getParameter("id"));
         int status = 1;
         if (Integer.parseInt(request.getParameter("status")) == 1) {
