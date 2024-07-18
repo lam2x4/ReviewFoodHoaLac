@@ -91,7 +91,6 @@ public class DAOImages extends DBContext {
 
             while (rs.next()) {
                 Images img = Mapper.mapRowImages(rs);
-
                 vector.add(img);
             }
         }
@@ -100,11 +99,11 @@ public class DAOImages extends DBContext {
 
     public static void main(String[] args) {
         DAOImages dao = new DAOImages();
-        Images img = new Images(1, "New Link");
-
         try {
-
-            System.out.println(dao.getAll());
+            Vector<Images> vector = dao.findImagesByBlog_id(7);
+            for(Images i : vector){
+                System.out.println(i.toString());
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DAOImages.class.getName()).log(Level.SEVERE, null, ex);
         }

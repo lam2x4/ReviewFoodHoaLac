@@ -1,5 +1,7 @@
 package dao;
 
+import Utility.BlogFilterDate;
+import Utility.BlogFilterPop;
 import Utility.Mapper;
 import dal.DBContext;
 import entity.Blog;
@@ -9,6 +11,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -218,8 +221,6 @@ public class DAOBlog extends DBContext {
         }
     }
 
-   
-
     public Vector<Blog> getAllById(int user_id) throws SQLException {
         Vector<Blog> vector = new Vector<>();
         String sql = "SELECT * FROM Blog WHERE [user_id]=?";
@@ -246,8 +247,8 @@ public class DAOBlog extends DBContext {
         }
         return vector;
     }
-    
-        public Vector<Blog> getAllByIdApproved(int user_id) throws SQLException {
+
+    public Vector<Blog> getAllByIdApproved(int user_id) throws SQLException {
         Vector<Blog> vector = new Vector<>();
         String sql = "SELECT * FROM Blog WHERE [user_id]=? AND is_approved=1";
 
@@ -310,30 +311,28 @@ public class DAOBlog extends DBContext {
         }
         return blog;
     }
-    
-        public Vector<Blog> filterPop() {
-        String sql = """
-                     SELECT * 
-                     FROM Blog b
-                     ORDER BY b.likes DESC, b.create_date DESC;
-                     """;
-        Vector<Blog> vector = new Vector<>();
-        try (Statement state
-                = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE); ResultSet rs
-                = state.executeQuery(sql)) {
-            while (rs.next()) {
-                Blog b = Mapper.mapRowBlog(rs);
-                if (b.getIs_approved() == 1) {
-                    vector.add(b);
-                }
+
+    public Vector<Blog> searchThenFilter(String search, String filter) {
+        try {
+            Vector<Blog> vector = new Vector<>();
+            if (filter.equals("")) {
+                vector = search1(search);
+            } else if (filter.equals("fdate")) {
+                BlogFilterDate d = new BlogFilterDate();
+                vector = search1(search);
+                Collections.sort(vector, d);
+            } else if (filter.equals("fpop")) {
+                BlogFilterPop d = new BlogFilterPop();
+                vector = search1(search);
+                Collections.sort(vector, d);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
+            return vector;
+        } catch (SQLException e) {
+
         }
-        
-        return vector;
+        return null;
     }
-    
+
     public Vector<Blog> filterDate() {
         String sql = """
                      SELECT * 
@@ -352,10 +351,10 @@ public class DAOBlog extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return vector;
     }
-    
+
     public Vector<Blog> filterDateSearch(String search) {
         String sql = """
                      SELECT * 
@@ -377,7 +376,7 @@ public class DAOBlog extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return vector;
     }
 
@@ -402,39 +401,58 @@ public class DAOBlog extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(dao.DAOUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return vector;
     }
 
-    public Vector<Blog> search1(String search) {
-        
-        DAOBlog dao = new DAOBlog();
-        try {
-            Vector<Blog> vector = dao.getAllApproved();
-            Vector<Blog> v = new Vector<>();
-            for (Blog b : vector) {
-                if(b.getTitle().toLowerCase().contains(search.toLowerCase())){
-                    v.add(b);
-                } 
+    public Vector<Blog> search1(String search) throws SQLException {
+
+        String sql = "SELECT * FROM Blog WHERE LOWER(title) Like LOWER(?) and is_approved = 1";
+        Vector<Blog> v = new Vector<>();
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            pre.setString(1, "%" + search + "%");
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+                v.add(b);
             }
-            return v;
-        } catch (Exception ex) {
-            
         }
-        
-        return null;
-        
+        return v;
+
     }
 
-   
+    public Vector<Blog> newPaging(int page, Vector<Blog> all) {
+        Vector<Blog> vector = new Vector<>();
+        try {
+            page -= 1;
+            page = page * 6;
+            for (int i = page; i <= page + 5; i++) {
+                vector.add(all.get(i));
+                if (i == all.size() - 1) {
+                    break;
+                }
+            }
+
+        } catch (Exception ex) {
+
+        }
+        return vector;
+    }
+
+    public int countPage(Vector<Blog> all) {
+        return all.size();
+    }
 
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
         try {
-            dao.deleteBlogIgnoreConstraint(22);
-            
-        } catch (SQLException ex) {
+            Vector<Blog> vector = dao.newPaging(1, dao.searchThenFilter("","fpop"));
+//            Vector<Blog> vector = dao.search1("");
+            for (Blog blog : vector) {
+                System.out.println(blog.toString());
+            }
+        } catch (Exception ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
