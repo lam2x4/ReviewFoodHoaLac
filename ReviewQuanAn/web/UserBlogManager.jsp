@@ -167,11 +167,15 @@
                                                 <a  class="cute-button bg-danger" title="Reason" data-toggle="popover" data-trigger="hover" data-content="${i.reason_reject}" >Rejected</a>
                                             </c:when>
                                             <c:when test="${i.is_approved ==0}">
-                                                <a  class="cute-button bg-warning" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
+                                                <a  class="cute-button bg-dark" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
                                             </c:when>
 
                                             <c:when test="${i.is_approved ==4}">
                                                 <a  class="cute-button bg-secondary" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is hidden from homepage" >Hidden</a>
+                                            </c:when>
+                                                
+                                                <c:when test="${i.is_approved ==3}">
+                                                <a  class="cute-button bg-warning" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is banned from admin" >Banned</a>
                                             </c:when>
                                             <c:otherwise>
                                                 <a class="cute-button bg-success" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is approved by admin" >Approved</a>
@@ -198,7 +202,7 @@
                                                         <c:if test="${i.is_approved==4}">
                                                             <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>
-                                                        <c:if test="${i.is_approved!=4&&i.is_approved!=0&&i.is_approved!=2}">
+                                                        <c:if test="${i.is_approved!=4&&i.is_approved!=0&&i.is_approved!=2&&i.is_approved!=3}">
                                                             <a class="dropdown-item" href="UserRemoveBlog?user_id=${user.id}&&id=${i.id}">Hide Blog</a>
                                                         </c:if>
 

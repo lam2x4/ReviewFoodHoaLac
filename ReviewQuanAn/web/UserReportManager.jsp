@@ -147,7 +147,7 @@
                                         <tr>
                                             <td>${r.id}</td>
                                             <td>${requestScope.report_User.get(r.user_id)}</td>
-                                            <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${r.blog_id}</a></td>
+                                            <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.blog_id)}</a></td>
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
                                             <td>${r.create_date} </td>

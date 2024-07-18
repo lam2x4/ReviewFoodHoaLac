@@ -223,7 +223,7 @@
             </div>
         </div>
 
-        <%@ include file="./Footer.jsp" %>
+       
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
                                         updateCommentCount();

@@ -78,6 +78,7 @@ public class UserReportManagement extends HttpServlet {
             }
             HashMap<Integer, String> report_User = new HashMap<>();
             HashMap<Integer, String> report_ReportType = new HashMap<>();
+            HashMap<Integer, String> report_Blog = new HashMap<>();
             DAOUser daouser = new DAOUser();
             DAOBlog daoblog = new DAOBlog();
             DAOReport daoreport = new DAOReport();
@@ -97,8 +98,17 @@ public class UserReportManagement extends HttpServlet {
                     }
                 }
             }
+            
+            for (Report report : daoreport.getAll()) {
+                for (Blog blog : daoblog.getAll()) {
+                    if (report.getBlog_id()== report.getBlog_id()) {
+                        report_Blog.put(report.getBlog_id(), blog.getTitle());
+                    }
+                }
+            }
 
             request.setAttribute("user", user1);
+            request.setAttribute("report_Blog", report_Blog);
             request.setAttribute("report_ReportType", report_ReportType);
             request.setAttribute("report_User", report_User);
             request.setAttribute("reportList", daoreport.getAllById(user1.getId()));

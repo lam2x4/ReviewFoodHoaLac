@@ -153,9 +153,7 @@ public class AdminBlogPage extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("CommentFragment.jsp");
             dispatcher.include(request, response);
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("CommentFragment.jsp");
-            dispatcher.include(request, response);
-
+           
             RequestDispatcher dispth = request.getRequestDispatcher("AdminBlogPage.jsp");
             dispth.forward(request, response);
         }

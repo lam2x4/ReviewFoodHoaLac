@@ -224,6 +224,18 @@ public class DAOComment extends DBContext {
         }
         return vector;
     }
+    
+    
+    public Vector<Comment> getListCommentByPage(Vector<Comment> list, int start, int end) {
+        Vector<Comment> comment = new Vector<>();
+        if (list == null) {
+            return null;
+        }
+        for (int i = start; i < end; i++) {
+            comment.add(list.get(i));
+        }
+        return comment;
+    }
 
     public static void main(String[] args) {
         DAOComment dao = new DAOComment();

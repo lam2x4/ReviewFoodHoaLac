@@ -133,6 +133,11 @@
                 background-color: #f8d7da; /* Light red background */
                 color: #721c24; /* Dark red text */
             }
+            
+            .banned {
+                background-color: #ffca28; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
         </style>
     </head>
     <body>
@@ -177,7 +182,9 @@
                                             <c:when test="${i.is_approved == 2}">
                                                 <td id="status-${i.id}" class="rejected" > <i class="fas fa-circle text-danger"></i> Rejected</td>
                                             </c:when>
-                                         
+                                         <c:when test="${i.is_approved == 3}">
+                                                <td id="status-${i.id}" class="banned" > <i class="fas fa-circle text-warning"></i> Banned</td>
+                                            </c:when>
                                         </c:choose>
                                         <td>
                                             <c:choose>

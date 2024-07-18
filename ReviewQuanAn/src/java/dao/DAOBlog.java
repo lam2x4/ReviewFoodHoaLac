@@ -413,7 +413,7 @@ public class DAOBlog extends DBContext {
             Vector<Blog> vector = dao.getAllApproved();
             Vector<Blog> v = new Vector<>();
             for (Blog b : vector) {
-                if(b.getTitle().contains(search)){
+                if(b.getTitle().toLowerCase().contains(search.toLowerCase())){
                     v.add(b);
                 } 
             }
