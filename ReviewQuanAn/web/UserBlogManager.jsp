@@ -118,7 +118,7 @@
 
         <c:if test="${requestScope.list.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-mushroom-mascot-cartoon-character-free-vector.jpg" alt="Placeholder Image">
+                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
                 <p>${requestScope.user.username} hasn't posted yet</p>
             </div>
         </c:if>
@@ -177,6 +177,7 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="BlogPageController?id=${i.id}">See Detail</a>
+                                                        <a class="dropdown-item" href="BlogEdit?blogId=${i.id}">Reapply Blog</a>
                                                         <c:if test="${i.is_approved==4}">
                                                              <a class="dropdown-item" href="UserUnremoveBlog?user_id=${user.id}&&id=${i.id}">Active Blog</a>
                                                         </c:if>

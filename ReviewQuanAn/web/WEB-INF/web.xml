@@ -141,12 +141,8 @@
         <servlet-class>Controller.BookmarkController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>home</servlet-name>
-        <servlet-class>Controller.home</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>BlogPageController</servlet-name>
-        <servlet-class>Controller.BlogPageController</servlet-class>
+        <servlet-name>BlogEdit</servlet-name>
+        <servlet-class>Controller.BlogEdit</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
@@ -281,11 +277,7 @@
         <url-pattern>/BookmarkController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>home</servlet-name>
-        <url-pattern>/home</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BlogPageController</servlet-name>
-        <url-pattern>/BlogPageController</url-pattern>
+        <servlet-name>BlogEdit</servlet-name>
+        <url-pattern>/BlogEdit</url-pattern>
     </servlet-mapping>
 </web-app>

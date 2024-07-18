@@ -111,7 +111,7 @@
 
         <c:if test="${requestScope.list.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-mushroom-mascot-cartoon-character-free-vector.jpg" alt="Placeholder Image">
+                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
                 <p>${requestScope.pageUser.username} hasn't bookmarked yet</p>
             </div>
         </c:if>
@@ -196,9 +196,9 @@
                         console.log("Bookmark successfully removed.");
                         location.reload();
                         //updateList();
-                    } else {
-                        console.error("Bookmark toggle failed. Status: " + xhr.status);
                     }
+                } else {
+                    console.error("Bookmark toggle failed. Status: " + xhr.status);
                 }
             };
             if (confirm("Are you sure? You're unbookmarking: " + title)) {
@@ -206,6 +206,5 @@
             } else {
                 console.log("Action cancelled by user.");
             }
-        }
     </script>
 </html>

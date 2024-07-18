@@ -4,9 +4,12 @@
  */
 package Controller;
 
+import dao.DAOBlog;
+import dao.DAOComment;
 import dao.DAOReport;
 import dao.DAOReportType;
 import dao.DAOUser;
+import entity.Blog;
 import entity.Report;
 import entity.ReportType;
 import entity.User;
@@ -76,6 +79,7 @@ public class UserReportManagement extends HttpServlet {
             HashMap<Integer, String> report_User = new HashMap<>();
             HashMap<Integer, String> report_ReportType = new HashMap<>();
             DAOUser daouser = new DAOUser();
+            DAOBlog daoblog = new DAOBlog();
             DAOReport daoreport = new DAOReport();
             DAOReportType daoReportType = new DAOReportType();
 

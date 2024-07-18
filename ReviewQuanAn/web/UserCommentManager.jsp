@@ -163,7 +163,7 @@
     <%@include file="NavbarProfile.jsp" %>
      <c:if test="${requestScope.commentList.size()==0}">
             <div class="content" style="height:450px"> 
-                <img src="img/cute-mushroom-mascot-cartoon-character-free-vector.jpg" alt="Placeholder Image">
+                <img src="img/cute-kawaii-mushroom-chibi-mascot-cartoon-style-vector.jpg" alt="Placeholder Image">
                 <p>${requestScope.user.username} hasn't comment yet</p>
             </div>
         </c:if>

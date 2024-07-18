@@ -15,8 +15,8 @@ public class DAOBlog extends DBContext {
 
     public int addBlog(Blog b) throws SQLException {
         String sql = "INSERT INTO [dbo].[Blog] "
-                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned], [author_id], reason_reject) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "([user_id],[title],[content],[create_date],[likes],[is_approved],[is_banned], [author_id]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pre = conn.prepareStatement(sql)) {
             Mapper.setRowAddBlog(b, pre);
@@ -312,18 +312,9 @@ public class DAOBlog extends DBContext {
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
-        Blog b = new Blog();
-        b.setUser_id(5);
-        b.setTitle("haha");
-        b.setContent("hha");
-        b.setCreate_date("2022");
-        b.setLikes(0);
-        b.setIs_banned(0);
-        b.setIs_banned(0);
-        b.setAuthor_id(5);   
-        b.setReason_reject("haha");
+        Blog b = new Blog(1, "New Title", "New Content", "", 0, 0, 0, 1);
         try {
-            dao.addBlog(b);
+            System.out.println(dao.getAllByIdApproved(5));
         } catch (SQLException ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

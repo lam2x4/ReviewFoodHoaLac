@@ -72,7 +72,7 @@
           String loggedInUsername = (String)request.getAttribute("commentUsername");%>
         <div class="post-container">
             <div class="post-header" style="position: relative;">
-                <img src="<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
+                <img src="img/<%=(String)request.getAttribute("profPic")%>" alt="Profile Picture" class="profile-pic">
                 <div class="user-info">
                     <h2><a href="" class="profile-link"><%=(String)request.getAttribute("username")%></a></h2>
                     <p id="blogPublishDate"><%=(String)request.getAttribute("publishDate")%></p>
@@ -134,7 +134,7 @@
                     </select>
                 </div>
                 <div class="comment-box" id="comment-box">
-                    <img src="<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
+                    <img src="img/<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
                     <input type="hidden" id="Username" value="<%=(String)request.getAttribute("commentUsername")%>">
                     <input type="hidden" id="BlogId" value="<%=(String)request.getAttribute("blogId")%>">
                     <form id="commentForm">

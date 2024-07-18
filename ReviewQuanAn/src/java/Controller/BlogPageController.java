@@ -2,6 +2,7 @@ package Controller;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
+@WebServlet(name = "BlogPageController", urlPatterns = {"/BlogPageController"})
 public class BlogPageController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -117,8 +119,6 @@ public class BlogPageController extends HttpServlet {
 
         request.setAttribute("username", u.getUsername());
         request.setAttribute("publishDate", b.getCreate_date());
-        request.setAttribute("profPic", "img/" + u.getAvatar());
-        request.setAttribute("userId", u.getId());
         request.setAttribute("profPic", u.getAvatar());
 
         request.setAttribute("blogId", request.getParameter("id"));

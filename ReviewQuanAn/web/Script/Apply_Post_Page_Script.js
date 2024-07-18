@@ -43,6 +43,10 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    CKEDITOR.editorConfig = function (config) {
+        config.versionCheck = false; // Disable version check
+    };
+
     CKEDITOR.config.toolbar_Basic = [
         //{name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
         //{name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
@@ -67,7 +71,6 @@ window.addEventListener('DOMContentLoaded', () => {
         {name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize']},
         {name: 'tools', items: ['Maximize']}
     ];
-
 
     //Custom form reset
     form.addEventListener("reset", () => {
@@ -100,8 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     reader.onload = (e) => {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.maxWidth = '200px'; // Limit the width to avoid stretching
-                        img.style.margin = '5px'; // Add margin around each image
+                        img.classList.add('preview'); // Add 'preview' class to the image
                         previewContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);
@@ -126,35 +128,4 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error("Element with ID 'imageUpload' not found.");
     }
-
-//    form.addEventListener("submit", function (event) {
-//        event.preventDefault();
-
-//        const editor = CKEDITOR.instances.postDescription;
-//        if (!editor || editor.getData().trim() === "") {
-//            alert("Post content cannot be empty.");
-//            return; // Exit the function early
-//        }
-
-//        alert("Your post application has been submitted successfully!", "alert-success");
-//        const formData = new FormData(form);
-//
-//        fetch(form.action, {
-//            method: form.method,
-//            body: formData
-//        })
-//                .then(response => {
-//                    if (response.ok) {
-//                        alert("Your post application has been submitted successfully!", "alert-success");
-//                        resetForm(); // Call function to reset the form
-//                    } else {
-//                        response.text().then(text => {
-//                            alert(`Error: ${text}`, "alert-danger");
-//                        });
-//                    }
-//                })
-//                .catch(error => {
-//                    alert("An error occurred. Please try again later.", "alert-danger");
-//                });
-//    });
 });

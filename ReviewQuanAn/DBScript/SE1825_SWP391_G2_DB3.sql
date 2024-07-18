@@ -94,7 +94,8 @@ CREATE TABLE CommentLikes(
 )
 CREATE TABLE Report_Type(
 	id int identity(1,1) primary key ,
-	[type_name] int,
+	[type_name] nvarchar(30),
+	[description] nvarchar(150),
 	
 )
 
@@ -103,15 +104,30 @@ CREATE TABLE Report(
 	[user_id] int foreign key references [User](id),
 	[blog_id] int foreign key references Blog(id),
 	[content] nvarchar(100),
+	create_date nvarchar(20) not null,
 	[type_id] int foreign key references Report_Type(id),
+	[is_approved] int foreign key references Approve_Name(id),
 	
 )
 
-create table BookMark(
-id int Identity(1,1) primary key,
-[user_id] int foreign key references [user](id),
-[blog_id] int foreign key references Blog(id),
+create table Bookmark(
+	id int identity(1,1) primary key,
+	[user_id] int foreign key references [User](id),
+	blog_id int foreign key references Blog(id),
 )
+
+INSERT INTO Report_Type([type_name],[description])  VALUES
+('Harassment', 'Reports related to harassment or abusive behavior'),
+('Spam', 'Reports regarding unsolicited or irrelevant messages'),
+('Violence', 'Reports of violent content or threatening behavior'),
+('Hate Speech', 'Reports involving discriminatory or hateful speech'),
+('Misinformation', 'Reports about false or misleading information'),
+('Impersonation', 'Reports about accounts impersonating other individuals or entities'),
+('Child Exploitation', 'Reports related to child exploitation or abuse'),
+('Scams', 'Reports regarding fraudulent schemes or deceptive practices'),
+('Privacy Violation', 'Reports about unauthorized use of personal information'),
+('Self-Harm', 'Reports related to content promoting self-harm or suicide'),
+('Other', 'Reports that do not fit into any other predefined categories');
 
 -- Insert data into the Role table
 INSERT INTO [Role] (role_id, role_name)
@@ -133,7 +149,9 @@ VALUES ('anhtthe182190', '$2a$10$4gdBX6nPOX8rgNHKGzcQjOPgy9zDXQ4I9UboWPd.wy.Ii.S
 INSERT INTO Approve_Name(id, [name])
 VALUES (0, 'Waiting'),
 	   (1, 'Approved'),
-	   (2, 'Reject');
+	   (2, 'Reject'),
+	   (3,'Ban'),
+	   (4,'Remove');
 
 	   SET IDENTITY_INSERT [dbo].[Blog] ON 
 -- Insert data into the Blog table

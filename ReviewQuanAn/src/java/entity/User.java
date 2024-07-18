@@ -29,7 +29,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.avatar = "img/" + avatar;
+        this.avatar = avatar;
         this.gender = gender;
         this.description = description;
         this.create_date = create_date;
@@ -42,7 +42,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.avatar = "img/" + avatar;
+        this.avatar = avatar;
         this.gender = gender;
         this.description = description;
         this.create_date = create_date;
@@ -65,8 +65,6 @@ public class User {
     public void setAuthor_id(String author_id) {
         this.author_id = author_id;
     }
-
-
     
     public String getCreate_date() {
         return create_date;
@@ -138,7 +136,7 @@ public class User {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = "img/" + avatar;
+        this.avatar = avatar;
     }
 
     public void setGender(int gender) {

@@ -92,29 +92,29 @@ public class ChangeInformation extends HttpServlet {
         HttpSession session = request.getSession(true);
         try {
             User user = (User) session.getAttribute("User");
-            String email = avoidBlank(request.getParameter("email"), user.getEmail());
             String username = avoidBlank(request.getParameter("username"), user.getUsername());
-            String password = avoidBlank(request.getParameter("password"), user.getPassword());
             String phone = avoidBlank(request.getParameter("phone"), user.getPhone());
-
+            String desc = avoidBlank(request.getParameter("description"), user.getDescription());
+            String avatarURL = "";
+            boolean flag = false;
             DAOUser dao = new DAOUser();
 
             String uploadPath = getServletContext().getRealPath("/img") + File.separator;
             for (Part part : request.getParts()) {
                 String contentType = part.getContentType();
-
                 if (contentType != null && contentType.startsWith("image")) {
-                    String avatarURL = UUID.randomUUID().toString() + "_" + part.getSubmittedFileName();
+                    avatarURL = part.getSubmittedFileName().substring(0, 10) + "_" + UUID.randomUUID().toString();
+                    flag = true;
                     Files.copy(part.getInputStream(), Paths.get(uploadPath, avatarURL));
-//                    User tempUser = new User(User.getId(), username, password, email, phone, avatarURL, User.getGender(), User.getDescription(), User.getCreate_date(), User.getVerify_status(), User.getRole_id());
-                    User tempUser = new User(user.getId(), username, password, email, phone, avatarURL, user.getGender(), user.getDescription(), user.getCreate_date(), user.getVerify_status(), user.getRole_id());
-//                    response.getWriter().println(tempUser.toString());
-                    dao.updateUser(tempUser);
-                    session.setAttribute("User", tempUser);
-                    response.sendRedirect("ChangeInformation.jsp");
-//                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + avatarURL);
+//                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + fileName);
                 }
             }
+            User tempUser = new User(user.getId(), username, user.getPassword(), user.getEmail(), phone, flag ? avatarURL : user.getAvatar(), user.getGender(), desc, user.getCreate_date(), user.getVerify_status(), user.getRole_id());
+//                    response.getWriter().println(tempUser.toString());
+            dao.updateUser(tempUser);
+            session.setAttribute("User", tempUser);
+//                    response.getWriter().println("The file uploaded sucessfully to: " + uploadPath + avatarURL);
+            response.sendRedirect("ChangeInformation.jsp");
         } catch (ServletException | IOException e) {
             e.printStackTrace();
             response.getWriter().println("Error updating user: " + e.getMessage());

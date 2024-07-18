@@ -138,7 +138,7 @@
         <!-- Header begin -->
         <header>
             <!-- Navigation bar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" id="mainNavbar">
                 <a class="navbar-brand" href="home">
                     <img src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.34264412.1716346800&semt=sph" style="width: 60px" alt="Logo">
                     HoaLac3School
