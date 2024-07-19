@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,7 +72,7 @@ public class Admin extends HttpServlet {
             throws ServletException, IOException {
         try {
 
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             User admin = (User) session.getAttribute("Admin");
             if (admin == null) {
                 response.sendRedirect("home");
@@ -120,19 +121,68 @@ public class Admin extends HttpServlet {
                 }
             }
 
+            //Pagination Blog
+            int page, numberpage = 6;
+            int size = daoblog.getAllWaiting().size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            if (session.getAttribute("page") == null) {
+                session.setAttribute("page", num);
+                page = 1;
+            } else {
+                String xpage = request.getParameter("page");
+                if (xpage == null) {
+                    page = 1;
+                } else {
+                    page = Integer.parseInt(xpage);
+                }
+            }
+
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Blog> list1 = daoblog.getListBlogByPage(daoblog.getAllWaiting(), start, end);
+
+            //Pagination Report
+            int pageReport, numberpageReport = 6;
+            int sizeReport = daoreport.getAll().size();
+            int numReport = (sizeReport % 6 == 0 ? (sizeReport / 6) : ((sizeReport / 6) + 1)); //so trang
+           
+            if (session.getAttribute("pageReport") == null) {
+                session.setAttribute("pageReport", numReport);
+                pageReport = 1;
+            } else {
+                String xpageReport = request.getParameter("pageReport");
+                if (xpageReport == null) {
+                    pageReport = 1;
+                } else {
+                    pageReport = Integer.parseInt(xpageReport);
+                }
+            }
+
+            int startReport, endReport;
+            startReport = (pageReport - 1) * numberpageReport;
+            endReport = Math.min(pageReport * numberpageReport, sizeReport);
+            Vector<Report> listReport = daoreport.getListReportByPage(daoreport.getAll(), startReport, endReport);
+
+            session.setAttribute("page", page);
+            session.setAttribute("num", num);
+
+            session.setAttribute("pageReport", pageReport);
+            session.setAttribute("numReport", numReport);
+
             request.setAttribute("report_Blog", report_Blog);
             request.setAttribute("report_ReportType", report_ReportType);
             request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAll());
+            request.setAttribute("reportList", listReport);
             request.setAttribute("Blog_User", blog_User);
             request.setAttribute("userNumber", userNumber);
             request.setAttribute("blogNumber", blogNumber);
             request.setAttribute("commentNumber", commentNumber);
-             request.setAttribute("reportNumber", reportNumber);
-            request.setAttribute("BlogList", daoblog.getAll());
+            request.setAttribute("reportNumber", reportNumber);
+            request.setAttribute("BlogList", list1);
             request.getRequestDispatcher("Admin.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("hehe");;
         }
     }
 

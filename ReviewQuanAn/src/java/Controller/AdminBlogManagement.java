@@ -100,7 +100,7 @@ public class AdminBlogManagement extends HttpServlet {
             
             //Pagination
             int page, numberpage = 6;
-            int size = daoBlog.getAll().size();
+            int size = daoBlog.getAllNotWaiting().size();
             int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
             String xpage = request.getParameter("page");
             if (xpage == null) {
@@ -111,7 +111,7 @@ public class AdminBlogManagement extends HttpServlet {
             int start, end;
             start = (page - 1) * numberpage;
             end = Math.min(page * numberpage, size);
-            Vector<Blog> list1 = daoBlog.getListBlogByPage(daoBlog.getAll(), start, end);
+            Vector<Blog> list1 = daoBlog.getListBlogByPage(daoBlog.getAllNotWaiting(), start, end);
 
             request.setAttribute("page", page);
             request.setAttribute("num", num);

@@ -442,16 +442,45 @@ public class DAOBlog extends DBContext {
     public int countPage(Vector<Blog> all) {
         return all.size();
     }
+    
+    public Vector<Blog> getAllWaiting() throws SQLException {
+        Vector<Blog> vector = new Vector<>();
+        String sql = "SELECT * FROM Blog WHERE is_approved=0";
 
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
+    
+     public Vector<Blog> getAllNotWaiting() throws SQLException {
+        Vector<Blog> vector = new Vector<>();
+        String sql = "SELECT * FROM Blog WHERE is_approved!=0";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Blog b = Mapper.mapRowBlog(rs);
+
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
+    
     public static void main(String[] args) {
         DAOBlog dao = new DAOBlog();
 
         try {
-            Vector<Blog> vector = dao.newPaging(1, dao.searchThenFilter("","fpop"));
-//            Vector<Blog> vector = dao.search1("");
-            for (Blog blog : vector) {
-                System.out.println(blog.toString());
-            }
+            System.out.println(dao.getListBlogByPage(dao.getAllWaiting(), 1, 6));
+            
         } catch (Exception ex) {
             Logger.getLogger(DAOBlog.class.getName()).log(Level.SEVERE, null, ex);
         }

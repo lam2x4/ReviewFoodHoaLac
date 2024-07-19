@@ -286,6 +286,36 @@
 
                     </div>
                 </div>
+                       <!-- Pagination -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${sessionScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="Admin?page=${page - 1}&&pageReport=${sessionScope.pageReport}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${sessionScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="Admin?page=${i}&&pageReport=${sessionScope.pageReport}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < sessionScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="Admin?page=${page + 1}&&pageReport=${sessionScope.pageReport}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
 
                 <!-- Waiting Report -->
                 <div class="card mt-4 shadow-sm">
@@ -374,6 +404,36 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                       <!-- Pagination -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="pageReport" value="${sessionScope.pageReport}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${pageReport > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="Admin?page=${sessionScope.page}&&pageReport=${pageReport - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${sessionScope.numReport}" var="i">
+                                    <li class="page-item ${i == pageReport ? 'active' : ''}">
+                                        <a class="page-link" href="Admin?page=${sessionScope.page}&&pageReport=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${pageReport < sessionScope.numReport}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="Admin?page=${sessionScope.page}&&pageReport=${pageReport + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

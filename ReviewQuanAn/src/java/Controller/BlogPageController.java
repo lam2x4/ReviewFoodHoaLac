@@ -115,23 +115,7 @@ public class BlogPageController extends HttpServlet {
 
         }
 
-        //Pagination
-        int page, numberpage = 6;
-        int size = comments.size();
-        int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
-        String xpage = request.getParameter("page");
-        if (xpage == null) {
-            page = 1;
-        } else {
-            page = Integer.parseInt(xpage);
-        }
-        int start, end;
-        start = (page - 1) * numberpage;
-        end = Math.min(page * numberpage, size);
-        Vector<Comment> list1 = daoComment.getListCommentByPage(comments, start, end);
-
-        request.setAttribute("page", page);
-        request.setAttribute("num", num);
+       
         request.setAttribute("type_list", daoType.getAll());
 
         request.setAttribute("username", u.getUsername());
@@ -144,7 +128,7 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogContent", b.getContent());
         request.setAttribute("blogLikes", b.getLikes());
         request.setAttribute("blogPictures", imgs);
-        request.setAttribute("blogComments", list1);
+        request.setAttribute("blogComments", comments);
         request.setAttribute("commentAvatars", avatars);
         request.setAttribute("commentsDates", convertedDates);
         request.setAttribute("authorname", b.getAuthor_name());
