@@ -56,7 +56,7 @@
             }
             .card-title {
                 word-wrap: break-word;
-                --max-lines: 2;
+                --max-lines: 1;
                 display: -webkit-box;
                 overflow: hidden;
                 -webkit-box-orient: vertical;
@@ -88,22 +88,29 @@
             <div class="container">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <form id="seachForm" action="Search" method="post">
-                            <input name="search1" type="text" class="form-control" placeholder="Search for articles...">
-                            <input type="submit" name="search" value="Search">
-                            <input type="hidden" name="submit" value="search">
+                        <form id="seachForm" action="home" method="get">
+                            <%String searchC = (String) session.getAttribute("searchC");%>
+                            <%if(searchC != null || !searchC.equals("")){%>
+                            <input name="search1" type="text" class="form-control" placeholder="Search for articles..." value="<%=searchC%>"> 
+                            <%}else{%>
+                            <input name="search1" type="text" class="form-control" placeholder="Search for articles..."> 
+                            <%}%>
+                            <input type="submit" name="search" value="search">
                         </form>
                     </div>
                     <div class="col-md-6 text-right">                       
+                        <% String filterValue = (String) session.getAttribute("filterS"); %>
+                        <% filterValue = filterValue == null? "" : filterValue;%>
                         <form id="filterForm" action="home" method="get">
                             <label for="filterq" class="mr-2">Filter:</label>
-                            <select id="filterq" name="filter" class="form-control w-50 d-inline" onchange="this.form.submit()">
-                                <option value="none">None</option>
-                                <option value="fdate">By Date</option>
-                                <option value="fpop">By Popularity</option>
+                            <select id="filterq" name="filterq" class="form-control w-50 d-inline" onchange="this.form.submit()">
+                                <option value="" <%= "None".equals(filterValue) ? "selected" : "" %>>None</option>
+                                <option value="fdate" <%= "fdate".equals(filterValue) ? "selected" : "" %>>By Date</option>
+                                <option value="fpop" <%= "fpop".equals(filterValue) ? "selected" : "" %>>By Popularity</option>
                             </select>
                             <input type="hidden" name="applyFilter" value="applyFilter">
                         </form>
+
 
                     </div>
                 </div>
@@ -189,20 +196,4 @@
 
 
 </body>
-<script>
-    // Function to get query parameter by name
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    // Set the selected option based on the query parameter
-    window.onload = function () {
-        const filterValue = getQueryParam('filter');
-        if (filterValue) {
-            document.getElementById('filterq').value = filterValue;
-        }
-    };
-</script>
-
 </html>

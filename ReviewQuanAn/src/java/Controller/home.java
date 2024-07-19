@@ -17,6 +17,8 @@ import java.util.Vector;
 import dao.DAOBlog;
 import dao.DAOImages;
 import entity.Images;
+import jakarta.mail.Message;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,106 +31,106 @@ import java.util.logging.Logger;
  * @author lam1
  */
 public class Home extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Home</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Home at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession(true);
         
         DAOBlog dao = new DAOBlog();
         DAOImages daoImage = new DAOImages();
-        
+
         HashMap<Blog, Vector<Images>> Blog_Image = new HashMap<>();
-        Vector<Images> imageList;
         Vector<Images> listFake;
-
-        String filter = request.getParameter("applyFilter");
         
-        //request.setAttribute("filt", filter);
-        try {
-            imageList = daoImage.getAll();
-            Vector<Blog> list = dao.getAllApproved();
-            if(filter != null){
-                String val = request.getParameter("filter");
-                if(val.equals("fpop")){
-                    list = dao.filterPop();
-                }
-                else if(val.equals("fdate")){
-                    list = dao.filterDate();
-                }
+        //HANDLE FILTERS
+        String filterApply = (String) session.getAttribute("filterS");
+        String submitFilter = request.getParameter("filterq");
+        if (submitFilter != null) {
+//            System.out.println("SubmitFILTER: " + submitFilter);
+            if(!submitFilter.equals("")){
+                filterApply = submitFilter;
             }
+        }
+        filterApply = filterApply == null ? "" : filterApply;
+//        System.out.println("FILTER: "  + filterApply);
+        session.setAttribute("filterS", filterApply);
+        // IF SESSION FILTER CONTENT EXIST -> USE THAT
+        // IF SUBMIT FOR FILTERING IS CLICKED -> USE THE NEW FILTER CONTENT
+        // SET ATTRIBUTE FOR KEEPING THE FILTER EVEN IF CHANGE PAGES
+        
+        //HANDLE SEARCHES
+        String searchC = (String) session.getAttribute("searchC");
+        String submitSearch = request.getParameter("search");
+        if (submitSearch != null) {
+            searchC = request.getParameter("search1");
+        }
+        searchC = (searchC == null) ? "" : searchC;
+//        System.out.println("SEARCH: "+ searchC);
+        session.setAttribute("searchC", searchC);
+        // IF SESSION SEARCH CONTENT EXIST -> USE THAT
+        // IF SUBMIT FOR SEARCHING IS CLICKED -> USE THE NEW SEARCH CONTENT
+        // SET ATTRIBUTE FOR KEEPING THE SEARCH EVEN IF CHANGE PAGES
+
+        
+        //GET PAGE
+        
+        String currentPage = request.getParameter("page");
+        currentPage = currentPage == null? "1" : currentPage;
+        int page = Integer.parseInt(currentPage);
+//        System.out.println("Page: " + page);
+       
+        
+        
+        String filter = request.getParameter("applyFilter");
+        request.setAttribute("filt", filter);
+        Vector<Blog> list = new Vector<>();
+        try {
+
+            list = dao.newPaging(page, dao.searchThenFilter(searchC, filterApply));
             for (Blog blog : list) {
-
                 listFake = new Vector();
-
+                
+                Vector<Images> imageList = daoImage.findImagesByBlog_id(blog.getId());
+                
                 for (Images images : imageList) {
-
-                    if (images.getBlog_id() == blog.getId()) {
-                        listFake.add(images);
-                    }
+                    listFake.add(images);
                 }
                 Blog_Image.put(blog, listFake);
 
             }
             //Pagination
-            int page, numberpage = 6;
-            int size = list.size();
+//            int numberpage = 6;
+            int size = dao.searchThenFilter(searchC, filterApply).size();
+//            System.out.println("Size: " + size);
             int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
-            String xpage = request.getParameter("page");
-            if (xpage == null) {
-                page = 1;
-            } else {
-                page = Integer.parseInt(xpage);
-            }
-            int start, end;
-            start = (page - 1) * numberpage;
-            end = Math.min(page * numberpage, size);
-            Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
+//            System.out.println("Num: " + num);
+//            System.out.println("NUMBER: " + num);
+//            String xpage = request.getParameter("page");
+//            if (xpage == null) {
+//                page = 1;
+//            } else {
+//                page = Integer.parseInt(xpage);
+//            }
+//            int start, end;
+//            start = (page - 1) * numberpage;
+//            end = Math.min(page * numberpage, size);
+//            Vector<Blog> list1 = dao.getListBlogByPage(list, start, end);
 
             request.setAttribute("page", page);
             request.setAttribute("num", num);
             request.setAttribute("blog_image", Blog_Image);
-            request.setAttribute("list", list1);
-            request.setAttribute("afterSearch", "111");
+            request.setAttribute("list", list);
+            
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         } catch (Exception e) {
-
+            System.out.println(e);
         }
     }
 
