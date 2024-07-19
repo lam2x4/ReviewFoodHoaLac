@@ -110,6 +110,7 @@
             <hr>
             <div class="post-sub-info">
                 <input type="hidden" id="blogLikes" value="<%=(int)request.getAttribute("blogLikes")%>">
+                <input type="hidden" id="commentCounter" value="<%=(int)request.getAttribute("blogCommentCount")%>">
                 <span id="likeCount" class="count"><i class="fa-solid fa-thumbs-up"></i> Likes: <%=(int)request.getAttribute("blogLikes")%></span>
                 <span id="commentCount" class="count"><i class="fa-solid fa-comment"></i> Comments: 0</span>
             </div>
@@ -125,10 +126,15 @@
             <div class="comment-section">
                 <div class="sort-options">
                     <label for="sort-comments"><i class="fa-solid fa-sort"></i> Sort by: </label>
-                    <select id="sort-comments" name="sort-comments" onchange="sortComments()">
-                        <option value="date">Date</option>
-                        <option value="popular">Popular</option>
-                    </select>
+                    <!-- New sorting form -->
+                    <form action="BlogPageController" method="get">
+                        <input type="hidden" name="id" value="<%=(String)request.getAttribute("blogId")%>">
+                        <input type="hidden" name="page" value="${requestScope.page}">
+                        <select name="sortOption" onchange="this.form.submit()">
+                            <option value="date" ${sortOption == 'date' ? 'selected' : ''}>Date</option>
+                            <option value="popular" ${sortOption == 'popular' ? 'selected' : ''}>Popular</option>
+                        </select>
+                    </form>
                 </div>
                 <div class="comment-box" id="comment-box">
                     <img src="img/<%=(String)request.getAttribute("commentProfPic")%>" alt="Profile Picture" class="profile-pic" id="UserPP">
@@ -189,33 +195,36 @@
                <!-- Pagination -->
 
                 <div class="row">
-                    <div class="col-lg-12">
-                        <c:set var="page" value="${requestScope.page}"/>
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <c:if test="${page > 1}">
-                                    <li class="page-item">
-                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${page - 1}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                                <c:forEach begin="1" end="${requestScope.num}" var="i">
-                                    <li class="page-item ${i == page ? 'active' : ''}">
-                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${i}">${i}</a>
-                                    </li>
-                                </c:forEach>
-                                <c:if test="${page < requestScope.num}">
-                                    <li class="page-item">
-                                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&&page=${page + 1}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+    <div class="col-lg-12">
+        <c:set var="page" value="${requestScope.page}"/>
+        <c:set var="sortOption" value="${requestScope.sortOption}"/>
+        <input type="hidden" value="${requestScope.page}" id="pageNumber">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <c:if test="${page > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&page=${page - 1}&sortOption=${sortOption}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                    <li class="page-item ${i == page ? 'active' : ''}">
+                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&page=${i}&sortOption=${sortOption}">${i}</a>
+                    </li>
+                </c:forEach>
+                <c:if test="${page < requestScope.num}">
+                    <li class="page-item">
+                        <a class="page-link" href="BlogPageController?id=<%=(String)request.getAttribute("blogId")%>&page=${page + 1}&sortOption=${sortOption}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
+    </div>
+</div>
+
         </div>
 
         <!-- Report Modal -->
@@ -255,7 +264,7 @@
         <%@ include file="./Footer.jsp" %>
         <script src="Script/Blog_Page_Script.js"></script>
         <script>
-                                        updateCommentCount();
+                                        updateCommentCount(0);
             <%if(loggedInUsername == null){%>
                                         const commentBox = document.getElementById('comment-box');
                                         commentBox.style.display = "none";
