@@ -48,6 +48,17 @@ public class BlogPageController extends HttpServlet {
         if (curUser == null) {
             curUser = (User) session.getAttribute("User");
         }
+        
+        // Store sortOption in session
+        String sortOption = request.getParameter("sortOption");
+        if (sortOption != null) {
+            session.setAttribute("sortOption", sortOption);
+        } else {
+            sortOption = (String) session.getAttribute("sortOption");
+            if (sortOption == null) {
+                sortOption = "date";
+            }
+        }
 
         if (service.equals("addComment")) {
             handleAddComment(request, response, curUser, blogId, daoComment);
@@ -88,23 +99,38 @@ public class BlogPageController extends HttpServlet {
             return;
         }
 
-        Vector<Comment> comments;
-        String sortOption = request.getParameter("sortOption");
-        if (sortOption == null) {
+        Vector<Comment> comments = new Vector<>();
+        sortOption = request.getParameter("sortOption");
+        if(sortOption == null) sortOption = "date";
+        if (sortOption.equals("date")) {
             comments = daoComment.findCommentsByBlog_id(blogId);
-        } else {
-            if (sortOption.equals("popular")) {
-                comments = daoComment.getCommentsSortedByLikes(blogId);
-            } else {
-                comments = daoComment.findCommentsByBlog_id(blogId);
-            }
+        } else if (sortOption.equals("popular")) {
+            comments = daoComment.getCommentsSortedByLikes(blogId);
         }
 
         Vector<Images> imgs = daoImages.findImagesByBlog_id(blogId);
         Vector<String> avatars = new Vector<>();
         Vector<String> convertedDates = new Vector<>();
         Vector<String> commentsInteractionType = new Vector<>();
-        for (Comment comm : comments) {
+        
+
+        //Pagination
+        int page, numberpage = 6;
+        int size = comments.size();
+        int pageNum = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1));
+        String xpage = request.getParameter("page");
+        
+        if (xpage == null) page = 1;
+        else page = Integer.parseInt(xpage);
+        
+        int start= (page - 1) * numberpage;
+        int end = Math.min(page * numberpage, size);
+        Vector<Comment> list1 = daoComment.getListCommentByPage(comments, start, end);
+//        avatars.clear();
+//        convertedDates.clear();
+//        commentsInteractionType.clear();
+        
+        for (Comment comm : list1) {
             avatars.add(daoComment.findAvatarByUser_id(comm.getUser_id()));
 
             if (curUser != null) {
@@ -115,7 +141,10 @@ public class BlogPageController extends HttpServlet {
 
         }
 
-       
+        request.setAttribute("page", page);
+        request.setAttribute("num", pageNum);
+        System.out.println(request.getParameter("sortBy"));
+        request.setAttribute("sortOption", sortOption);
         request.setAttribute("type_list", daoType.getAll());
 
         request.setAttribute("username", u.getUsername());
@@ -128,7 +157,8 @@ public class BlogPageController extends HttpServlet {
         request.setAttribute("blogContent", b.getContent());
         request.setAttribute("blogLikes", b.getLikes());
         request.setAttribute("blogPictures", imgs);
-        request.setAttribute("blogComments", comments);
+        request.setAttribute("blogCommentCount", comments.size());
+        request.setAttribute("blogComments", list1);
         request.setAttribute("commentAvatars", avatars);
         request.setAttribute("commentsDates", convertedDates);
         request.setAttribute("authorname", b.getAuthor_name());
@@ -146,14 +176,8 @@ public class BlogPageController extends HttpServlet {
             request.setAttribute("commentUsername", curUser.getUsername());
         }
 
-        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("CommentFragment.jsp");
-            dispatcher.include(request, response);
-        } else {
-
-            RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
-            dispth.forward(request, response);
-        }
+        RequestDispatcher dispth = request.getRequestDispatcher("BlogPage.jsp");
+        dispth.forward(request, response);
     }
 
     private void handleAddComment(HttpServletRequest request, HttpServletResponse response, User curUser, int blogId, DAOComment daoComment)

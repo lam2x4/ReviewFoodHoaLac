@@ -45,7 +45,7 @@ document.getElementById('commentForm').addEventListener('submit', function () {
 
                 console.log(xhr.status);
                 postComment(username, profPic, commentId);
-                updateCommentCount();
+                updateCommentCount(1);
             } else {
                 console.log(xhr.status);
             }
@@ -143,16 +143,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Function to count the comments and update the span
-function updateCommentCount() {
-    // Select the comment list
-    const commentList = document.querySelector('.comment-list');
-
-    // Count the number of comments (excluding replies)
-    const comments = commentList.querySelectorAll('.comment');
-    const commentCount = comments.length;
-
+function updateCommentCount(val) {
+    const commentCount = document.getElementById('commentCounter').value;
     // Update the span with the new comment count
-    document.getElementById('commentCount').textContent = `Comments: ${formatNumber(commentCount)}`;
+    document.getElementById('commentCount').innerHTML = `<i class="fa-solid fa-comment"></i> Comments: ${formatNumber(parseInt(commentCount) + val)}`;
 }
 
 function formatNumber(count) {
@@ -388,9 +382,10 @@ function timeAgo(date) {
 function sortComments() {
     var sortOption = document.getElementById("sort-comments").value;
     var blogId = document.getElementById("BlogId").value;
+    var pageNum = document.getElementById("pageNumber").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'BlogPageController?id=' + blogId, true);
+    xhr.open('POST', 'BlogPageController?id=' + blogId + "&page=" + pageNum + "&sortOption=" + sortOption, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
@@ -405,7 +400,7 @@ function sortComments() {
         }
     };
 
-    xhr.send(`sortOption=${sortOption}&blogId=${encodeURIComponent(blogId)}`);
+    xhr.send(`sortOption=${sortOption}&blogId=${encodeURIComponent(blogId)}"&sortBy=${encodeURIComponent(sortOption)}`);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -499,6 +494,7 @@ function saveEditedComment(commentId) {
 
 function deleteComment(commentId) {
     var blogId = document.getElementById("BlogId").value;
+    const commentCount = document.getElementById('commentCount').value;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'BlogPageController?id=' + blogId, true);
@@ -509,6 +505,7 @@ function deleteComment(commentId) {
             if (xhr.status === 200) {
                 var commentElement = document.getElementById('comment-' + commentId);
                 commentElement.parentNode.removeChild(commentElement);
+                updateCommentCount(-1);
             } else
                 console.error("Failed to delete comment. Status: " + xhr.status);
         }

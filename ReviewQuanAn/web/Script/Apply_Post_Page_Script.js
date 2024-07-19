@@ -44,6 +44,10 @@ window.addEventListener('DOMContentLoaded', () => {
         
     });
 
+    CKEDITOR.editorConfig = function (config) {
+        config.versionCheck = false; // Disable version check
+    };
+
     CKEDITOR.config.toolbar_Basic = [
         //{name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
         //{name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
