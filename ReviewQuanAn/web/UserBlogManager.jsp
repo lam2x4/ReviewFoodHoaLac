@@ -115,7 +115,7 @@
 
             .card-title {
                 word-wrap: break-word;
-                --max-lines: 2;
+                --max-lines: 1;
                 display: -webkit-box;
                 overflow: hidden;
                 -webkit-box-orient: vertical;
@@ -167,7 +167,7 @@
                                                 <a  class="cute-button bg-danger" title="Reason" data-toggle="popover" data-trigger="hover" data-content="${i.reason_reject}" >Rejected</a>
                                             </c:when>
                                             <c:when test="${i.is_approved ==0}">
-                                                <a  class="cute-button bg-dark" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
+                                                <a  class="cute-button bg-info" title="Content" data-toggle="popover" data-trigger="hover" data-content="This blog is waiting for admin " >Waiting</a>
                                             </c:when>
 
                                             <c:when test="${i.is_approved ==4}">

@@ -134,11 +134,36 @@ public class DAOReport extends DBContext {
         }
         return blog;
     }
+    
+    public Vector<Report> getAllNotWaiting() throws SQLException {
+        Vector<Report> vector = new Vector<>();
+        String sql = "SELECT * FROM Report WHERE is_approved != 0";
+
+        try (PreparedStatement pre = conn.prepareStatement(sql)) {
+
+            ResultSet rs = pre.executeQuery();
+
+            while (rs.next()) {
+                Report b = new Report();
+
+                b.setId(rs.getInt(1));
+                b.setUser_id(rs.getInt(2));
+                b.setBlog_id(rs.getInt(3));
+                b.setContent(rs.getString(4));
+                b.setCreate_date(rs.getString(5));
+                b.setType_id(rs.getInt(6));
+                b.setIs_approved(rs.getInt(7));
+
+                vector.add(b);
+            }
+        }
+        return vector;
+    }
 
     public static void main(String[] args) {
         DAOReport dao = new DAOReport();
         try {
-           dao.getListReportByPage(dao.getAll(), 1, 6);
+            System.out.println(dao.getAllNotWaiting());
            
         } catch (SQLException ex) {
             Logger.getLogger(DAOReport.class.getName()).log(Level.SEVERE, null, ex);

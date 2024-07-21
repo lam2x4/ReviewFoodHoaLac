@@ -312,26 +312,7 @@ public class DAOBlog extends DBContext {
         return blog;
     }
 
-    public Vector<Blog> searchThenFilter(String search, String filter) {
-        try {
-            Vector<Blog> vector = new Vector<>();
-            if (filter.equals("")) {
-                vector = search1(search);
-            } else if (filter.equals("fdate")) {
-                BlogFilterDate d = new BlogFilterDate();
-                vector = search1(search);
-                Collections.sort(vector, d);
-            } else if (filter.equals("fpop")) {
-                BlogFilterPop d = new BlogFilterPop();
-                vector = search1(search);
-                Collections.sort(vector, d);
-            }
-            return vector;
-        } catch (SQLException e) {
-
-        }
-        return null;
-    }
+   
 
     public Vector<Blog> filterDate() {
         String sql = """
@@ -473,6 +454,27 @@ public class DAOBlog extends DBContext {
             }
         }
         return vector;
+    }
+     
+     public Vector<Blog> searchThenFilter(String search, String filter) {
+        try {
+            Vector<Blog> vector = new Vector<>();
+            if (filter.equals("none")) {
+                vector = search1(search);
+            } else if (filter.equals("fdate")) {
+                BlogFilterDate d = new BlogFilterDate();
+                vector = search1(search);
+                Collections.sort(vector, d);
+            } else if (filter.equals("fpop")) {
+                BlogFilterPop d = new BlogFilterPop();
+                vector = search1(search);
+                Collections.sort(vector, d);
+            }
+            return vector;
+        } catch (SQLException e) {
+
+        }
+        return null;
     }
     
     public static void main(String[] args) {

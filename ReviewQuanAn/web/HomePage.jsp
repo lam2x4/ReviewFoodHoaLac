@@ -104,7 +104,7 @@
                         <form id="filterForm" action="home" method="get">
                             <label for="filterq" class="mr-2">Filter:</label>
                             <select id="filterq" name="filterq" class="form-control w-50 d-inline" onchange="this.form.submit()">
-                                <option value="" <%= "None".equals(filterValue) ? "selected" : "" %>>None</option>
+                              <option value="none" <%= "none".equals(filterValue) ? "selected" : "" %>>None</option>
                                 <option value="fdate" <%= "fdate".equals(filterValue) ? "selected" : "" %>>By Date</option>
                                 <option value="fpop" <%= "fpop".equals(filterValue) ? "selected" : "" %>>By Popularity</option>
                             </select>

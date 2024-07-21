@@ -139,7 +139,7 @@
         <header>
             <!-- Navigation bar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light" id="mainNavbar">
-                <a class="navbar-brand" href="home">
+                <a class="navbar-brand" href="home?original=true">
                     <img src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?size=338&ext=jpg&ga=GA1.1.34264412.1716346800&semt=sph" style="width: 60px" alt="Logo">
                     HoaLac3School
                 </a>
@@ -151,9 +151,12 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="home"><i class="fas fa-home"></i> Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
-                        </li>
+                        <c:if test="${sessionScope.Admin==null}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="upload"><i class="fas fa-book-open"></i> Add Blog</a>
+                            </li>
+                        </c:if>
+
                         <c:choose>
                             <c:when test="${sessionScope.User!=null}">
                                 <li class="nav-item dropdown">

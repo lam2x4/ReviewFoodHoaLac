@@ -116,7 +116,7 @@ public class Admin extends HttpServlet {
             for (Report report : daoreport.getAll()) {
                 for (Blog blog : daoblog.getAll()) {
                     if (report.getBlog_id() == blog.getId()) {
-                        report_Blog.put(report.getBlog_id(), blog.getContent());
+                        report_Blog.put(report.getBlog_id(), blog.getTitle());
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class Admin extends HttpServlet {
 
             //Pagination Report
             int pageReport, numberpageReport = 6;
-            int sizeReport = daoreport.getAll().size();
+            int sizeReport = daoreport.getAllWaiting().size();
             int numReport = (sizeReport % 6 == 0 ? (sizeReport / 6) : ((sizeReport / 6) + 1)); //so trang
            
             if (session.getAttribute("pageReport") == null) {
@@ -162,7 +162,7 @@ public class Admin extends HttpServlet {
             int startReport, endReport;
             startReport = (pageReport - 1) * numberpageReport;
             endReport = Math.min(pageReport * numberpageReport, sizeReport);
-            Vector<Report> listReport = daoreport.getListReportByPage(daoreport.getAll(), startReport, endReport);
+            Vector<Report> listReport = daoreport.getListReportByPage(daoreport.getAllWaiting(), startReport, endReport);
 
             session.setAttribute("page", page);
             session.setAttribute("num", num);

@@ -100,7 +100,7 @@
 
             .card-title {
                 word-wrap: break-word;
-                --max-lines: 2;
+                --max-lines: 1;
                 display: -webkit-box;
                 overflow: hidden;
                 -webkit-box-orient: vertical;

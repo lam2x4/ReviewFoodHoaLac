@@ -129,7 +129,7 @@
             .text-info {
                 word-wrap: break-word;
                 max-width: 300px;
-                --max-lines: 2;
+                --max-lines: 1;
                 display: -webkit-box;
                 overflow: hidden;
                 -webkit-box-orient: vertical;
@@ -165,10 +165,10 @@
                     </div>
                     <div class="col-md-3">
                         <div class="card text-dark bg-light mb-3 shadow-sm">
-                            <div class="card-header"><i class="fas fa-file-alt"></i><a href="#" style="color:#343A40">Posts</a></div>
+                            <div class="card-header"><i class="fas fa-file-alt"></i><a href="#" style="color:#343A40">Blogs</a></div>
                             <div class="card-body">
                                 <h5 class="card-title">${requestScope.blogNumber}</h5>
-                                <p class="card-text">Total posts created.</p>
+                                <p class="card-text">Total blogs created.</p>
                             </div>
                         </div>
                     </div>

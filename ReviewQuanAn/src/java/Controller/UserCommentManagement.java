@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,9 +93,27 @@ public class UserCommentManagement extends HttpServlet {
                     }
                 }
             }
+            
+               //Pagination
+            int page, numberpage = 3;
+            int size = daoComment.GetAllById(user1.getId()).size();
+            int num = (size % 3 == 0 ? (size / 3) : ((size / 3) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
+            }
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Comment> list1 = daoComment.getListCommentByPage(daoComment.GetAllById(user1.getId()), start, end);
+
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
 
             request.setAttribute("user", user1);
-            request.setAttribute("commentList", daoComment.GetAllById(user1.getId()));
+            request.setAttribute("commentList", list1);
             request.setAttribute("Comment_Blog", Comment_Blog);
             request.setAttribute("Comment_User", Comment_User);
             request.getRequestDispatcher("UserCommentManager.jsp").forward(request, response);

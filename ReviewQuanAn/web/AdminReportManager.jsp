@@ -144,7 +144,7 @@
 
 
             <div class="container-fluid mt-4">
-                <h1 class="mb-4">Report Management</h1>
+                <h1 class="mb-4">Report Management</h1> 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead class="thead-dark">
@@ -176,11 +176,11 @@
                                             </c:when>
 
                                             <c:when test="${r.is_approved == 1}">
-                                                <td id="status-${i.id}" class="approved">Approved</td>
+                                                <td id="status-${i.id}" class="approved"> <i class="fas fa-circle text-success"></i>Approved</td>
                                             </c:when>
 
                                             <c:when test="${r.is_approved == 2}">
-                                                <td id="status-${i.id}" class="rejected">Rejected</td>
+                                                <td id="status-${i.id}" class="rejected"> <i class="fas fa-circle text-danger"></i>Rejected</td>
                                             </c:when>
 
 
@@ -192,6 +192,36 @@
                             <!-- Add more report rows as needed -->
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${requestScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="AdminReportManagement?page=${page - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="AdminReportManagement?page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < requestScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="AdminReportManagement?page=${page + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>

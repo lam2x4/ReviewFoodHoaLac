@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Vector;
@@ -70,7 +71,13 @@ public class AdminReportManagement extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
+            HttpSession session = request.getSession(true);
+            User admin = (User) session.getAttribute("Admin");
+            if (admin == null) {
+                response.sendRedirect("home");
+                return;
+            }
+            
             HashMap<Integer, String> blog_User = new HashMap<>();
             HashMap<Integer, String> report_User = new HashMap<>();
             HashMap<Integer, String> report_ReportType = new HashMap<>();
@@ -112,11 +119,30 @@ public class AdminReportManagement extends HttpServlet {
                     }
                 }
             }
+             
+               //Pagination
+            int page, numberpage = 6;
+            int size = daoreport.getAllNotWaiting().size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
+            }
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Report> list1 = daoreport.getListReportByPage(daoreport.getAllNotWaiting(), start, end);
+
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
+
 
               request.setAttribute("report_Blog", report_Blog);
             request.setAttribute("report_ReportType", report_ReportType);
             request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAll());
+            request.setAttribute("reportList", list1);
             request.setAttribute("Blog_User", blog_User);
             request.setAttribute("userNumber", userNumber);
             request.setAttribute("blogNumber", blogNumber);

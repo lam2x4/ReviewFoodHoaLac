@@ -156,6 +156,17 @@
         .tooltip-inner {
             white-space: pre-wrap; /* Allows for multiline tooltips */
         }
+         .text-info {
+                word-wrap: break-word;
+                max-width: 300px;
+                --max-lines: 1;
+                display: -webkit-box;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: var(--max-lines);
+                white-space: normal; /* Ensure the text wraps properly */
+                text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            }
     </style>
 </head>
 <body>
@@ -180,6 +191,34 @@
             </div>
         </div>
     </c:forEach>
+           <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${requestScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="UserCommentManagement?user_id=${requestScope.user.id}&&page=${page - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="UserCommentManagement?user_id=${requestScope.user.id}&&page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < requestScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="UserCommentManagement?user_id=${requestScope.user.id }&&page=${page + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
 </div>
     <%@include file="Footer.jsp" %>
 

@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,17 +102,35 @@ public class UserReportManagement extends HttpServlet {
             
             for (Report report : daoreport.getAll()) {
                 for (Blog blog : daoblog.getAll()) {
-                    if (report.getBlog_id()== report.getBlog_id()) {
+                    if (report.getBlog_id()== blog.getId()) {
                         report_Blog.put(report.getBlog_id(), blog.getTitle());
                     }
                 }
             }
+            
+               //Pagination
+            int page, numberpage = 6;
+            int size = daoreport.getAllById(user1.getId()).size();
+            int num = (size % 6 == 0 ? (size / 6) : ((size / 6) + 1)); //so trang
+            String xpage = request.getParameter("page");
+            if (xpage == null) {
+                page = 1;
+            } else {
+                page = Integer.parseInt(xpage);
+            }
+            int start, end;
+            start = (page - 1) * numberpage;
+            end = Math.min(page * numberpage, size);
+            Vector<Report> list1 = daoreport.getListReportByPage(daoreport.getAllById(user1.getId()), start, end);
+
+            request.setAttribute("page", page);
+            request.setAttribute("num", num);
 
             request.setAttribute("user", user1);
             request.setAttribute("report_Blog", report_Blog);
             request.setAttribute("report_ReportType", report_ReportType);
             request.setAttribute("report_User", report_User);
-            request.setAttribute("reportList", daoreport.getAllById(user1.getId()));
+            request.setAttribute("reportList", list1);
             request.getRequestDispatcher("UserReportManager.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);

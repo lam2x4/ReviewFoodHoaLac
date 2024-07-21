@@ -105,6 +105,21 @@
             .tooltip-inner {
                 white-space: pre-wrap; /* Allows for multiline tooltips */
             }
+            
+             .approved {
+                background-color: #d4edda; /* Light green background */
+                color: #155724; /* Dark green text */
+            }
+
+            .pending {
+                background-color: #fff3cd; /* Light yellow background */
+                color: #856404; /* Dark yellow text */
+            }
+
+            .rejected {
+                background-color: #f8d7da; /* Light red background */
+                color: #721c24; /* Dark red text */
+            }
         </style>
     </head>
     <body>
@@ -132,7 +147,6 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
                                         <th>Blog</th>
                                         <th>Reason</th>
                                         <th>Description</th>
@@ -146,7 +160,6 @@
 
                                         <tr>
                                             <td>${r.id}</td>
-                                            <td>${requestScope.report_User.get(r.user_id)}</td>
                                             <td><a href="BlogPageController?id=${r.blog_id}" class="text-info">${requestScope.report_Blog.get(r.blog_id)}</a></td>
                                             <td>${requestScope.report_ReportType.get(r.type_id)}</td>
                                             <td>${r.content}</td>                                       
@@ -154,14 +167,14 @@
                                             <c:choose>
 
                                                 <c:when test = "${r.is_approved==0}">
-                                                    <td>Waiting </td>
+                                                    <td class="pending"> <i class="fas fa-circle text-warning"></i>Waiting </td>
                                                 </c:when>
 
                                                 <c:when test = "${r.is_approved==1}">
-                                                    <td>Approved </td>
+                                                    <td class="approved"> <i class="fas fa-circle text-success"></i>Approved </td>
                                                 </c:when>
                                                 <c:when test = "${r.is_approved==2}">
-                                                    <td>Rejected </td>
+                                                    <td class="rejected"> <i class="fas fa-circle text-danger"></i>Rejected </td>
                                                 </c:when>
 
 
@@ -174,6 +187,36 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+                 <!-- Pagination -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <c:set var="page" value="${requestScope.page}"/>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <c:if test="${page > 1}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="UserReportManagement?user_id=${requestScope.user.id}&&page=${page - 1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <c:forEach begin="1" end="${requestScope.num}" var="i">
+                                    <li class="page-item ${i == page ? 'active' : ''}">
+                                        <a class="page-link" href="UserReportManagement?user_id=${requestScope.user.id}&&page=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${page < requestScope.num}">
+                                    <li class="page-item">
+                                        <a class="page-link" href="UserReportManagement?user_id=${requestScope.user.id}&&page=${page + 1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

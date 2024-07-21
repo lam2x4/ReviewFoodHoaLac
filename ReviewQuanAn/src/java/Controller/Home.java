@@ -54,17 +54,15 @@ public class Home extends HttpServlet {
         String submitFilter = request.getParameter("filterq");
         if (submitFilter != null) {
 //            System.out.println("SubmitFILTER: " + submitFilter);
-            if(!submitFilter.equals("")){
-                filterApply = submitFilter;
-            }
+            filterApply = submitFilter;
         }
-        filterApply = filterApply == null ? "" : filterApply;
+        filterApply = filterApply == null ? "none" : filterApply;
 //        System.out.println("FILTER: "  + filterApply);
         session.setAttribute("filterS", filterApply);
         // IF SESSION FILTER CONTENT EXIST -> USE THAT
         // IF SUBMIT FOR FILTERING IS CLICKED -> USE THE NEW FILTER CONTENT
         // SET ATTRIBUTE FOR KEEPING THE FILTER EVEN IF CHANGE PAGES
-        
+
         //HANDLE SEARCHES
         String searchC = (String) session.getAttribute("searchC");
         String submitSearch = request.getParameter("search");
@@ -78,18 +76,23 @@ public class Home extends HttpServlet {
         // IF SUBMIT FOR SEARCHING IS CLICKED -> USE THE NEW SEARCH CONTENT
         // SET ATTRIBUTE FOR KEEPING THE SEARCH EVEN IF CHANGE PAGES
 
-        
         //GET PAGE
-        
         String currentPage = request.getParameter("page");
-        currentPage = currentPage == null? "1" : currentPage;
+        currentPage = currentPage == null ? "1" : currentPage;
         int page = Integer.parseInt(currentPage);
 //        System.out.println("Page: " + page);
-       
-        
-        
+
         String filter = request.getParameter("applyFilter");
         request.setAttribute("filt", filter);
+        String showHome = request.getParameter("original");
+        if (showHome != null) {
+            if (showHome.equals("true")) {
+                session.setAttribute("searchC", "");
+                session.setAttribute("filterS", "none");
+                searchC = "";
+                filterApply = "none";
+            }
+        }
         Vector<Blog> list = new Vector<>();
         try {
 
