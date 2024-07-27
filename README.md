@@ -1,7 +1,6 @@
-# Temp
+# Food Review in Hoa Lac
 
-awdawdawdawdawdawd
-
+This is a project for users to post blog about a food store in Hoa Lac for others to knwo that store is good or not 
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
